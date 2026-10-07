@@ -1,0 +1,5 @@
+runtime/
+data/
+assets/sounds_hq/
+*.log
+*.tmp

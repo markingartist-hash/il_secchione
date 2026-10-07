@@ -1,0 +1,8 @@
+{
+  "probe": "=1+1",
+  "contract": 2,
+  "defaultMode": "spreadsheet",
+  "csvContainsUnneutralizedFormula": false,
+  "neutralizedCell": "'=1+1",
+  "rawModeKeepsOriginal": true
+}

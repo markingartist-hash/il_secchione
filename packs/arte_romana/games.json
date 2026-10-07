@@ -1,0 +1,568 @@
+{
+  "games": {
+    "photopuzzle": [
+      {
+        "label": "Immagine 1",
+        "image": "via_appia.jpg",
+        "answer": "Via Appia antica",
+        "sourcePage": 5,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 2",
+        "image": "segovia.jpg",
+        "answer": "Acquedotto di Segovia",
+        "sourcePage": 11,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 3",
+        "image": "pont_gard.jpg",
+        "answer": "Pont du Gard",
+        "sourcePage": 11,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 4",
+        "image": "atrio.jpg",
+        "answer": "Atrio con impluvium",
+        "sourcePage": 14,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 5",
+        "image": "insula.jpg",
+        "answer": "Insula (ricostruzione)",
+        "sourcePage": 16,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 6",
+        "image": "ercole.jpg",
+        "answer": "Tempio di Ercole Vincitore",
+        "sourcePage": 18,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 7",
+        "image": "patrizio.jpg",
+        "answer": "Ritratto veristico di patrizio",
+        "sourcePage": 21,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 8",
+        "image": "barberini.jpg",
+        "answer": "Statua Barberini",
+        "sourcePage": 24,
+        "sourceLabel": "Repubblicana"
+      },
+      {
+        "label": "Immagine 9",
+        "image": "ara_pacis.jpg",
+        "answer": "Ara Pacis",
+        "sourcePage": 4,
+        "sourceLabel": "Imperiale"
+      },
+      {
+        "label": "Immagine 10",
+        "image": "pantheon.jpg",
+        "answer": "Cupola del Pantheon",
+        "sourcePage": 11,
+        "sourceLabel": "Imperiale"
+      },
+      {
+        "label": "Immagine 11",
+        "image": "traiana.jpg",
+        "answer": "Colonna Traiana",
+        "sourcePage": 14,
+        "sourceLabel": "Imperiale"
+      },
+      {
+        "label": "Immagine 12",
+        "image": "colosseo.jpg",
+        "answer": "Colosseo",
+        "sourcePage": 21,
+        "sourceLabel": "Imperiale"
+      },
+      {
+        "label": "Immagine 13",
+        "image": "augusto.jpg",
+        "answer": "Augusto di Prima Porta",
+        "sourcePage": 22,
+        "sourceLabel": "Imperiale"
+      },
+      {
+        "label": "Immagine 14",
+        "image": "marco_aurelio.jpg",
+        "answer": "Marco Aurelio equestre",
+        "sourcePage": 25,
+        "sourceLabel": "Imperiale"
+      }
+    ],
+    "indovina": [
+      {
+        "label": "Personaggio 1",
+        "theme": "Protagonisti di Roma",
+        "subject": "Augusto",
+        "candidates": [
+          "Augusto",
+          "Vitruvio",
+          "Adriano",
+          "Traiano",
+          "Vespasiano",
+          "Marco Aurelio",
+          "Costantino",
+          "Giulio Cesare"
+        ],
+        "clues": [
+          "Il mio governo è associato a una stagione di pace.",
+          "Ho promosso un grande rinnovamento edilizio.",
+          "L’Ara Pacis celebra la pace legata al mio nome.",
+          "Una mia statua mi mostra mentre parlo alle truppe.",
+          "Sono il protagonista della statua di Prima Porta."
+        ]
+      },
+      {
+        "label": "Personaggio 2",
+        "theme": "Protagonisti di Roma",
+        "subject": "Vitruvio",
+        "candidates": [
+          "Augusto",
+          "Vitruvio",
+          "Adriano",
+          "Traiano",
+          "Vespasiano",
+          "Marco Aurelio",
+          "Costantino",
+          "Giulio Cesare"
+        ],
+        "clues": [
+          "Mi occupo di architettura.",
+          "Espongo principi tecnici e teorici.",
+          "Collego proporzioni umane e architettoniche.",
+          "Richiedo solidità, utilità e bellezza.",
+          "Ho scritto il De Architectura."
+        ]
+      },
+      {
+        "label": "Personaggio 3",
+        "theme": "Protagonisti di Roma",
+        "subject": "Adriano",
+        "candidates": [
+          "Augusto",
+          "Vitruvio",
+          "Adriano",
+          "Traiano",
+          "Vespasiano",
+          "Marco Aurelio",
+          "Costantino",
+          "Giulio Cesare"
+        ],
+        "clues": [
+          "Sono un imperatore romano.",
+          "Il mio nome è legato a grandi opere architettoniche.",
+          "Sono il successore di Traiano.",
+          "Sotto il mio governo viene ricostruito un tempio a pianta circolare.",
+          "L’edificio è il Pantheon."
+        ]
+      },
+      {
+        "label": "Personaggio 4",
+        "theme": "Protagonisti di Roma",
+        "subject": "Traiano",
+        "candidates": [
+          "Augusto",
+          "Vitruvio",
+          "Adriano",
+          "Traiano",
+          "Vespasiano",
+          "Marco Aurelio",
+          "Costantino",
+          "Giulio Cesare"
+        ],
+        "clues": [
+          "Sono un imperatore romano.",
+          "Le mie campagne sono raccontate in scene scolpite.",
+          "Sono raffigurato mentre guido e organizzo l’esercito.",
+          "Una colonna nel mio foro celebra le mie imprese.",
+          "Ho conquistato la Dacia."
+        ]
+      },
+      {
+        "label": "Personaggio 5",
+        "theme": "Protagonisti di Roma",
+        "subject": "Vespasiano",
+        "candidates": [
+          "Augusto",
+          "Vitruvio",
+          "Adriano",
+          "Traiano",
+          "Vespasiano",
+          "Marco Aurelio",
+          "Costantino",
+          "Giulio Cesare"
+        ],
+        "clues": [
+          "Appartengo alla dinastia Flavia.",
+          "Promuovo un grande edificio per spettacoli.",
+          "L’edificio sorge presso la Domus Aurea di Nerone.",
+          "Mio figlio Tito ne prosegue la realizzazione.",
+          "Avvio la costruzione del Colosseo."
+        ]
+      },
+      {
+        "label": "Personaggio 6",
+        "theme": "Protagonisti di Roma",
+        "subject": "Marco Aurelio",
+        "candidates": [
+          "Augusto",
+          "Vitruvio",
+          "Adriano",
+          "Traiano",
+          "Vespasiano",
+          "Marco Aurelio",
+          "Costantino",
+          "Giulio Cesare"
+        ],
+        "clues": [
+          "Sono un imperatore romano.",
+          "Un mio celebre ritratto è realizzato in bronzo.",
+          "Il monumento esprime fermezza e serenità.",
+          "Una copia è al centro del Campidoglio.",
+          "Sono raffigurato a cavallo."
+        ]
+      },
+      {
+        "label": "Monumento o edificio 1",
+        "theme": "Spazi dell’architettura romana",
+        "subject": "Pantheon",
+        "candidates": [
+          "Pantheon",
+          "Domus",
+          "Insula",
+          "Colosseo",
+          "Basilica",
+          "Ara Pacis",
+          "Acquedotto",
+          "Arco di trionfo"
+        ],
+        "clues": [
+          "Sono un edificio di Roma.",
+          "La mia grande aula ha pianta circolare.",
+          "Altezza interna e diametro sono uguali.",
+          "La mia cupola presenta cassettoni.",
+          "Ricevo luce dall’oculo zenitale."
+        ]
+      },
+      {
+        "label": "Monumento o edificio 2",
+        "theme": "Spazi dell’architettura romana",
+        "subject": "Domus",
+        "candidates": [
+          "Pantheon",
+          "Domus",
+          "Insula",
+          "Colosseo",
+          "Basilica",
+          "Ara Pacis",
+          "Acquedotto",
+          "Arco di trionfo"
+        ],
+        "clues": [
+          "Sono un’abitazione.",
+          "I miei spazi si sviluppano intorno ad ambienti interni.",
+          "Posso avere un giardino circondato da colonne.",
+          "Il triclinio è la mia sala da pranzo.",
+          "Nell’atrio ho un impluvium."
+        ]
+      }
+    ],
+    "abbinamenti": [
+      {
+        "label": "Riconosci le opere 1",
+        "theme": "Forme e funzioni",
+        "cards": [
+          {
+            "img": "ercole.jpg",
+            "title": "Immagine 1"
+          },
+          {
+            "img": "ara_pacis.jpg",
+            "title": "Immagine 2"
+          },
+          {
+            "img": "pantheon.jpg",
+            "title": "Immagine 3"
+          },
+          {
+            "img": "colosseo.jpg",
+            "title": "Immagine 4"
+          }
+        ],
+        "names": [
+          "Tempio di Ercole Vincitore",
+          "Ara Pacis",
+          "Cupola del Pantheon",
+          "Colosseo"
+        ]
+      },
+      {
+        "label": "Riconosci le opere 2",
+        "theme": "Forme e funzioni",
+        "cards": [
+          {
+            "img": "patrizio.jpg",
+            "title": "Immagine 1"
+          },
+          {
+            "img": "barberini.jpg",
+            "title": "Immagine 2"
+          },
+          {
+            "img": "augusto.jpg",
+            "title": "Immagine 3"
+          },
+          {
+            "img": "marco_aurelio.jpg",
+            "title": "Immagine 4"
+          }
+        ],
+        "names": [
+          "Ritratto veristico di patrizio",
+          "Statua Barberini",
+          "Augusto di Prima Porta",
+          "Marco Aurelio equestre"
+        ]
+      },
+      {
+        "label": "Riconosci le opere 3",
+        "theme": "Forme e funzioni",
+        "cards": [
+          {
+            "img": "via_appia.jpg",
+            "title": "Immagine 1"
+          },
+          {
+            "img": "segovia.jpg",
+            "title": "Immagine 2"
+          },
+          {
+            "img": "atrio.jpg",
+            "title": "Immagine 3"
+          },
+          {
+            "img": "insula.jpg",
+            "title": "Immagine 4"
+          }
+        ],
+        "names": [
+          "Via Appia antica",
+          "Acquedotto di Segovia",
+          "Atrio con impluvium",
+          "Insula (ricostruzione)"
+        ]
+      }
+    ],
+    "ghigliottina": [
+      {
+        "label": "Parola segreta 1",
+        "theme": "Strutture e costruzione",
+        "answer": "ARCO",
+        "pairs": [
+          [
+            "Chiave",
+            "Tessera"
+          ],
+          [
+            "Conci",
+            "Pigmenti"
+          ],
+          [
+            "Tutto sesto",
+            "Ottastilo"
+          ],
+          [
+            "Spinta",
+            "Ritratto"
+          ],
+          [
+            "Fornice",
+            "Cubiculum"
+          ]
+        ]
+      },
+      {
+        "label": "Parola segreta 2",
+        "theme": "Infrastrutture e abitazioni",
+        "answer": "ACQUA",
+        "pairs": [
+          [
+            "Acquedotto",
+            "Ritratto"
+          ],
+          [
+            "Cisterna",
+            "Corazza"
+          ],
+          [
+            "Impluvium",
+            "Capitello"
+          ],
+          [
+            "Pioggia",
+            "Bronzo"
+          ],
+          [
+            "Condotto",
+            "Fregio"
+          ]
+        ]
+      },
+      {
+        "label": "Parola segreta 3",
+        "theme": "Arte e potere",
+        "answer": "AUGUSTO",
+        "pairs": [
+          [
+            "Pace",
+            "Dacia"
+          ],
+          [
+            "Prima Porta",
+            "Campidoglio"
+          ],
+          [
+            "Ara Pacis",
+            "Colonna Traiana"
+          ],
+          [
+            "Adlocutio",
+            "Triclinio"
+          ],
+          [
+            "Lorica",
+            "Velario"
+          ]
+        ]
+      },
+      {
+        "label": "Parola segreta 4",
+        "theme": "Un monumento di Roma",
+        "answer": "PANTHEON",
+        "pairs": [
+          [
+            "Oculo",
+            "Velario"
+          ],
+          [
+            "Cupola",
+            "Arena"
+          ],
+          [
+            "Cassettoni",
+            "Cubicoli"
+          ],
+          [
+            "Rotonda",
+            "Insula"
+          ],
+          [
+            "Adriano",
+            "Vespasiano"
+          ]
+        ]
+      }
+    ],
+    "chain": [
+      {
+        "label": "La casa romana",
+        "theme": "La casa romana",
+        "links": [
+          {
+            "from": "DOMUS",
+            "to": "ATRIO"
+          },
+          {
+            "from": "ATRIO",
+            "to": "IMPLUVIO"
+          },
+          {
+            "from": "IMPLUVIO",
+            "to": "ACQUA"
+          },
+          {
+            "from": "ACQUA",
+            "to": "CISTERNA"
+          }
+        ]
+      },
+      {
+        "label": "Le strutture",
+        "theme": "Le strutture",
+        "links": [
+          {
+            "from": "ARCO",
+            "to": "CONCI"
+          },
+          {
+            "from": "CONCI",
+            "to": "COMPRESSIONE"
+          },
+          {
+            "from": "COMPRESSIONE",
+            "to": "SPINTA"
+          },
+          {
+            "from": "SPINTA",
+            "to": "SOSTEGNO"
+          }
+        ]
+      },
+      {
+        "label": "Immagini del potere",
+        "theme": "Immagini del potere",
+        "links": [
+          {
+            "from": "AUGUSTO",
+            "to": "PACE"
+          },
+          {
+            "from": "PACE",
+            "to": "ARA PACIS"
+          },
+          {
+            "from": "ARA PACIS",
+            "to": "RILIEVO"
+          },
+          {
+            "from": "RILIEVO",
+            "to": "CORTEO"
+          }
+        ]
+      },
+      {
+        "label": "Raccontare le imprese",
+        "theme": "Raccontare le imprese",
+        "links": [
+          {
+            "from": "TRAIANO",
+            "to": "DACIA"
+          },
+          {
+            "from": "DACIA",
+            "to": "COLONNA"
+          },
+          {
+            "from": "COLONNA",
+            "to": "FREGIO"
+          },
+          {
+            "from": "FREGIO",
+            "to": "SPIRALE"
+          }
+        ]
+      }
+    ]
+  }
+}

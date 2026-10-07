@@ -1,0 +1,13 @@
+{
+  "unicodeToken": "RangeError: Input buffers must have the same byte length",
+  "inflateDeclaredOneByteActual": 1048576,
+  "foreignHost": {
+    "status": 200,
+    "containsHostKey": true
+  },
+  "repeatedShowHelloClients": 5,
+  "reservedPackId": {
+    "importOK": false,
+    "list": []
+  }
+}

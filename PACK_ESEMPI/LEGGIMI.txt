@@ -1,0 +1,21 @@
+PACCHETTI DI ESEMPIO
+
+Due piccoli pacchetti, volutamente diversi, per provare il Gestore Pacchetti:
+
+vulcani.zip        Scienze, classe 2a, versione 1.0.0
+                   6 domande con immagini, 4 giochi (Photopuzzle, Abbinamenti, Indovina, Staffetta)
+inglese_base.zip   Lingua inglese, classe 1a, versione 0.9.0
+                   6 domande senza immagini, 3 giochi (Indovina, Parola Segreta, Staffetta)
+
+Le domande dei due pacchetti hanno di proposito gli stessi id (q001...q006):
+servono a provare una sessione mista con id in collisione.
+
+PROVA IN 1 MINUTO
+1. Avvia il Secchione e apri PACCHETTI (colonna sinistra).
+2. Trascina vulcani.zip sulla finestra (oppure IMPORTA PACCHETTO e scegli il file).
+3. Premi ATTIVA: squadre e punti restano, cambiano domande e giochi.
+4. Importa anche inglese_base.zip, spunta entrambi e premi USA I SELEZIONATI: sessione mista.
+
+Le cartelle vulcani/ e inglese_base/ sono i sorgenti: per rifare lo zip dopo una modifica
+    node tools/pack_manager.js zip PACK_ESEMPI/vulcani
+Le immagini dei vulcani sono disegni schematici creati per questo progetto (CC0).

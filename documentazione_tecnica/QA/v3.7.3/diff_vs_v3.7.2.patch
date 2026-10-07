@@ -1,0 +1,1129 @@
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/CHANGELOG_V3_7_3.md Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/CHANGELOG_V3_7_3.md
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/CHANGELOG_V3_7_3.md	1970-01-01 01:00:00.000000000 +0100
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/CHANGELOG_V3_7_3.md	2026-10-05 20:05:23.936170200 +0200
+@@ -0,0 +1,114 @@
++# v3.7.3 CONTENT IMPORT AND PODIUM REVEAL — 5 ottobre 2026
++
++Base obbligatoria: `Il_Secchione_v3.7.2_REVEAL_FIX_PORTABLE.zip` (SHA-256 `5661c38640128990bc87550a167222eb9a655ccc96f4610fcf2bbab9350fc598`). La baseline è conservata intatta in `Desktop\BASELINE_v3.7.2_REVEAL_FIX`.
++
++Restano tutte le correzioni della baseline: matcher risposte, Pack Studio, tastierine, reveal del round dedicato e porta di riserva se è già in esecuzione una versione vecchia.
++
++## 1. IMPORTA CONTENUTI: un solo ingresso, nessun dubbio su dove rimettere un file
++
++Nuovo pulsante **📥 IMPORTA CONTENUTI**, nella colonna sinistra sotto PACCHETTI e SCALETTA. Il file si sceglie lì oppure si trascina in un punto qualsiasi della regia. Anche i pulsanti IMPORTA di ARCHIVIO e IMPORTA GIOCHI passano dallo stesso flusso.
++
++Il tipo di file si riconosce **dal contenuto**, non dal nome:
++
++| File | Che cosa succede |
++|---|---|
++| **Archivio domande** `.json` (ARCHIVIO → ESPORTA) | riepilogo, poi sostituisce le domande del pack attivo. Messaggio: *Hai importato 30 domande nel pack attivo: Arte romana* |
++| **Archivio giochi** `.json` (GIOCHI → ESPORTA GIOCHI) | tabella per tipo (ora / nel file / dopo), poi sostituisce le manche dei tipi presenti nel file. Messaggio: *Hai importato 10 giochi nel pack attivo* |
++| **Pacchetto completo** `.zip` (o pack `.json`) | viene installato nella libreria con lo stesso flusso di PACCHETTI, senza cambiare sezione. Messaggio: *Pacchetto installato correttamente*, con **● ATTIVA ORA** |
++| **Scaletta** `.json` | viene aggiunta alle scalette, con **📋 APRI LA SCALETTA** |
++| **JSON completo dei risultati** | viene spiegato che è un file di partita, non un contenuto, e nulla cambia |
++| file non valido o sconosciuto | viene detto perché e quali file sono accettati; nulla cambia |
++
++- **Conferma con backup**: prima di sostituire domande o giochi compaiono tre pulsanti.
++  - **⬇ ESPORTA BACKUP PRIMA DI CONTINUARE** salva il blocco attuale (`backup_domande_<pack>_<data>.json` o `backup_giochi_…`) e poi importa;
++  - **CONTINUA SENZA BACKUP**;
++  - **ANNULLA**.
++- **Sicurezza**: con il server, il pacchetto precedente resta comunque nel cestino dei pacchetti.
++- **Semantica invariata dove già c'era**: l'import JSON è una sostituzione del blocco corrispondente, senza unione intelligente.
++  - **Domande**: come prima, si sostituiscono tutte.
++  - **Giochi**: vengono sostituiti i tipi di gioco presenti nel file; i tipi assenti restano. Il vecchio IMPORTA GIOCHI invece *aggiungeva* le manche: ora si comporta come richiesto dal passaggio di consegne, e la tabella del riepilogo lo mostra prima.
++- **Persistenza**: domande e giochi importati vengono salvati **nel pacchetto installato**, come già facevano le modifiche delle domande dalla v3.6.0, quindi restano dopo la chiusura e riapertura del programma.
++  - Se il pacchetto è in sola lettura (senza server), restano in questo browser e il messaggio lo dice.
++  - **Correzione inclusa**: prima, Photopuzzle e Abbinamenti importati non sopravvivevano alla riapertura, perché la copia del browser salvava solo i tipi dell'editor dei giochi.
++- **Blocchi**: niente sostituzioni con una domanda o un gioco in corso, né in sessione mista (bisogna attivare un solo pacchetto).
++- **Aiuti brevi**:
++  - in ARCHIVIO: *Importa qui un file .json esportato dall'archivio domande. Per un pacchetto completo usa 📥 IMPORTA CONTENUTI o 📦 PACCHETTI.*
++  - in GIOCHI: lo stesso per i giochi.
++
++## 2. CLASSIFICA FINALE: proclamazione dall'ultimo al primo
++
++A fine partita (ultima domanda dell'archivio o fine della scaletta) non compare più subito la tabella completa:
++
++1. Schermata introduttiva a tutto schermo: **CLASSIFICA FINALE · Ecco il verdetto.**, con il numero di squadre in gara.
++2. Ogni **AVANTI** (pulsante principale della regia o tasto →) rivela **una** posizione, dall'ultima alla prima.
++   - Le posizioni non ancora rivelate restano al loro posto come carte coperte "?": la classifica non si sposta e il podio crea attesa.
++3. Il **1° posto** arriva per ultimo. L'azione principale diventa **★ RIVELA IL 1° POSTO**, poi c'è un ingresso più forte (salita, leggero ingrandimento, riflesso dorato) e un suono dedicato.
++4. A verdetto completo la regia propone **⌂ HOME** e **📄 REPORT DI CLASSE**; altri AVANTI non fanno nulla.
++
++**Le carte**:
++- ogni carta mostra posizione, nome della squadra, punteggio totale grande, e ORO / ARGENTO / BRONZO per il podio;
++- mostra anche ✓ corrette, ✗ errate e Ø astensioni, contate solo sui round confermati;
++- **EX AEQUO** indica i pari merito, che hanno la stessa posizione.
++
++**Layout**:
++- fino a 4 squadre: carte grandissime;
++- 5–8 squadre: una colonna;
++- oltre 8: podio **2–1–3** grande in alto e le altre in colonne compatte. Il podio non viene mai miniaturizzato.
++
++**Regia**:
++- l'azione principale dice esattamente che cosa succede ("▶ RIVELA IL 5° POSTO", "▶ RIVELA L'11° POSTO") e quanti posti sono già rivelati;
++- **MOSTRA TUTTA LA CLASSIFICA** è secondaria.
++
++**★ CLASSIFICA a metà partita** mostra subito tutte le squadre, con le stesse carte.
++
++**Ripresa**: il punto del reveal entra nell'istantanea. Dopo un refresh della regia si riparte dalla stessa posizione; lo SHOW ricaricato mostra lo stesso stato.
++
++## 3. Coerenza con il reveal del round
++
++La finale usa la stessa grammatica della classifica del round della v3.7.2: intestazione `resultHeader` con indicatore di avanzamento, cerchi di posizione `resultPos`, toni del podio oro/argento/bronzo e sfondo blu scuro. Il flusso è uno solo:
++
++> RIVELA (soluzione) → AVANTI (classifica del round) → … → AVANTI a fine partita (classifica finale, una posizione per volta)
++
++La classifica del round mantiene la sua rivelazione automatica a cascata, come nella v3.7.2. La finale invece è condotta dal docente, perché è il momento della proclamazione.
++
++## Nota sulle scelte UX
++
++- **Riconoscere dal contenuto, non chiedere**: il docente non deve sapere che cosa ha esportato e da dove. Il riepilogo dice **che cosa** è il file e **dove** andrà prima di toccare qualcosa.
++- **Backup come prima scelta**: il pulsante più grande e colorato è *Esporta backup prima di continuare*; sostituire senza backup resta possibile ma è il secondo.
++- **Giochi per tipo**: un file con sole Staffette non deve cancellare i Photopuzzle. La tabella mostra in giallo i tipi sostituiti e in verde quelli che restano.
++- **Proclamazione a carte coperte**: le posizioni non rivelate restano al loro posto, così la classifica non salta e il podio coperto crea attesa. Il docente può commentare ogni posizione prima di passare alla successiva.
++- **Mascotte assente nella finale**: lascia lo spazio alle squadre, come chiesto.
++- **Animazioni** solo transform/opacity e brevi (0,6–1,15 s); con movimento ridotto le carte compaiono senza animazione.
++
++## File modificati
++
++- **Nuovi**:
++  - `tests/content_import_podium_373.test.js`, 12 test;
++  - `CHANGELOG_V3_7_3.md`;
++  - `QA/TEST_RESULTS_V3_7_3.md`;
++  - `QA/IMPORT_PODIUM_MANUAL_TEST.md`;
++  - `QA/v3.7.3/*`.
++- **Modificati**:
++  - `js/app.js`: import contenuti, salvataggio giochi nel pacchetto, classifica finale, regia;
++  - `js/engine/packlib.js`: `contentKind`, `replaceGames`, `cleanGameSet`, `storedQuestionId`;
++  - `js/engine/roundControl.js`: azione RIVELA della finale, articoli delle posizioni;
++  - `js/host/packs-ui.js`: un file trascinato va a IMPORTA CONTENUTI;
++  - `index.html`;
++  - `css/show.css`;
++  - `css/classroom.css`;
++  - `server/server.js` (solo la versione);
++  - i documenti.
++- **Test della baseline**: invariati, salvo il numero di versione atteso in `tests/session_planner_370.test.js` (3.7.2 → 3.7.3).
++
++## Non modificato
++
++- matcher;
++- scoring di base;
++- rete e protocollo;
++- Player;
++- Pack Studio;
++- formato dei pacchetti;
++- giochi;
++- scaletta.
++
++Nessun cloud, account o merge avanzato.
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/GUIDA_RAPIDA_DOCENTE.md Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/GUIDA_RAPIDA_DOCENTE.md
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/GUIDA_RAPIDA_DOCENTE.md	2026-10-05 18:31:56.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/GUIDA_RAPIDA_DOCENTE.md	2026-10-05 20:06:04.903701500 +0200
+@@ -103,6 +103,15 @@
+ - **DUPLICA** per avere una copia da modificare, **ESPORTA** per mandarlo a un collega, **ELIMINA** per toglierlo. Con il server finisce in un cestino recuperabile.
+ - Nei risultati (CSV e report) ogni risposta indica da quale pacchetto viene.
+ 
++### Rimettere nel programma un file esportato (v3.7.3)
++Non serve ricordare dove va: premi **📥 IMPORTA CONTENUTI**, oppure trascina il file sulla regia. Il programma riconosce che cosa contiene e te lo dice prima di cambiare qualcosa:
++
++- *Hai selezionato un archivio domande (.json). Verranno sostituite le domande del pack attivo.*
++- *Hai selezionato un archivio giochi (.json). Verranno sostituiti i giochi del pack attivo* (solo i tipi presenti nel file).
++- *Hai selezionato un pacchetto completo (.zip). Verrà installato nella libreria pacchetti.*
++
++Prima di sostituire domande o giochi scegli **⬇ ESPORTA BACKUP PRIMA DI CONTINUARE**: salva una copia di quelli attuali, poi importa. Domande e giochi importati restano anche chiudendo il programma.
++
+ ### Creare o modificare un pacchetto: Pack Studio
+ - In **📦 PACCHETTI** premi **✏ PACK STUDIO** per un pacchetto nuovo, oppure **MODIFICA** su un pacchetto esistente.
+ - Scrivi le domande: testo, 4 alternative, il pallino sulla risposta corretta, spiegazione, tempo e, se vuoi, un'immagine. L'**ANTEPRIMA** mostra la domanda come in classe.
+@@ -112,7 +121,13 @@
+ 
+ ## 7. Classifica e risultati
+ 
+-- **★ CLASSIFICA** la mostra sul proiettore.
++- **★ CLASSIFICA** la mostra sul proiettore, tutta subito.
++- **A fine partita** (ultima domanda o fine della scaletta) arriva la **CLASSIFICA FINALE** come una proclamazione:
++  1. prima la schermata *CLASSIFICA FINALE · Ecco il verdetto*;
++  2. poi ogni **AVANTI** (o il tasto →) rivela una posizione, dall'ultima alla prima, mentre i posti non ancora svelati restano coperti;
++  3. il pulsante dice che cosa rivela ("▶ RIVELA IL 4° POSTO"), e l'ultimo è **★ RIVELA IL 1° POSTO**.
++
++  Hai tempo di commentare ogni posizione. **MOSTRA TUTTA LA CLASSIFICA** rivela tutto in una volta.
+ - Scheda **CLASSIFICA → ESPORTA RISULTATI**:
+   - **REPORT DI CLASSE**: pagina stampabile con classifica, % corrette, categorie e domande con più errori;
+   - **RISPOSTE CSV**: una riga per risposta, si apre con Excel;
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/LEGGIMI.txt Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/LEGGIMI.txt
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/LEGGIMI.txt	2026-10-05 16:40:52.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/LEGGIMI.txt	2026-10-05 20:06:04.903701500 +0200
+@@ -1,4 +1,6 @@
+-IL SECCHIONE · v3.7.1 KEYBOARD + ROUND REVEAL
++IL SECCHIONE · v3.7.3 CONTENT IMPORT AND PODIUM REVEAL
++Novità v3.7.3: CHANGELOG_V3_7_3.md (IMPORTA CONTENUTI: un solo pulsante per qualunque file esportato, con backup;
++               classifica finale rivelata dall'ultimo al primo posto, una posizione per AVANTI)
+ Novità v3.7.1: CHANGELOG_V3_7_1.md (tastiera testuale più stabile sui tablet; dopo il reveal,
+                primo AVANTI = classifica del round a tutto schermo, secondo AVANTI = contenuto successivo)
+ Novità v3.6.1: CHANGELOG_V3_6_1.md (flusso rapido in classe, 60 s giochi scritti, mini-classifica, 3 astensioni gratuite)
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/README.md Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/README.md
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/README.md	2026-10-05 18:31:56.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/README.md	2026-10-05 20:06:04.903701500 +0200
+@@ -1,4 +1,6 @@
+-# Il Secchione v3.7.2 KEYBOARD + ROUND REVEAL
++# Il Secchione v3.7.3 CONTENT IMPORT AND PODIUM REVEAL
++
++**v3.7.3**: **📥 IMPORTA CONTENUTI**, un solo pulsante per qualunque file: il programma riconosce da solo archivio domande, archivio giochi, pacchetto completo o scaletta, dice che cosa succederà e propone il backup prima di sostituire. A fine partita, la **CLASSIFICA FINALE** è una proclamazione: ogni AVANTI rivela una posizione dall'ultima alla prima, e il 1° posto arriva per ultimo. Vedi [CHANGELOG_V3_7_3.md](CHANGELOG_V3_7_3.md) e [QA/TEST_RESULTS_V3_7_3.md](QA/TEST_RESULTS_V3_7_3.md).
+ 
+ **v3.7.2**: ottimizzazione della **tastiera testuale** e nuova **classifica del round a tutto schermo**. La v3.7.0 resta la base della Scaletta della puntata. Si scelgono domande e giochi da uno o più pacchetti, si ordinano e si salvano con un nome; in classe si preme quasi solo **AVANTI**. La **regia "one screen"** mostra, sempre in vista sopra le schede e anche durante i giochi, lo stato, una sola **azione principale** contestuale (AVVIA → RIVELA → AVANTI) e solo le azioni secondarie utili in quel momento. Vedi [CHANGELOG_V3_7_1.md](CHANGELOG_V3_7_1.md) e [QA/TEST_RESULTS_V3_7_1.md](QA/TEST_RESULTS_V3_7_1.md).
+ 
+@@ -67,6 +69,17 @@
+ 
+ La scaletta si salva da sola e si riapre dall'elenco; **ESPORTA/IMPORTA** ne fa una copia in un file. Contiene solo riferimenti alle domande e ai giochi dei pacchetti, senza copiarli: se un contenuto non esiste più, compare come **MANCANTE** e viene saltato, mai sostituito.
+ 
++### Importa contenuti (v3.7.3)
++1. Premi **📥 IMPORTA CONTENUTI** nella colonna sinistra, oppure trascina il file in un punto qualsiasi della regia.
++2. Il programma riconosce il file e mostra un riepilogo:
++   - **archivio domande** (`.json` da ARCHIVIO → ESPORTA): sostituisce le domande del pack attivo;
++   - **archivio giochi** (`.json` da GIOCHI → ESPORTA GIOCHI): sostituisce le manche dei tipi presenti nel file, gli altri restano;
++   - **pacchetto completo** (`.zip`): viene installato nella libreria;
++   - **scaletta**: viene aggiunta alle scalette.
++3. Per domande e giochi scegli **⬇ ESPORTA BACKUP PRIMA DI CONTINUARE** (consigliato), **CONTINUA SENZA BACKUP** oppure **ANNULLA**.
++
++Con il server i contenuti importati vengono salvati nel pacchetto installato (restano dopo la chiusura) e la versione precedente finisce nel cestino dei pacchetti.
++
+ ### Ripristino sessione
+ 1. Se il browser si chiude, il PC si blocca o suona la campanella, riapri il Secchione come al solito.
+ 2. Compare **PARTITA NON CONCLUSA TROVATA**, con squadre, domanda e risposte registrate.
+@@ -87,6 +100,7 @@
+ | [EXPORT_CSV.md](EXPORT_CSV.md) | chi analizza i risultati | Contratto dei CSV, protezione dalle formule nei fogli di calcolo, dati grezzi |
+ | [TEST_CHECKLIST.md](TEST_CHECKLIST.md) | chi prova il software | Test automatici e i 19 test manuali da fare prima di una lezione |
+ | [ARCHITECTURE.md](ARCHITECTURE.md) | sviluppatore | Moduli, protocollo, dati, sicurezza, scelte |
++| [CHANGELOG_V3_7_3.md](CHANGELOG_V3_7_3.md) | tutti | Importa contenuti con riconoscimento del file e backup; classifica finale rivelata dall'ultimo al primo |
+ | [CHANGELOG_V3_7_0.md](CHANGELOG_V3_7_0.md) | tutti | Session Planner: scaletta della puntata, regia "one screen" con azione principale |
+ | [CHANGELOG_V3_6_1.md](CHANGELOG_V3_6_1.md) | tutti | Classroom Flow: 60 s scrittura, regia rapida, mini-classifica, astensioni, Staffetta |
+ | [CHANGELOG_V3_6_0.md](CHANGELOG_V3_6_0.md) | tutti | Classroom Control: modifica in partita, annulla/ripeti, connessioni, ricerca |
+@@ -135,9 +149,9 @@
+ node tools/simulate_players.js
+ ```
+ 
+-Il primo esegue 208 test su scoring, timer, risposte, persistenza, pack, Gestore Pacchetti, Pack Studio, answer matcher, Classroom Control/Flow, scaletta e regia "one screen", zip, report e CSV, QR, server e mascotte. Il secondo simula 2, 6, 15 e 30 pulsantiere.
++Il primo esegue 225 test su scoring, timer, risposte, persistenza, pack, Gestore Pacchetti, Pack Studio, answer matcher, Classroom Control/Flow, scaletta e regia "one screen", importa contenuti, classifica finale, zip, report e CSV, QR, server e mascotte. Il secondo simula 2, 6, 15 e 30 pulsantiere.
+ 
+-Runtime supportato: il **Node 24 portable incluso** in `runtime/`; con questo passano tutti i 208 test. Solo per informazione: con Node 8.16 ne passano 128; i 2 di `pilot_hotfix.test.js` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2.
++Runtime supportato: il **Node 24 portable incluso** in `runtime/`; con questo passano tutti i 225 test. Solo per informazione: con Node 8.16 ne passano 128; i 2 di `pilot_hotfix.test.js` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2.
+ 
+ ## Requisiti
+ - **Regia**: Chrome o Edge recenti su Windows (Firefox e Safari recenti dovrebbero funzionare, ma non sono stati provati).
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/TEST_CHECKLIST.md Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/TEST_CHECKLIST.md
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/TEST_CHECKLIST.md	2026-10-05 18:34:33.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/TEST_CHECKLIST.md	2026-10-05 20:06:04.903701500 +0200
+@@ -33,7 +33,19 @@
+ 
+ Totale v3.7.0: **208 test superati** (190 della v3.6.1 + 18 di `tests/session_planner_370.test.js`). Simulazione 2/6/15/30 pulsantiere: nessuna risposta persa o duplicata.
+ 
+-Totale v3.7.1: **212 test superati** (208 della v3.7.0 + 4 di `tests/classroom_readability_371.test.js`). La tastiera testuale non ricostruisce più tutto il DOM a ogni carattere; primo AVANTI dopo il reveal = classifica del round full-screen, secondo AVANTI = contenuto successivo. Simulazione 2/6/15/30 pulsantiere: nessuna risposta persa o duplicata.
++Totale v3.7.3: **225 test superati** (213 della v3.7.2 + 12 di `tests/content_import_podium_373.test.js`: riconoscimento del file, sostituzione di domande e giochi salvata nel pacchetto con backup e riapertura, blocchi, cablaggio, classifica finale dall'ultimo al primo con pari merito, layout per 3/6/12 squadre, regia e animazioni). Simulazione 2/6/15/30 pulsantiere: nessuna risposta persa o duplicata.
++
++| Test manuale v3.7.3 | Atteso | Stato |
++|---|---|---|
++| ARCHIVIO → ESPORTA, modifica il file, 📥 IMPORTA CONTENUTI | riepilogo "archivio domande … verranno sostituite", backup scaricato, domande sostituite, restano dopo la riapertura | ✅ |
++| GIOCHI → ESPORTA GIOCHI, file con un solo tipo | tabella per tipo, solo quel tipo sostituito | ✅ |
++| Trascina uno `.zip` di pacchetto sulla regia | "Pacchetto installato correttamente", ATTIVA ORA | ✅ |
++| File di risultati, scaletta, file sconosciuto | spiegazione chiara, nulla modificato senza conferma | ✅ |
++| Fine partita con 3, 6, 12 squadre | intro, una posizione per AVANTI, 1° per ultimo, pari merito, nessuna sovrapposizione a 1366×768 e 1920×1080 | ✅ |
++| Refresh dello SHOW a reveal in corso, AVANTI rapidissimi | stesso punto, nessun passo perso | ✅ |
++| Proiettore reale | leggibilità dal fondo dell'aula | ⬜ |
++
++Storico v3.7.1: **212 test superati** (208 della v3.7.0 + 4 di `tests/classroom_readability_371.test.js`). La tastiera testuale non ricostruisce più tutto il DOM a ogni carattere; primo AVANTI dopo il reveal = classifica del round full-screen, secondo AVANTI = contenuto successivo. Simulazione 2/6/15/30 pulsantiere: nessuna risposta persa o duplicata.
+ 
+ Storico v3.6.1: **190 test superati** (182 della v3.6.0 + 8 di `tests/classroom_flow_361.test.js`). Simulazione 2/6/15/30 pulsantiere: nessuna risposta persa o duplicata.
+ 
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/css/classroom.css Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/css/classroom.css
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/css/classroom.css	2026-10-05 17:45:06.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/css/classroom.css	2026-10-05 19:54:53.472692000 +0200
+@@ -238,3 +238,27 @@
+  .deviceLive{margin-top:6px;padding:4px 8px}
+ }
+ @media(max-height:900px) and (min-width:1151px){.tabViewport{max-height:calc(100vh - 380px);min-height:240px}}
++
++/* ---------- v3.7.3 · IMPORTA CONTENUTI ---------- */
++.importDialog{width:min(780px,96vw);max-height:92vh;overflow:auto}
++.importDialog code{font-size:12px;color:#ffe08a;background:#0b1a2b;border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
++.impLead,.impWhat{font-size:15px;line-height:1.5;margin:4px 0 6px}
++.impWhat.ok{color:#62e5ab;font-weight:800}.impWhat.bad{color:#ffb3bf;font-weight:800}
++.impWhere{font-size:14px;line-height:1.5;color:#c9dcee;margin:0 0 10px}
++.impKinds{margin:8px 0 12px 18px;padding:0;font-size:13px;line-height:1.7;color:#c9dcee}
++.impKinds i{color:#ffe08a;font-style:normal;font-weight:800}
++.impPreview{margin:0 0 10px 20px;padding:0;font-size:12px;color:#a9cbe4;line-height:1.5}
++.impPreview .more{list-style:none;margin-left:-14px;color:#7f9bb5}
++.impTable{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 10px}
++.impTable th{text-align:left;font-size:10px;letter-spacing:.06em;color:#8edaff;padding:5px 6px;border-bottom:1px solid #2c4a66}
++.impTable td{padding:6px;border-bottom:1px solid #1d3550}
++.impTable tr.rep td{background:#2b230c}
++.impTable td i{font-style:normal;font-size:11px;color:#ffe08a;margin-left:4px}
++.impTable td i.keep{color:#62e5ab}
++.impWarn{border:1px solid #c79a2e;background:#2b230c;color:#ffe2a3;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5;margin:6px 0 12px}
++.impErrors{margin:0 0 10px 18px;font-size:13px;color:#ffb3bf}
++.impActions{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
++.impActions .btn{flex:1 1 180px;min-width:0}
++.impActions .btn.xl{flex:2 1 280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
++.impActions .btn small{font-size:10px;font-weight:600;opacity:.85}
++.impHelp{margin:8px 0 0;font-size:11px}
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/css/show.css Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/css/show.css
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/css/show.css	2026-10-05 18:31:56.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/css/show.css	2026-10-05 20:01:28.163245300 +0200
+@@ -120,3 +120,78 @@
+ @media(max-aspect-ratio:4/3){.resultHeader{grid-template-columns:minmax(0,1fr) auto 14cqw}.resultHeader>img{width:14cqw}.resultRow{grid-template-columns:6cqh minmax(0,1fr) 7cqw 10cqw 9cqw 9cqw}.resultTeam{font-size:3cqh}.roundRevealFooter span:nth-child(2){display:none}}
+ @media(prefers-reduced-motion:reduce){.resultRow{opacity:1;transform:none;filter:none;animation:none!important}}
+ 
++
++/* ===== v3.7.3 · CLASSIFICA FINALE: proclamazione dalla posizione piu bassa alla prima =====
++   Stessa grammatica della classifica del round (resultHeader, resultPos, toni del podio); qui ogni AVANTI rivela una posizione.
++   Animazioni solo transform/opacity; con movimento ridotto le carte compaiono senza animazione. */
++.finalScene{height:100%;padding:2.4cqh 3.1cqw 2.6cqh;display:grid;grid-template-rows:10.5cqh minmax(0,1fr);gap:1.8cqh;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% -12%,#1679ff5c 0,transparent 50%),radial-gradient(ellipse at 50% 118%,#ffbd3338 0,transparent 44%),linear-gradient(150deg,#071f4a,#030b1c)}
++.finalScene.complete{background:radial-gradient(ellipse at 50% -12%,#1679ff5c 0,transparent 50%),radial-gradient(ellipse at 50% 112%,#ffc63e55 0,transparent 48%),linear-gradient(150deg,#071f4a,#030b1c)}
++.finalHeader .revealDirection strong{font-variant-numeric:tabular-nums}
++.finalIntro{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2cqh;min-height:0;animation:finalIntroIn .9s cubic-bezier(.2,.8,.25,1) both}
++.finalKicker{font-size:2.2cqh;letter-spacing:.34em;color:#9fd2ff;font-weight:900}
++.finalIntro h2{margin:0;font-size:12cqh;line-height:.92;letter-spacing:-.025em;color:#fff;text-shadow:0 0 5cqh #2f8cff70}
++.finalIntro p{margin:0;font-size:4cqh;color:#ffe08a;font-weight:800}
++.finalIntro small{font-size:2.1cqh;color:#9fbcd6;letter-spacing:.08em}
++.finalList{display:grid;gap:1.1cqh;min-height:0;padding:0 .4cqw}
++.finalCard{--tone:#4a8bd3;position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:2cqw;min-height:0;padding:.9cqh 2.2cqw .9cqh 1.6cqw;border:1px solid color-mix(in srgb,var(--tone) 70%,#1c3651);border-left:.8cqh solid var(--tone);border-radius:1.4cqh;background:linear-gradient(100deg,#0d315c 0,#091d39 70%,#07172d 100%);box-shadow:0 .5cqh 2cqh #0006,inset 0 0 2cqh #ffffff05;overflow:hidden}
++.finalCard .resultPos{width:8cqh;height:8cqh;font-size:3.5cqh;font-weight:900}
++.finalIdentity{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:.7cqh}
++.finalTeam{font-size:4.8cqh;font-weight:900;line-height:1.2;padding-bottom:.04em;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
++.finalIdentity small{display:flex;flex-wrap:wrap;align-items:center;gap:.4cqh 1.4cqw;font-size:1.9cqh;color:#a9cbe4;font-weight:800;letter-spacing:.04em}
++.finalIdentity .medal{font-style:normal;color:var(--tone);letter-spacing:.18em;font-weight:900}
++.finalIdentity .tie{font-style:normal;color:#ffe08a;letter-spacing:.12em}
++.finalScore{display:flex;flex-direction:column;align-items:flex-end;justify-content:center}
++.finalScore strong{font-size:6.4cqh;line-height:1;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
++.finalScore span{font-size:1.5cqh;letter-spacing:.22em;color:#8fb7d5;font-weight:900}
++.finalCard.p1{--tone:#ffd34c;border-color:#ffe58a;border-left-color:#ffe58a;background:linear-gradient(100deg,#8a6512 0,#1d3a55 68%,#081a31 100%);box-shadow:0 0 5cqh #ffd34c40,0 .6cqh 2.4cqh #0008}
++.finalCard.p1 .resultPos{background:#d4a72e;color:#152034;border-color:#fff0ad;font-size:4.2cqh}
++.finalCard.p1 .finalScore strong{color:#ffe58a}
++.finalCard.p2{--tone:#d3e1ec;background:linear-gradient(100deg,#40536a 0,#122c49 70%,#081a31 100%);box-shadow:0 0 3cqh #d3e1ec22,0 .5cqh 2cqh #0007}
++.finalCard.p3{--tone:#e0a26f;background:linear-gradient(100deg,#5b3b22 0,#142b47 70%,#081a31 100%);box-shadow:0 0 3cqh #e0a26f22,0 .5cqh 2cqh #0007}
++.finalCard.locked{grid-template-columns:auto minmax(0,1fr);background:#071a31b0;border-style:dashed;border-left-style:solid;box-shadow:none;opacity:.6}
++.finalCard.locked.podium{opacity:.72}
++.finalLock{font-size:4cqh;color:#4f7aa3;font-weight:900;letter-spacing:.4em}
++.finalShine{position:absolute;top:0;bottom:0;left:-30%;width:24%;background:linear-gradient(100deg,transparent,#fff4 50%,transparent);opacity:0;pointer-events:none}
++.finalCard.enter{animation:finalCardIn .6s cubic-bezier(.18,.84,.25,1) both}
++.finalCard.podium.enter{animation-duration:.85s}
++.finalCard.p1.enter{animation:finalWinnerIn 1.15s cubic-bezier(.16,.9,.24,1) both}
++.finalCard.p1.enter .finalShine{animation:finalShine 1.5s .55s ease-out both}
++@keyframes finalCardIn{from{opacity:0;transform:translateY(3cqh)}to{opacity:1;transform:none}}
++@keyframes finalWinnerIn{0%{opacity:0;transform:translateY(5cqh) scale(.88)}60%{opacity:1;transform:translateY(-.8cqh) scale(1.035)}100%{opacity:1;transform:none}}
++@keyframes finalShine{0%{opacity:0;transform:translateX(0)}20%{opacity:1}100%{opacity:0;transform:translateX(600%)}}
++@keyframes finalIntroIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
++/* poche squadre: carte ancora piu grandi; 6-8 squadre: carte piu basse ma sempre leggibili */
++.finalScene.few .finalCard .resultPos{width:11cqh;height:11cqh;font-size:4.6cqh}
++.finalScene.few .finalTeam{font-size:6.6cqh}
++.finalScene.few .finalScore strong{font-size:8.6cqh}
++.finalScene.few .finalIdentity small{font-size:2.3cqh}
++.finalScene.dense .finalList{gap:.8cqh}
++.finalScene.dense .finalCard{padding:.45cqh 2cqw .45cqh 1.4cqw}
++.finalScene.dense .finalCard .resultPos{width:6.2cqh;height:6.2cqh;font-size:2.8cqh}
++.finalScene.dense .finalTeam{font-size:3.7cqh;-webkit-line-clamp:1}
++.finalScene.dense .finalScore strong{font-size:4.8cqh}
++.finalScene.dense .finalIdentity small{font-size:1.85cqh}
++.finalScene.dense .finalLock{font-size:3cqh}
++/* molte squadre (oltre 8): podio 2-1-3 grande in alto, le altre in colonne compatte */
++.finalMany{display:grid;grid-template-rows:minmax(0,1.2fr) minmax(0,1fr);gap:1.6cqh;min-height:0}
++.finalPodium{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:1.6cqw;align-items:end;min-height:0}
++.finalPodium .finalCard{height:100%;grid-template-columns:1fr;justify-items:center;align-content:center;text-align:center;gap:.9cqh;padding:1.2cqh 1.4cqw}
++.finalPodium .finalCard:nth-child(1){height:86%}
++.finalPodium .finalCard:nth-child(3){height:76%}
++.finalPodium .finalIdentity small{justify-content:center}
++.finalPodium .finalScore{align-items:center}
++.finalPodium .finalTeam{font-size:3.9cqh}
++.finalPodium .finalCard.p1 .finalTeam{font-size:4.6cqh}
++.finalPodium .finalScore strong{font-size:5.2cqh}
++.finalPodium .finalCard .resultPos{width:7cqh;height:7cqh;font-size:3cqh}
++.finalRest{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-template-rows:repeat(var(--rows),minmax(0,1fr));grid-auto-flow:column;gap:.7cqh 1.4cqw;min-height:0}
++.finalRest .finalCard{padding:.3cqh 1.2cqw .3cqh .9cqw;gap:1.1cqw;border-left-width:.5cqh;border-radius:1cqh}
++.finalRest .finalCard .resultPos{width:4.3cqh;height:4.3cqh;font-size:1.9cqh}
++.finalRest .finalTeam{font-size:2.5cqh;-webkit-line-clamp:1}
++.finalRest .finalIdentity{gap:.2cqh}
++.finalRest .finalIdentity small{font-size:1.5cqh}
++.finalRest .finalScore strong{font-size:3cqh}
++.finalRest .finalScore span{font-size:.95cqh}
++.finalRest .finalLock{font-size:2.3cqh}
++@media(prefers-reduced-motion:reduce){.finalCard.enter,.finalCard.p1.enter,.finalIntro,.finalCard.p1.enter .finalShine{animation:none!important}}
++.finalScene.isIntro .resultHeader h1{visibility:hidden}
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/index.html Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/index.html
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/index.html	2026-10-05 18:31:56.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/index.html	2026-10-05 19:52:26.071019400 +0200
+@@ -4,7 +4,7 @@
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="secchione-host-key" content="">
+-<title>Il Secchione · v3.7.2 CLASSROOM</title>
++<title>Il Secchione · v3.7.3 CLASSROOM</title>
+ <link rel="stylesheet" href="css/show.css">
+ <link rel="stylesheet" href="css/classroom.css">
+ </head>
+@@ -33,6 +33,7 @@
+         <button id="devicesBtn" class="btn primary railWide top8">📱 PULSANTIERE (TABLET)</button>
+         <button id="packsBtn" class="btn ghost railWide top8">📦 PACCHETTI</button>
+         <button id="planBtn" class="btn ghost railWide top8">📋 SCALETTA</button>
++        <button id="importContentBtn" class="btn ghost railWide top8">📥 IMPORTA CONTENUTI</button>
+         <small id="activePackInfo" class="railNote"></small>
+         <button id="settingsBtn" class="btn ghost railWide top8">⚙ IMPOSTAZIONI PARTITA</button>
+         <small id="settingsSummary" class="railNote"></small>
+@@ -127,8 +128,8 @@
+           </div>
+         </section>
+ 
+-        <section id="tab-games" class="tab"><div class="panel"><div class="panelHead"><h2>GIOCHI</h2><span class="badge amberBadge">SHOW</span></div><div id="gameButtons" class="gameButtons"></div></div><div class="panel editorActions"><button class="btn ghost" id="exportGamesBtn">ESPORTA GIOCHI</button><label class="btn ghost fileLabel">IMPORTA GIOCHI<input id="importGamesInput" type="file" accept="application/json,.json"></label></div><div id="gameControls"></div></section>
+-        <section id="tab-bank" class="tab"><div class="panel"><div class="panelHead"><h2>ARCHIVIO DOMANDE</h2><span id="bankCount" class="badge">0</span></div><div class="row wrap gap"><button id="newQuestionBtn" class="btn primary">+ NUOVA</button><button id="shuffleQuestionsBtn" class="btn ghost">MESCOLA</button><button id="exportBankBtn" class="btn ghost">ESPORTA</button><label class="btn ghost fileLabel">IMPORTA<input id="importBankInput" type="file" accept="application/json,.json"></label><button id="resetBankBtn" class="btn red">RESET</button></div><div class="row wrap gap top8"><button id="openPacksBtn2" class="btn ghost">📦 PACCHETTI…</button><small class="help" id="packInfo"></small></div><div class="bankSearch top8"><input id="bankSearch" class="control" type="search" placeholder="Cerca: testo, risposte, spiegazione, argomento…" aria-label="Cerca nell'Archivio"><select id="bankTopic" class="control" aria-label="Filtra per argomento"></select><select id="bankDifficulty" class="control" aria-label="Filtra per difficoltà"></select><small id="bankResultInfo" class="help"></small></div><div id="questionList" class="questionList"></div></div></section>
++        <section id="tab-games" class="tab"><div class="panel"><div class="panelHead"><h2>GIOCHI</h2><span class="badge amberBadge">SHOW</span></div><div id="gameButtons" class="gameButtons"></div></div><div class="panel"><div class="editorActions"><button class="btn ghost" id="exportGamesBtn">ESPORTA GIOCHI</button><label class="btn ghost fileLabel">IMPORTA GIOCHI<input id="importGamesInput" type="file" accept=".json,.zip,application/json"></label></div><p class="help impHelp">Importa qui un file .json esportato con ESPORTA GIOCHI: sostituisce le manche dei tipi presenti nel file. Per un pacchetto completo usa <b>📥 IMPORTA CONTENUTI</b> o <b>📦 PACCHETTI</b>.</p></div><div id="gameControls"></div></section>
++        <section id="tab-bank" class="tab"><div class="panel"><div class="panelHead"><h2>ARCHIVIO DOMANDE</h2><span id="bankCount" class="badge">0</span></div><div class="row wrap gap"><button id="newQuestionBtn" class="btn primary">+ NUOVA</button><button id="shuffleQuestionsBtn" class="btn ghost">MESCOLA</button><button id="exportBankBtn" class="btn ghost">ESPORTA</button><label class="btn ghost fileLabel">IMPORTA<input id="importBankInput" type="file" accept=".json,.zip,application/json"></label><button id="resetBankBtn" class="btn red">RESET</button></div><p class="help impHelp">Importa qui un file .json esportato dall’archivio domande: sostituisce le domande del pacchetto attivo. Per un pacchetto completo usa <b>📥 IMPORTA CONTENUTI</b> o <b>📦 PACCHETTI</b>.</p><div class="row wrap gap top8"><button id="openPacksBtn2" class="btn ghost">📦 PACCHETTI…</button><small class="help" id="packInfo"></small></div><div class="bankSearch top8"><input id="bankSearch" class="control" type="search" placeholder="Cerca: testo, risposte, spiegazione, argomento…" aria-label="Cerca nell'Archivio"><select id="bankTopic" class="control" aria-label="Filtra per argomento"></select><select id="bankDifficulty" class="control" aria-label="Filtra per difficoltà"></select><small id="bankResultInfo" class="help"></small></div><div id="questionList" class="questionList"></div></div></section>
+         <section id="tab-results" class="tab"><div class="panel"><div class="panelHead"><h2>CLASSIFICA</h2><span class="badge amberBadge">SHOW</span></div><div id="resultsList"></div></div>
+           <div class="panel"><div class="panelHead"><h2>ESPORTA RISULTATI</h2><span class="badge">DATI</span></div>
+             <div class="exportGrid"><button id="exportReportBtn" class="btn primary">REPORT DI CLASSE<small>HTML stampabile</small></button><button id="exportCsvBtn" class="btn ghost">RISPOSTE CSV<small>una riga per risposta · sicuro per Excel</small></button><button id="exportJsonBtn" class="btn ghost">JSON COMPLETO<small>backup e ripresa</small></button><button id="exportLogBtn" class="btn ghost">LOG TECNICO<small>per i pilot</small></button></div>
+@@ -159,6 +160,8 @@
+ 
+ <dialog id="packsDialog" class="dialog packsDialog"><div class="dialogHead"><h2>📦 Pacchetti</h2><button type="button" id="packsClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="packsBody"></div></dialog>
+ 
++<dialog id="importDialog" class="dialog importDialog"><div class="dialogHead"><h2>📥 Importa contenuti</h2><button type="button" id="importClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="importBody"></div></dialog>
++
+ <dialog id="planDialog" class="dialog planDialog"><div class="dialogHead"><h2>📋 Scaletta della puntata</h2><button type="button" id="planClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="planBody"></div></dialog>
+ 
+ <dialog id="devicesDialog" class="dialog devicesDialog"><div class="dialogHead"><h2>📱 Pulsantiere (tablet)</h2><button type="button" id="devicesClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="devicesBody"></div></dialog>
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/app.js Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/app.js
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/app.js	2026-10-05 18:31:56.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/app.js	2026-10-05 20:02:20.505826400 +0200
+@@ -14,7 +14,7 @@
+ const SP=window.SecchioneSessionPlan,PLAN_UI=window.SecchionePlannerUI;
+ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+ const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+-const VERSION='3.7.2';
++const VERSION='3.7.3';
+ const FREE_OMISSIONS=SC.DEFAULT_FREE_OMISSIONS||3;
+ const BRAND_LOGO='assets/logo_clean.svg';
+ const SOUND={
+@@ -50,7 +50,7 @@
+ const state={
+  motion:prefs.motion!==false,packKey:P[prefs.packKey]?prefs.packKey:Object.keys(P)[0],activePacks:[],mixed:false,mixPack:null,mixShuffle:!!prefs.mixShuffle,bank:[],teams:[],screen:'home',qIndex:0,qRound:null,phase:'preview',answerVisible:false,roundResultsVisible:false,
+  pending:{},pendingOrder:[],correctOrder:[],pendingHistory:[],entryMeta:{},entrySeq:0,cursor:0,
+- questionScored:false,arcade:null,completedRounds:{},deferredEdits:{},repeatOf:null,planRun:null,timer:TM.create(30),round:null,session:null,
++ questionScored:false,arcade:null,completedRounds:{},deferredEdits:{},repeatOf:null,planRun:null,finalReveal:null,timer:TM.create(30),round:null,session:null,
+  sound:prefs.sound!==false,volume:Number.isFinite(Number(prefs.volume))?Number(prefs.volume):.78
+ };
+ 
+@@ -61,7 +61,7 @@
+  return out;
+ }
+ /* Manche Indovina / Parola Segreta / Staffetta modificate dal docente, salvate per pack. */
+-function applyCustomGames(rt){const data=customGames[rt.id];if(!data)return;try{const ready={};for(const type of EDITABLE_GAMES){if(!Array.isArray(data[type]))continue;if(!data[type].length||data[type].length>200)throw Error();ready[type]=data[type].map(x=>PE.validateGame(type,x))}Object.assign(rt.arcadeSets,C.clone(ready))}catch(e){console.warn('Giochi personalizzati non validi per',rt.id)}}
++function applyCustomGames(rt){const data=customGames[rt.id];if(!data)return;try{const ready={};for(const type of PE.GAME_TYPES){if(!Array.isArray(data[type]))continue;if(!data[type].length||data[type].length>200)throw Error();ready[type]=data[type].map(x=>PE.validateGame(type,x))}Object.assign(rt.arcadeSets,C.clone(ready))}catch(e){console.warn('Giochi personalizzati non validi per',rt.id)}}
+ function activeRuntimes(){return state.activePacks.map(id=>P[id]).filter(Boolean)}
+ function buildMixPack(rts){const first=rts[0],subjects=[...new Set(rts.map(r=>(r.meta||{}).subject).filter(Boolean))];return Object.assign({},first,{key:'mix',id:'mix',title:'Sessione mista',subtitle:rts.map(r=>r.title).join(' · '),tags:[],questions:[],arcadeSets:PL.composeArcade(rts),texts:Object.assign({},first.texts,{homeEyebrow:'SESSIONE MISTA',homeClaim:rts.map(r=>r.title).join(' + '),mascotHome:'Tanti argomenti,\nuna sfida!',footer:rts.map(r=>r.title.toUpperCase()).join(' · ')}),meta:Object.assign({},first.meta,{version:'',subject:subjects.join(', ')}),members:rts.map(r=>r.id),mixed:true})}
+ /* Imposta i pack in gara e ricostruisce domande e giochi. Squadre, punti e sessione NON cambiano. */
+@@ -124,7 +124,7 @@
+ function buildSnapshot(reason){
+  const s=state.session;s.updatedAt=SS.nowISO();s.participants=state.teams.map(t=>({id:t.id,type:t.type||'team',name:t.name,createdAt:t.createdAt||s.createdAt}));
+  return {format:'secchione-snapshot',version:1,app:VERSION,savedAt:SS.nowISO(),reason:reason||'',packKey:state.packKey,activePacks:state.activePacks,mixShuffle:state.mixShuffle,session:s,
+-  ui:{screen:state.screen,qIndex:state.qIndex,questionId:q()?q().id:null,phase:state.phase,answerVisible:state.answerVisible,roundResultsVisible:!!state.roundResultsVisible,questionScored:state.questionScored,qRound:state.qRound,pending:state.pending,pendingOrder:state.pendingOrder,correctOrder:state.correctOrder,entryMeta:state.entryMeta,entrySeq:state.entrySeq,completedRounds:state.completedRounds,arcade:sanitizeArcade(state.arcade),timer:TM.snapshot(state.timer,performance.now()),round:state.round,deferredEdits:state.deferredEdits||{},lockedQuestion:RC.isLocked(state)?q():null,repeatOf:state.repeatOf||null,planRun:state.planRun||null}};
++  ui:{screen:state.screen,qIndex:state.qIndex,questionId:q()?q().id:null,phase:state.phase,answerVisible:state.answerVisible,roundResultsVisible:!!state.roundResultsVisible,questionScored:state.questionScored,qRound:state.qRound,pending:state.pending,pendingOrder:state.pendingOrder,correctOrder:state.correctOrder,entryMeta:state.entryMeta,entrySeq:state.entrySeq,completedRounds:state.completedRounds,arcade:sanitizeArcade(state.arcade),timer:TM.snapshot(state.timer,performance.now()),round:state.round,deferredEdits:state.deferredEdits||{},lockedQuestion:RC.isLocked(state)?q():null,repeatOf:state.repeatOf||null,finalReveal:state.finalReveal?{shown:state.finalReveal.shown,lastAt:0}:null,planRun:state.planRun||null}};
+ }
+ function hasProgress(snap){const s=snap&&snap.session;return !!s&&s.status==='active'&&((s.participants||[]).length>0||(s.responses||[]).length>0)}
+ function autosave(reason,delay){clearTimeout(saveTO);saveTO=setTimeout(()=>saveNow(reason),delay==null?120:delay)}
+@@ -147,7 +147,7 @@
+  }else if(ui.screen==='arcade'&&ui.arcade){
+   state.screen='arcade';state.arcade=ui.arcade;state.arcade.started=false;state.pending=ui.pending||{};state.pendingOrder=ui.pendingOrder||[];state.correctOrder=ui.correctOrder||[];state.entryMeta=ui.entryMeta||{};state.round=ui.round||null;
+   state.timer=Object.assign(TM.create(state.arcade.seconds||30),ui.timer||{},{running:false});
+- }else if(ui.screen==='leaderboard'){state.screen='leaderboard'}
++ }else if(ui.screen==='leaderboard'){state.screen='leaderboard';state.finalReveal=ui.finalReveal?{shown:Number(ui.finalReveal.shown)||0,lastAt:0}:null}
+  else{state.screen='home';if(idx>=0)state.qIndex=idx}
+  logEvent({event:'session.resume',reason:snap.reason||''});NET.newSession(s.sessionId);syncNetParticipants();
+  renderAll();autosave('resume',0);
+@@ -222,7 +222,7 @@
+   if(state.roundResultsVisible){label=`RISULTATI · DOMANDA ${nq.n}`;msg=`Classifica del round sul palco: ${live?'AVANTI':'PROSSIMA'} passa al contenuto successivo.`}
+   else{label=`DOMANDA ${nq.n} / ${nq.total}`;msg=state.phase==='preview'?'Mostra la domanda. Premi AVVIA DOMANDA (Spazio) quando la classe è pronta.':state.phase==='running'?(state.timer.running?'Tempo in corso: le risposte possono arrivare dai tablet o essere registrate qui sotto.':'Tempo in PAUSA.'):state.questionScored?(state.answerVisible?`${live?'AVANTI':'PROSSIMA'} mostra la classifica della domanda a tutto schermo.`:(live?'Punti confermati: premi AVANTI.':'Punti confermati. Premi → per la prossima domanda.')):state.answerVisible?`Soluzione svelata: ${live?'AVANTI':'PROSSIMA'} registra i punti e mostra la classifica del round.`:'Registra le risposte mancanti (A B C D o 0) e conferma con Invio.'}
+  }else if(state.screen==='arcade'&&state.arcade){label=gameName(state.arcade.type).toUpperCase();msg=state.arcade.started?'Manche in corso. Timer e automatismi sono sincronizzati.':state.arcade.played&&!state.arcade.scoreCommitted?`Manche conclusa: controlla RISPOSTE E PUNTI qui sotto, poi ${live?'AVANTI':'PROSSIMA'}.`:state.arcade.scoreCommitted?'Punti del gioco registrati.':'Regia pronta: avvia la manche quando la classe è pronta.'}
+- else if(state.screen==='leaderboard'){label='CLASSIFICA';msg=run&&run.finished&&!run.stopped?'Scaletta completata. Risultati aggiornati.':'Risultati aggiornati.'}
++ else if(state.screen==='leaderboard'){const pi=podiumInfo();label=pi?'CLASSIFICA FINALE':'CLASSIFICA';msg=pi&&pi.shown<pi.total?`Proclamazione: AVANTI (→) rivela ${RC.placeLabel(pi.nextRank).toLowerCase()} · ${pi.shown} di ${pi.total} rivelati.`:pi?'Verdetto completo: commenta il podio, poi HOME o REPORT.':run&&run.finished&&!run.stopped?'Scaletta completata. Risultati aggiornati.':'Risultati aggiornati.'}
+  if(stateEl)stateEl.textContent=label;if(hint)hint.textContent=msg;
+  const pr=$('#directorProgress');if(pr){if(live){const p=SP.position(live);pr.textContent=p.next?`Poi: ${p.next.kind==='game'?'🎮':'❓'} ${(p.next.preview&&p.next.preview.title)||''}${p.next.duplicateOf?' (di nuovo)':''}`:'Ultimo elemento della scaletta'}else{const p=RC.progress(state.bank,state.completedRounds,state.qIndex),cur=state.screen==='question'&&q()?(state.completedRounds[q().id]?' · questa: giocata':' · questa: da giocare'):'';pr.textContent=p.total?`Domanda ${p.current} / ${p.total} · giocate ${p.played} · da giocare ${p.toPlay}${cur}`:''}}
+  renderCockpit();updateTimerUI();
+@@ -234,7 +234,7 @@
+ 
+ /* ---------------- FLUSSO DOMANDE ---------------- */
+ function startQuiz(){if(planLive())return planResume();if(state.teams.length<2){toast('Aggiungi almeno due squadre.');tab('session');return}logEvent({event:'quiz.start'});state.qIndex=0;goQuestion(0)}
+-function goQuestion(i){RC.applyDeferred(state);state.repeatOf=null;ghClosePairRound();arcadeEpoch++;state.arcade=null;stopTimer();state.screen='question';state.qIndex=Math.max(0,Math.min(state.bank.length-1,i));state.qRound=C.buildQuestionRound(q());state.phase='preview';state.answerVisible=false;state.roundResultsVisible=false;state.round=null;state.questionScored=false;clearPending();resetTimer(TM.secondsFor(q()));state.cursor=0;restoreCompletedRound();renderAll();showTransition(`DOMANDA ${String(qNumber().n).padStart(2,'0')}`,q()?.category||pack().title,String(qNumber().n).padStart(2,'0'));autosave('question.go')}
++function goQuestion(i){RC.applyDeferred(state);state.repeatOf=null;state.finalReveal=null;ghClosePairRound();arcadeEpoch++;state.arcade=null;stopTimer();state.screen='question';state.qIndex=Math.max(0,Math.min(state.bank.length-1,i));state.qRound=C.buildQuestionRound(q());state.phase='preview';state.answerVisible=false;state.roundResultsVisible=false;state.round=null;state.questionScored=false;clearPending();resetTimer(TM.secondsFor(q()));state.cursor=0;restoreCompletedRound();renderAll();showTransition(`DOMANDA ${String(qNumber().n).padStart(2,'0')}`,q()?.category||pack().title,String(qNumber().n).padStart(2,'0'));autosave('question.go')}
+ /* Uscendo da una domanda aperta non si perdono le risposte: completa = conferma automatica, parziale = decide il docente. */
+ function leaveQuestionGuard(){if(state.screen!=='question'||state.questionScored||!state.round||state.phase==='preview')return true;const any=state.teams.some(t=>t.id in state.pending);if(!any){if(state.phase==='running'){if(!confirm('La domanda è in corso: annullarla e cambiare schermata?\nNessun punto verrà assegnato.')){renderAll();return false}cancelRoundCore('navigazione')}return true}if(state.phase==='running')closeQuestionTime();const n=state.teams.filter(t=>t.id in state.pending).length;if(n<state.teams.length){if(!confirm(`Mancano le risposte di ${state.teams.length-n} squadre.
+ OK = segnale come omesse e conferma i punti.
+@@ -259,12 +259,14 @@
+ }
+ function nextQuestion(){
+  if(planLive())return planNext();
++ /* classifica finale (scaletta conclusa o fine archivio): ogni AVANTI rivela una posizione, dalla piu bassa alla prima */
++ if(state.screen==='leaderboard'&&state.finalReveal){revealNextPlace();return}
+  if(!state.bank.length)return;
+  if(state.screen==='question'){
+   /* Primo AVANTI dopo la soluzione: classifica della domanda a tutto schermo. Secondo AVANTI: domanda seguente. */
+   if(!state.roundResultsVisible&&showQuestionResults())return;
+   state.roundResultsVisible=false;
+-  if(state.qIndex>=state.bank.length-1){showLeaderboard();return}
++  if(state.qIndex>=state.bank.length-1){showLeaderboard({final:true});return}
+   goQuestion(state.qIndex+1);return;
+  }
+  if(state.screen==='arcade'&&!settleArcadeForNext())return;
+@@ -284,8 +286,8 @@
+ function closeQuestionTime(){stopTimer();state.phase='scoring';if(state.round){state.round.closedAt=SS.nowISO();NET.closeRound(state.round.roundInstanceId);logEvent({event:'round.close',roundInstanceId:state.round.roundInstanceId})}markOmittedForTabletTeams()}
+ function finishQuestion(){if(state.screen!=='question'||state.phase!=='running')return;closeQuestionTime();renderAll();toast('Tempo chiuso: registra le risposte mancanti.');autosave('round.close',0)}
+ function revealQuestion(){if(state.screen!=='question'||state.phase==='preview'){toast('Avvia prima la domanda.');return}if(state.phase==='running')closeQuestionTime();state.roundResultsVisible=false;state.answerVisible=true;if(state.round&&!state.round.revealedAt){state.round.revealedAt=SS.nowISO();NET.revealRound(state.round.roundInstanceId);logEvent({event:'round.reveal',roundInstanceId:state.round.roundInstanceId})}renderAll();cloneAudio('reveal',.88);maybeAutoCommit();autosave('reveal',0)}
+-function showHome(){if(!leaveQuestionGuard())return;ghClosePairRound();arcadeEpoch++;stopTimer();state.roundResultsVisible=false;state.screen='home';state.arcade=null;state.round=null;clearPending();renderAll();autosave('home')}
+-function showLeaderboard(){if(!leaveQuestionGuard())return;arcadeEpoch++;stopTimer();state.roundResultsVisible=false;state.screen='leaderboard';state.arcade=null;state.round=null;renderAll();cloneAudio('leader',.84);showTransition('CLASSIFICA',pack().title,'TOP');autosave('leaderboard')}
++function showHome(){if(!leaveQuestionGuard())return;state.finalReveal=null;ghClosePairRound();arcadeEpoch++;stopTimer();state.roundResultsVisible=false;state.screen='home';state.arcade=null;state.round=null;clearPending();renderAll();autosave('home')}
++function showLeaderboard(opts){if(!leaveQuestionGuard())return;const final=!!(opts&&opts.final===true);arcadeEpoch++;stopTimer();state.roundResultsVisible=false;state.screen='leaderboard';state.arcade=null;state.round=null;state.finalReveal=final&&state.teams.length?{shown:0,lastAt:0}:null;renderAll();cloneAudio('leader',.84);showTransition(final?'CLASSIFICA FINALE':'CLASSIFICA',final?'La sfida è finita. Ecco il verdetto.':pack().title,'TOP');autosave('leaderboard')}
+ function newRound(kind,extra){state.round=Object.assign({roundInstanceId:SS.uuid(),kind,openedAt:null,closedAt:null,revealedAt:null,committed:false},extra||{});state.entrySeq=0;return state.round}
+ 
+ /* ---------------- SCALETTA DELLA PUNTATA (v3.7.0, engine/sessionPlan.js) ----------------
+@@ -349,7 +351,7 @@
+ }
+ function planPrev(){const run=planLive();if(!run)return;const p=SP.prevPlayable(run.items,run.cursor);if(p<0)return toast('Sei al primo elemento della scaletta.');if(state.screen==='arcade'&&state.arcade&&state.arcade.started&&!state.arcade.scoreCommitted){if(!confirm('Il gioco è in corso: lasciarlo senza assegnare punti?'))return;closeArcadeTabletRound(false)}if(!leaveQuestionGuard())return;planGo(p)}
+ function planResume(){const run=planLive();if(!run)return;if(planOnItem(planCurrent()))return toast('La scaletta è già in corso: usa AVANTI.');if(state.teams.length<2){toast('Aggiungi almeno due squadre.','warn');return}planGo(run.cursor>=0?run.cursor:SP.nextPlayable(run.items,-1))}
+-function planFinish(){const run=planLive();if(!run)return;run.finished=true;run.finishedAt=SS.nowISO();planRecord();logEvent({event:'plan.finish',reason:run.name});showLeaderboard();toast(`✓ Scaletta «${run.name}» completata.`,'ok')}
++function planFinish(){const run=planLive();if(!run)return;run.finished=true;run.finishedAt=SS.nowISO();planRecord();logEvent({event:'plan.finish',reason:run.name});showLeaderboard({final:true});toast(`✓ Scaletta «${run.name}» completata.`,'ok')}
+ function planExit(){const run=planLive();if(!run)return;if(!confirm(`Uscire dalla scaletta «${run.name}»?\nSquadre e punti restano; potrai riavviarla dalla SCALETTA.`))return;run.finished=true;run.finishedAt=SS.nowISO();run.stopped=true;planRecord();logEvent({event:'plan.stop',reason:run.name});renderAll();autosave('plan.stop',0);toast('Scaletta interrotta: squadre e punti restano. Ora → e PROSSIMA seguono l’ordine dell’archivio.')}
+ /* Lasciare un gioco: con risposte registrate i punti si confermano (mancanti = Ø, come PROSSIMA DOMANDA); senza risposte chiede conferma. */
+ function settleArcadeForNext(){
+@@ -377,7 +379,7 @@
+  const run=state.planRun,live=planLive(),pos=live?SP.position(live):null,a=state.screen==='arcade'?state.arcade:null,nx=pos&&pos.next;
+  const isLast=live?pos.isLast:state.screen==='question'&&state.qIndex>=state.bank.length-1;
+  const votes=side=>a&&a.votes&&a.pairRoundId?Object.values(a.votes).filter(v=>v===side).length:null;
+- return {screen:state.screen==='rules'?'home':state.screen,phase:state.phase,timerRunning:!!state.timer.running,answerVisible:!!state.answerVisible,questionScored:!!state.questionScored,canUndo:state.pendingHistory.length>0&&canEnter(),teams:state.teams.length,isLast,
++ return {podium:podiumInfo(),screen:state.screen==='rules'?'home':state.screen,phase:state.phase,timerRunning:!!state.timer.running,answerVisible:!!state.answerVisible,questionScored:!!state.questionScored,canUndo:state.pendingHistory.length>0&&canEnter(),teams:state.teams.length,isLast,
+   plan:run?{finished:!!run.finished,nextTitle:nx?(nx.kind==='game'?'🎮 ':'')+((nx.preview&&nx.preview.title)||'')+(nx.duplicateOf?' (di nuovo)':''):'',position:pos?`${Math.max(1,pos.current)} / ${pos.total}`:''}:null,
+   arcade:a?{type:a.type,name:gameName(a.type),played:!!a.played,started:!!a.started,final:!!a.final,pairSelected:a.type==='ghigliottina'&&!a.final&&!!(a.pairs&&a.pairs[a.step]||{}).selected,votesA:votes('A'),votesB:votes('B'),solutionShown:gameSolutionShown(a),scoreCommitted:!!a.scoreCommitted,chainHasNext:a.type==='chain'&&a.index<(a.links||[]).length-1,
+    canAid:{piece:a.revealed<(a.revealOrder||[]).length,matchOne:a.revealCount<(a.cards||[]).length,clue:a.visible<(a.clues||[]).length,eliminate:(a.candidates||[]).some((_,i)=>i!==a.answerIndex&&!(a.eliminated||[]).includes(i)),letter:a.visibleHelp<(a.helpPositions||[]).length}}:null};
+@@ -398,11 +400,124 @@
+ function cockpitAction(act){
+  const t=state.arcade&&state.arcade.type;
+  const map={startQuiz,planResume,openPlanner:()=>openPlanner(),exitPlan:planExit,launch:startQuestion,pause:togglePause,add10:()=>addSeconds(10),closeTime:finishQuestion,reveal:revealQuestion,next:nextQuestion,edit:editCurrentQuestion,cancel:cancelQuestion,repeat:repeatQuestion,reopen:reopenScores,undo:undoPending,home:showHome,report:exportReport,
+-  gameStart:()=>({photopuzzle:startPhoto,abbinamenti:startMatching,indovina:startIndovina,ghigliottina:startGh,chain:startChain})[t]?.(),gameReveal,piece:()=>removePuzzlePiece(),matchOne:revealMatchOne,clue:nextClue,eliminate:eliminateTwo,letter:chainRevealOne,chainNext:chainAdvance,ghA:()=>chooseGh('A'),ghB:()=>chooseGh('B'),gameRestart:restartGameRound};
++  gameStart:()=>({photopuzzle:startPhoto,abbinamenti:startMatching,indovina:startIndovina,ghigliottina:startGh,chain:startChain})[t]?.(),gameReveal,piece:()=>removePuzzlePiece(),matchOne:revealMatchOne,clue:nextClue,eliminate:eliminateTwo,letter:chainRevealOne,chainNext:chainAdvance,ghA:()=>chooseGh('A'),ghB:()=>chooseGh('B'),gameRestart:restartGameRound,revealNext:revealNextPlace,revealAll:revealAllPlaces};
+  const f=map[act];if(f)f();renderCockpit();
+ }
+ function onCockpitClick(e){const b=e.target.closest('[data-act]');if(!b||b.disabled)return;b.blur();cockpitAction(b.dataset.act)}
+ 
++/* ---------------- IMPORTA CONTENUTI (v3.7.3) ----------------
++   Un solo ingresso per qualunque file (pulsante, ARCHIVIO, GIOCHI, trascinamento): il tipo si riconosce dal contenuto (PL.contentKind).
++   Archivio domande / giochi .json = SOSTITUZIONE del blocco del pacchetto attivo (mai unione), con riepilogo e backup proposto prima.
++   Pacchetto .zip/.json = installazione nella libreria (stesso flusso di PACCHETTI). Scaletta = aggiunta alle scalette. */
++let importStep=null;
++function importBusyReason(){if(state.screen==='question'&&(state.phase==='running'||RC.roundOpen(state))||state.screen==='arcade'&&state.arcade&&state.arcade.started)return 'C’è una domanda o un gioco in corso: chiudilo prima di sostituire i contenuti.';if(state.mixed)return 'Sessione mista: attiva un solo pacchetto (PACCHETTI → ATTIVA) per sostituirne domande o giochi.';return ''}
++function openImportDialog(step){importStep=step||{kind:'choose'};const dlg=$('#importDialog');if(!dlg)return;renderImportDialog();if(!dlg.open)dlg.showModal()}
++async function importContent(file){
++ if(!file)return;const name=file.name||'file';
++ if(/\.zip$/i.test(name))return openImportDialog({kind:'pack',file,name});
++ if(!/\.json$/i.test(name))return openImportDialog({kind:'unknown',name,detail:'Il Secchione importa file .json (archivi domande, giochi, scalette) e .zip (pacchetti completi).'});
++ let data;try{data=JSON.parse(String(await file.text()).replace(/^﻿/,''))}catch(e){return openImportDialog({kind:'unknown',name,detail:'Il file non è un .json leggibile.'})}
++ const c=PL.contentKind(data);
++ if(c.kind==='pack')return openImportDialog({kind:'pack',file,name});
++ if(c.kind==='results')return openImportDialog({kind:'results',name});
++ if(c.kind==='plan'){const r=SP.normalize(data);return openImportDialog(r.ok?{kind:'plan',name,plan:r.plan,dropped:r.dropped}:{kind:'unknown',name,detail:r.error})}
++ if(c.kind==='questions'||c.kind==='games'){
++  const busy=importBusyReason();if(busy)return openImportDialog({kind:'blocked',name,detail:busy});
++  if(c.kind==='questions'){const res=PE.importV3Questions(c.list,pack(),()=>SS.uuid());if(res.errors.length||!res.questions.length)return openImportDialog({kind:'invalid',name,what:'archivio domande',errors:res.errors.length?res.errors:['nessuna domanda nel file']});return openImportDialog({kind:'questions',name,questions:res.questions,packId:state.packKey,packTitle:pack().title,before:state.bank.length})}
++  const res=PE.importV3Games(data,pack());const plan=res.games?PL.replaceGames(pack().arcadeSets,res.games):null;if(res.errors.length||!plan||!plan.imported)return openImportDialog({kind:'invalid',name,what:'archivio giochi',errors:res.errors.length?res.errors:['nessuna manche nel file']});
++  return openImportDialog({kind:'games',name,games:plan.games,rows:plan.rows,replacedTypes:plan.replacedTypes,imported:plan.imported,packId:state.packKey,packTitle:pack().title});
++ }
++ return openImportDialog({kind:'unknown',name,detail:'Non riconosco il contenuto di questo file.'});
++}
++function importKindsHTML(){return `<ul class="impKinds"><li><b>📄 Archivio domande</b> (.json, da ARCHIVIO → ESPORTA) → <i>sostituisce</i> le domande del pacchetto attivo</li><li><b>🎮 Archivio giochi</b> (.json, da GIOCHI → ESPORTA GIOCHI) → <i>sostituisce</i> le manche dei tipi presenti nel file</li><li><b>📦 Pacchetto completo</b> (.zip) → viene installato nella libreria pacchetti</li><li><b>📋 Scaletta</b> (.json, da SCALETTA → ESPORTA) → viene aggiunta alle tue scalette</li></ul>`}
++function importBackupHTML(what){return `<div class="impWarn"><b>⚠ Sostituzione, non unione.</b> ${what} Prima puoi salvarne una copia sul PC.</div><div class="impActions"><button class="btn amber xl" data-imp="backup">⬇ ESPORTA BACKUP PRIMA DI CONTINUARE<small>salva il file di backup, poi importa</small></button><button class="btn red" data-imp="go">CONTINUA SENZA BACKUP</button><button class="btn ghost" data-imp="cancel">ANNULLA</button></div>`}
++function renderImportDialog(){
++ const s=importStep||{kind:'choose'},b=$('#importBody');if(!b)return;const file=s.name?`<code>${esc(s.name)}</code>`:'';let h='';
++ if(s.kind==='choose')h=`<p class="impLead">Scegli un file: Il Secchione capisce da solo che cosa contiene e ti dice dove andrà, prima di cambiare qualcosa.</p>${importKindsHTML()}<div class="impActions"><label class="btn primary xl fileLabel">📂 SCEGLI IL FILE (.json o .zip)<input type="file" accept=".json,.zip,application/json,application/zip" data-imp="file"></label></div><p class="help">Puoi anche trascinare il file in un punto qualsiasi della regia.</p>`;
++ else if(s.kind==='questions')h=`<p class="impWhat">📄 Hai selezionato un <b>archivio domande</b> (.json) ${file}: <b>${s.questions.length} domande</b>.</p><p class="impWhere">Verranno sostituite le <b>${s.before} domande</b> del pack attivo: <b>${esc(s.packTitle)}</b>.</p><ol class="impPreview">${s.questions.slice(0,3).map(q=>`<li>${esc(q.question)}</li>`).join('')}${s.questions.length>3?`<li class="more">… e altre ${s.questions.length-3}</li>`:''}</ol>${importBackupHTML('Le domande attuali verranno sostituite da quelle del file.')}`;
++ else if(s.kind==='games')h=`<p class="impWhat">🎮 Hai selezionato un <b>archivio giochi</b> (.json) ${file}: <b>${s.imported} manche</b>.</p><p class="impWhere">Verranno sostituiti i giochi del pack attivo: <b>${esc(s.packTitle)}</b>. I tipi di gioco assenti dal file restano come sono.</p><table class="impTable"><thead><tr><th>Gioco</th><th>Ora</th><th>Nel file</th><th>Dopo</th></tr></thead><tbody>${s.rows.map(r=>`<tr class="${r.replaced?'rep':''}"><td>${esc(gameName(r.type))}</td><td>${r.before}</td><td>${r.inFile||'—'}</td><td><b>${r.after}</b> ${r.replaced?'<i>sostituito</i>':'<i class="keep">resta</i>'}</td></tr>`).join('')}</tbody></table>${importBackupHTML('Le manche attuali dei tipi evidenziati verranno sostituite da quelle del file.')}`;
++ else if(s.kind==='pack')h=`<p class="impWhat">📦 Hai selezionato un <b>pacchetto completo</b> ${file}.</p><p class="impWhere">Verrà installato nella <b>libreria pacchetti</b>. Il pack attivo, le squadre e i punti non cambiano: dopo potrai attivarlo.</p><div class="impActions"><button class="btn green xl" data-imp="go">📦 INSTALLA IL PACCHETTO</button><button class="btn ghost" data-imp="cancel">ANNULLA</button></div>`;
++ else if(s.kind==='plan')h=`<p class="impWhat">📋 Hai selezionato una <b>scaletta</b> ${file}: <b>«${esc(s.plan.name)}»</b>, ${s.plan.items.length} ${s.plan.items.length===1?'elemento':'elementi'}.</p><p class="impWhere">Verrà aggiunta alle tue scalette (pulsante 📋 SCALETTA). Domande e giochi dei pacchetti non cambiano.</p>${s.dropped?`<p class="help">${s.dropped===1?'1 elemento illeggibile verrà scartato':s.dropped+' elementi illeggibili verranno scartati'}.</p>`:''}<div class="impActions"><button class="btn green xl" data-imp="go">📋 AGGIUNGI LA SCALETTA</button><button class="btn ghost" data-imp="cancel">ANNULLA</button></div>`;
++ else if(s.kind==='results')h=`<p class="impWhat">📊 ${file} è un file di <b>risultati / partita</b> (JSON completo), non un contenuto da importare.</p><p class="impWhere">Le partite si riprendono da sole all’avvio (PARTITA NON CONCLUSA TROVATA). Per le domande usa il file esportato da ARCHIVIO → ESPORTA.</p>${importKindsHTML()}<div class="impActions"><label class="btn primary fileLabel">SCEGLI UN ALTRO FILE<input type="file" accept=".json,.zip" data-imp="file"></label><button class="btn ghost" data-imp="cancel">CHIUDI</button></div>`;
++ else if(s.kind==='blocked')h=`<p class="impWhat">⏸ ${file}</p><p class="impWhere">${esc(s.detail)}</p><div class="impActions"><button class="btn ghost" data-imp="cancel">CHIUDI</button></div>`;
++ else if(s.kind==='invalid')h=`<p class="impWhat">✗ ${file} sembra un <b>${esc(s.what)}</b>, ma non si può importare:</p><ul class="impErrors">${s.errors.slice(0,6).map(e=>`<li>${esc(e)}</li>`).join('')}</ul><p class="help">Nessun contenuto è stato modificato.</p><div class="impActions"><label class="btn primary fileLabel">SCEGLI UN ALTRO FILE<input type="file" accept=".json,.zip" data-imp="file"></label><button class="btn ghost" data-imp="cancel">CHIUDI</button></div>`;
++ else if(s.kind==='working')h=`<p class="impWhat">⏳ ${esc(s.detail||'Importazione in corso…')}</p>`;
++ else if(s.kind==='done')h=`<p class="impWhat ${s.ok?'ok':'bad'}">${s.ok?'✓':'✗'} ${esc(s.message)}</p>${s.detail?`<p class="impWhere">${esc(s.detail)}</p>`:''}${s.backup?`<p class="help">Backup salvato: <code>${esc(s.backup)}</code> (cartella Download).</p>`:''}<div class="impActions">${s.activateId?`<button class="btn green xl" data-imp="activate" data-id="${esc(s.activateId)}">● ATTIVA ORA</button>`:''}${s.openPlan?`<button class="btn primary" data-imp="openPlan">📋 APRI LA SCALETTA</button>`:''}<button class="btn ghost" data-imp="cancel">CHIUDI</button></div>`;
++ else h=`<p class="impWhat">✗ ${file} non è un contenuto del Secchione.</p><p class="impWhere">${esc(s.detail||'')}</p>${importKindsHTML()}<div class="impActions"><label class="btn primary fileLabel">SCEGLI UN ALTRO FILE<input type="file" accept=".json,.zip" data-imp="file"></label><button class="btn ghost" data-imp="cancel">CHIUDI</button></div>`;
++ b.innerHTML=h;
++}
++function importBackup(s){
++ if(s.kind==='questions'){const n=`backup_domande_${s.packId}_${stamp()}.json`;download(n,JSON.stringify(state.bank,null,2),'application/json');return n}
++ if(s.kind==='games'){const n=`backup_giochi_${s.packId}_${stamp()}.json`;download(n,JSON.stringify({format:'secchione-games',version:3,pack:s.packId,games:Object.fromEntries(PE.GAME_TYPES.map(k=>[k,(pack().arcadeSets[k]||[]).map(PL.cleanGameSet)]))},null,2),'application/json');return n}
++ return null;
++}
++async function runImport(withBackup){
++ const s=importStep;if(!s)return;let backup=null;
++ if(withBackup)backup=importBackup(s);
++ importStep={kind:'working',detail:s.kind==='pack'?'Installazione del pacchetto…':'Salvataggio nel pacchetto…'};renderImportDialog();
++ let out;
++ try{
++  if(s.kind==='questions'){
++   if(state.packKey!==s.packId||state.mixed)throw new Error('il pacchetto attivo è cambiato: riprova');
++   const qs=s.questions.map(q=>{const x=PL.storedQuestion(q);x.id=PL.storedQuestionId(x.id);return x});
++   state.bank=s.questions;bankChanged();
++   const r=await savePackQuestions(s.packId,{all:qs});
++   if(r.where==='pack')await refreshLibrary();
++   loadBank();renderAll();logEvent({event:'content.import',reason:`domande ${qs.length} → ${s.packId}`});
++   out={ok:!!r.ok,message:`Hai importato ${qs.length} ${qs.length===1?'domanda':'domande'} nel pack attivo: ${s.packTitle}`,detail:r.where==='pack'?`Salvate nel pacchetto (versione ${r.version}): restano anche chiudendo il programma. La versione precedente è conservata nel cestino dei pacchetti.`:`Salvate in questo browser (${r.reason}).`};
++  }else if(s.kind==='games'){
++   if(state.packKey!==s.packId||state.mixed)throw new Error('il pacchetto attivo è cambiato: riprova');
++   const r=await savePackGames(s.packId,s.games);
++   if(state.screen==='arcade')showHome();renderAll();logEvent({event:'content.import',reason:`giochi ${s.imported} (${s.replacedTypes.join(', ')}) → ${s.packId}`});
++   out={ok:!!r.ok,message:`Hai importato ${s.imported} ${s.imported===1?'gioco':'giochi'} nel pack attivo: ${s.packTitle}`,detail:(r.where==='pack'?`Salvati nel pacchetto (versione ${r.version}): restano anche chiudendo il programma. La versione precedente è conservata nel cestino dei pacchetti.`:`Salvati in questo browser (${r.reason}).`)+` Sostituiti: ${s.replacedTypes.map(gameName).join(', ')}.`};
++  }else if(s.kind==='pack'){
++   const r=await PKC.importFile(s.file);await refreshLibrary();renderAll();if(PKG&&PKG.render)PKG.render();
++   if(r&&r.action==='installed')out={ok:true,message:'Pacchetto installato correttamente',detail:`«${r.summary.title}»: ${r.summary.questions} domande, ${r.summary.games} manche.${r.renamedFrom?` Esisteva già un pacchetto con id «${r.renamedFrom}»: è rimasto invariato, il nuovo ha id «${r.id}».`:''} Lo trovi anche in PACCHETTI.`,activateId:r.id};
++   else if(r&&r.action==='already-installed')out={ok:true,message:'Questo pacchetto è già installato',detail:`Id «${r.id}»: nessuna modifica.`,activateId:r.id};
++   else out={ok:false,message:'Pacchetto non installato',detail:((r&&r.errors)||['file non valido']).slice(0,3).join(' · ')};
++  }else if(s.kind==='plan'){
++   const p=C.clone(s.plan);if(savedPlans.some(x=>x.id===p.id)){const fresh=SP.createPlan(p.name+' (importata)');p.id=fresh.id;p.name=fresh.name}
++   savedPlans=SP.upsert(savedPlans,p);savePrefs();renderAll();
++   out={ok:true,message:`Scaletta «${p.name}» aggiunta`,detail:`${p.items.length} ${p.items.length===1?'elemento':'elementi'}. La trovi in 📋 SCALETTA.`,openPlan:p.id};
++  }
++ }catch(e){out={ok:false,message:'Importazione non riuscita',detail:e.message}}
++ importStep=Object.assign({kind:'done',backup},out);renderImportDialog();toast((out.ok?'✓ ':'✗ ')+out.message,out.ok?'ok':'err');
++}
++function onImportClick(e){const t=e.target.closest('[data-imp]');if(!t||t.tagName==='INPUT'||t.disabled)return;const a=t.dataset.imp;
++ if(a==='cancel'){$('#importDialog').close();importStep=null;return}
++ if(a==='backup')return runImport(true);if(a==='go')return runImport(false);
++ if(a==='activate'){const r=activatePacks([t.dataset.id]);$('#importDialog').close();if(r&&!r.ok)toast(r.error,'warn');return}
++ if(a==='openPlan'){const id=importStep&&importStep.openPlan;$('#importDialog').close();openPlanner(id);return}}
++/* Giochi nel pacchetto installato (stessa fonte unica delle domande); se il pacchetto è in sola lettura restano in questo browser. */
++function savePackGames(packId,games){
++ const job=async()=>{
++  const fallback=reason=>{customGames[packId]=Object.fromEntries(PE.GAME_TYPES.map(t=>[t,C.clone(games[t]||[])]).filter(([,l])=>l.length));savePrefs();P=buildPacks();if(state.mixed)state.mixPack=buildMixPack(activeRuntimes());return {ok:true,where:'browser',reason}};
++  if(!PS||!PKC)return fallback('editor dei pacchetti non disponibile');
++  let r;try{r=await PKC.openBytes(packId)}catch(e){r={ok:false}}
++  if(!r||!r.ok)return fallback('pacchetto del programma in sola lettura');
++  try{
++   const d=PS.draftFromImport(PL.readImport(r.filename,r.bytes),{libraryId:packId});
++   PE.GAME_TYPES.forEach(t=>{d.games[t]=(games[t]||[]).map(PL.cleanGameSet)});
++   d.manifest.version=PS.bumpVersion(d.manifest.version);
++   const s=await PKC.save(packId,PS.toZip(d).bytes,'replace');
++   if(!s||!s.ok)throw new Error((s&&s.errors&&s.errors[0])||'salvataggio non riuscito');
++   if(customGames[packId]){delete customGames[packId];savePrefs()}
++   await refreshLibrary();
++   return {ok:true,where:'pack',version:d.manifest.version,backup:s.backup||null};
++  }catch(e){return fallback(e.message)}
++ };
++ packSaveChain=packSaveChain.then(job,job);return packSaveChain;
++}
++
++/* ---------------- CLASSIFICA FINALE: reveal condotto dalla regia, dall'ultimo al primo (v3.7.3) ----------------
++   Stessa grammatica della classifica del round (intestazione, cerchi di posizione, colori del podio); qui ogni AVANTI
++   rivela UNA posizione e il 1° posto arriva per ultimo. Il ★ CLASSIFICA a metà partita mostra subito tutto. */
++function teamOutcomeStats(){const s=state.session,out={};if(!s)return out;const done={};(s.rounds||[]).forEach(r=>{if(r.committed)done[r.roundInstanceId]=true});(s.responses||[]).forEach(r=>{if(r.voided||!done[r.roundInstanceId])return;let o;try{o=SC.normalizeOutcome(r.outcome)}catch(e){return}const x=out[r.participantId]=out[r.participantId]||{correct:0,wrong:0,omitted:0};x[o]++});return out}
++function finalStandings(){const stats=teamOutcomeStats(),sorted=[...state.teams].sort((a,b)=>(b.score||0)-(a.score||0)||String(a.name).localeCompare(String(b.name),'it'));let rank=0,prev=null;const rows=sorted.map((t,i)=>{if(prev===null||t.score!==prev){rank=i+1;prev=t.score}return {id:t.id,name:t.name,score:t.score||0,rank,stats:stats[t.id]||{correct:0,wrong:0,omitted:0}}});rows.forEach(r=>{r.tie=rows.filter(x=>x.rank===r.rank).length>1});return rows}
++function podiumInfo(){const f=state.finalReveal;if(state.screen!=='leaderboard'||!f)return null;const rows=finalStandings(),total=rows.length,shown=Math.min(f.shown,total),next=rows[total-shown-1];return {shown,total,nextRank:next?next.rank:1}}
++function revealNextPlace(){const f=state.finalReveal,p=podiumInfo();if(!f||!p||p.shown>=p.total)return;f.shown=p.shown+1;f.lastAt=Date.now();const winner=f.shown>=p.total;renderAll();cloneAudio(winner?'final':'reveal',winner?.95:.62);if(winner)logEvent({event:'leaderboard.final',reason:'primo posto rivelato'});autosave('podium',0)}
++function revealAllPlaces(){const f=state.finalReveal;if(!f)return;f.shown=state.teams.length;f.lastAt=0;renderAll();autosave('podium',0)}
++
+ /* ---------------- TIMER (modello in engine/timer.js) ---------------- */
+ function resetTimer(duration){stopTimer();state.timer=TM.create(TM.secondsFor(duration));updateTimerUI()}
+ function startTimer(bed='timerBed'){if(state.timer.running)return;TM.start(state.timer,performance.now());if(!state.timer.running)return;renderTeams();animateMascots();cloneAudio('timer',.78);playBed(bed);timerTick();renderCockpit()}
+@@ -585,7 +700,7 @@
+ 
+ /* ---------------- ARCADE ---------------- */
+ function renderGamesTab(){const buttons=$('#gameButtons');buttons.innerHTML=Object.entries(pack().gameNames).filter(([k])=>(pack().arcadeSets[k]||[]).length).map(([k,n])=>`<button class="btn ${state.arcade?.type===k?'primary':'ghost'}" data-game="${k}">${esc(n)}</button>`).join('');const gc=$('#gameControls');gc.innerHTML=state.screen==='arcade'&&state.arcade?gameControlsHTML():`<div class="panel"><p class="help">Scegli un gioco. Ogni gioco ha più manche pronte e un proprio pulsante di avvio.</p></div>`}
+-function startArcade(type){if(!leaveQuestionGuard())return;ghClosePairRound();arcadeEpoch++;stopTimer();const sets=pack().arcadeSets[type]||[];if(!sets.length)return toast('Nessun set disponibile.');state.screen='arcade';state.round=null;state.arcade={type,presetIndex:0,scoreCommitted:false};clearPending();loadArcadePreset(0,false);tab('games');showTransition(gameName(type),'BONUS SHOW','★');autosave('arcade')}
++function startArcade(type){if(!leaveQuestionGuard())return;state.finalReveal=null;ghClosePairRound();arcadeEpoch++;stopTimer();const sets=pack().arcadeSets[type]||[];if(!sets.length)return toast('Nessun set disponibile.');state.screen='arcade';state.round=null;state.arcade={type,presetIndex:0,scoreCommitted:false};clearPending();loadArcadePreset(0,false);tab('games');showTransition(gameName(type),'BONUS SHOW','★');autosave('arcade')}
+ function loadArcadePreset(index,announce=true){if(state.arcade&&state.arcade.pairRoundId)ghClosePairRound();arcadeEpoch++;const a=state.arcade,type=a.type,sets=pack().arcadeSets[type]||[];if(!sets.length)return;index=((Number(index)||0)%sets.length+sets.length)%sets.length;a.presetIndex=index;a.label=sets[index].label||`Quiz ${index+1}`;a.played=false;a.scoreCommitted=false;state.round=null;clearPending();stopTimer();const set=C.clone(sets[index]),secs=Math.max(60,TM.secondsFor(set));a._packId=sets[index]._packId||state.packKey;if(type==='photopuzzle'){Object.assign(a,{image:set.image,answer:set.answer,cols:6,rows:5,edges:C.makePuzzleEdges(6,5),revealOrder:C.shuffle([...Array(30).keys()]),revealed:0,started:false,pieceInterval:secs/30})}
+  if(type==='indovina'){Object.assign(a,C.buildIndovina(set),{type,presetIndex:index,label:a.label})}
+  if(type==='abbinamenti'){Object.assign(a,C.buildMatching(set),{type,presetIndex:index,label:a.label})}
+@@ -706,7 +821,6 @@
+ function renderDeviceLive(){const el=$('#deviceLive');if(!el)return;const st=NET.status(),sum=RC.deviceSummary(state.teams,NET.teamDevices());if(!st.available||!sum.total){el.hidden=true;lastOffline=null;return}el.hidden=false;const ok=!sum.disconnected.length;el.className='deviceLive '+(ok?'ok':'warn');el.innerHTML=`<b>📱 ${sum.connected} / ${sum.total} COLLEGATE</b>`+(ok?'':`<span>${sum.disconnected.length===1?'Disconnessa':'Disconnesse'}: ${sum.disconnected.map(d=>esc(d.name)+(d.agoSec!=null?` <small>(da ${fmtAgo(d.agoSec)}, in attesa di riconnessione)</small>`:'')).join(', ')}</span>`)+(sum.manual?`<small>${sum.manual} squadre senza pulsantiera</small>`:'');const ids=sum.disconnected.map(d=>d.id);if(lastOffline){const fresh=sum.disconnected.filter(d=>lastOffline.indexOf(d.id)<0);if(fresh.length)toast(`⚠ ${fresh.length===1?'1 pulsantiera disconnessa':fresh.length+' pulsantiere disconnesse'}: ${fresh.map(d=>d.name).join(', ')}`,'warn')}lastOffline=ids;if(!ok&&!deviceTicker)deviceTicker=setInterval(()=>{if(!(lastOffline&&lastOffline.length)){clearInterval(deviceTicker);deviceTicker=null;return}renderDeviceLive()},5000)}
+ function resetBank(){if(mixedGuard())return;if(!confirm('Ripristinare le domande originali di questo pack?'))return;delete bankOverrides[state.packKey];loadBank();bankChanged();savePrefs();renderAll()}
+ function exportBank(){download(`domande_${state.packKey}.json`,JSON.stringify(state.bank,null,2),'application/json')}
+-function importBank(file){if(mixedGuard())return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(String(r.result).replace(/^﻿/,''));if(data&&data.format===PE.FORMAT)return toast('Questo file è un PACK completo: usa IMPORTA PACK.');const res=PE.importV3Questions(data,pack(),()=>SS.uuid());if(res.errors.length||!res.questions.length)throw Error(res.errors.slice(0,2).join(' · ')||'archivio vuoto');state.bank=res.questions;persistBank();renderAll();toast(`Archivio importato: ${res.questions.length} domande.`)}catch(e){toast('Archivio non valido: '+e.message)}};r.readAsText(file)}
+ function shuffleQuestions(){if(state.mixed){state.bank=C.shuffle(state.bank);state.qIndex=0;showHome();toast('Domande della sessione mista mescolate (solo per questa partita).');return}state.bank=C.shuffle(state.bank);state.qIndex=0;persistBank();renderAll();toast('Domande mescolate.')}
+ 
+ /* ---------------- CLASSIFICA ED EXPORT ---------------- */
+@@ -774,7 +888,18 @@
+  const paths=C.puzzlePaths(a.edges,1200,750),total=a.revealOrder.length,solved=a.revealed>=total;
+  return `<div class="photoShow"><header class="showHeader"><div><span class="showEyebrow">RICONOSCI L’OPERA</span><h1>PHOTO<span>PUZZLE</span></h1></div><img src="${BRAND_LOGO}" alt="Il Secchione"></header><main class="photoMain"><div class="puzzleFrame"><img src="${imagePath(a.image,a._packId)}" alt="Opera misteriosa"><svg class="puzzleSvg" viewBox="0 0 1200 750" preserveAspectRatio="none">${paths.map((d,i)=>`<g id="pp-piece-${i}" class="puzzlePiece ${a.revealOrder.slice(0,a.revealed).includes(i)?'gone':''}" style="--piece:${['#72c843','#d1c43d','#e99531','#e34b49','#c52867'][Math.floor(i/6)]};--rot:${i%2?9:-9}deg"><path class="face" d="${d}"/><path class="inset" d="${d}"/></g>`).join('')}</svg><div class="puzzleSolution ${solved?'show':''}" id="puzzleSolution">${solved?esc(a.answer):''}</div></div><aside class="photoSidebar">${publicTimerHTML(a.started?'IN CORSO':'PRONTI')}<div id="liveQueue">${queueHTML()}</div><div class="photoBuddy">${mascotMarkup()}<span>Ogni dettaglio<br>può fare la differenza.</span></div></aside></main><footer class="photoFooter"><span class="puzzleCounter">${a.revealed}/${total}</span><span id="puzzleTopLabel">${solved?esc(a.answer):`${total} TESSERE IN ${a.seconds||30} SECONDI`}</span><small>${esc(rules().toUpperCase())}</small></footer></div>`;
+ }
+-function leaderboardHTML(){const ranks=[...state.teams].sort((a,b)=>b.score-a.score);return `<div class="leaderScene"><header class="showHeader"><div><span class="showEyebrow">IL SECCHIONE · ${esc(pack().title.toUpperCase())}</span><h1>CLASSIFICA</h1></div><img src="${BRAND_LOGO}" alt="Il Secchione"></header><div class="leaderContent"><div class="rankList">${ranks.slice(0,12).map((t,i)=>`<div class="rankRow ${i===0?'first':''}"><b>${i+1}</b><span>${esc(t.name)}</span><strong>${t.score}<small> PUNTI</small></strong></div>`).join('')||'<p>Aggiungi le squadre dalla regia.</p>'}${ranks.length>12?`<small>Prime 12 squadre. Classifica completa nella regia.</small>`:''}</div><aside class="leaderCharacter">${mascotMarkup()}<p>Ogni risposta<br>può cambiare tutto.</p></aside></div></div>`}
++function leaderboardHTML(){
++ const rows=finalStandings(),n=rows.length,f=state.finalReveal,final=!!f,shown=f?Math.min(f.shown,n):n,complete=shown>=n;
++ const fresh=final&&f.lastAt&&Date.now()-f.lastAt<1600?n-shown:-1,many=n>8,size=n<=4?' few':n>=6&&!many?' dense':'';
++ const header=`<header class="resultHeader finalHeader"><div><span class="showEyebrow">IL SECCHIONE · ${esc(pack().title.toUpperCase())}</span><h1>${final?'CLASSIFICA FINALE':'CLASSIFICA'}</h1></div><div class="revealDirection"><small>${final?(complete?'VERDETTO':'REVEAL'):'SQUADRE'}</small><strong>${final&&!complete?`${shown} di ${n} rivelati`:`${n} ${n===1?'squadra':'squadre'}`}</strong></div><img src="${BRAND_LOGO}" alt="Il Secchione"></header>`;
++ if(!n)return `<div class="finalScene">${header}<main class="finalIntro"><p>Aggiungi le squadre dalla regia.</p></main></div>`;
++ if(final&&!shown)return `<div class="finalScene isIntro">${header}<main class="finalIntro"><span class="finalKicker">LA SFIDA È FINITA</span><h2>CLASSIFICA FINALE</h2><p>Ecco il verdetto.</p><small>${n} squadre in gara · si parte ${RC.placeFrom(rows[n-1].rank)} posto</small></main></div>`;
++ const card=(r,i)=>{const pod=r.rank<=3?` podium p${r.rank}`:'';if(i<n-shown)return `<div class="finalCard locked${pod}"><b class="resultPos">${r.rank}°</b><span class="finalLock">?</span></div>`;const medal=r.rank===1?'ORO':r.rank===2?'ARGENTO':r.rank===3?'BRONZO':'',s=r.stats;return `<div class="finalCard${pod}${i===fresh?' enter':''}"><b class="resultPos">${r.rank}°</b><div class="finalIdentity"><span class="finalTeam">${esc(r.name)}</span><small>${medal?`<i class="medal">${medal}</i>`:''}${r.tie?'<i class="tie">EX AEQUO</i>':''}<span>✓ ${s.correct}</span><span>✗ ${s.wrong}</span><span>Ø ${s.omitted}</span></small></div><div class="finalScore"><strong>${r.score}</strong><span>PUNTI</span></div>${r.rank===1?'<i class="finalShine" aria-hidden="true"></i>':''}</div>`};
++ let body;
++ if(!many)body=`<main class="finalList" style="grid-template-rows:${rows.map(r=>`minmax(0,${r.rank===1?1.45:r.rank<=3?1.2:1}fr)`).join(' ')}">${rows.map(card).join('')}</main>`;
++ else{const rest=rows.slice(3),cols=rest.length>14?3:2;body=`<main class="finalMany"><div class="finalPodium">${[1,0,2].map(i=>card(rows[i],i)).join('')}</div><div class="finalRest" style="--cols:${cols};--rows:${Math.ceil(rest.length/cols)}">${rest.map((r,j)=>card(r,j+3)).join('')}</div></main>`}
++ return `<div class="finalScene${many?' many':''}${size}${final?' isFinal':''}${final&&complete?' complete':''}">${header}${body}</div>`;
++}
+ function clearPending(){state.pending={};state.pendingOrder=[];state.correctOrder=[];state.pendingHistory=[];state.entryMeta={};state.entrySeq=0}
+ function showRules(){stopTimer();stageDocs().forEach(d=>d.getElementById('transition')?.classList.remove('active'));state.screen='rules';state.arcade=null;state.round=null;arcadeEpoch++;renderAll()}
+ function rulesHTML(){
+@@ -815,10 +940,10 @@
+  $$('.tabBtn').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+  $('#audioBtn').onclick=()=>{state.sound=!state.sound;$('#audioBtn').textContent=state.sound?'🔊':'🔇';savePrefs();if(state.sound)cloneAudio('click');else stopBed()};$('#audioTestBtn').onclick=()=>{state.sound=true;$('#audioBtn').textContent='🔊';cloneAudio('question',.82);playBed('timerBed');setTimeout(()=>cloneAudio('tick',.7),900);setTimeout(()=>cloneAudio('urgent',.9),1800);setTimeout(()=>{stopBed();cloneAudio('correct',.84)},2600)};$('#volumeRange').oninput=e=>{state.volume=Number(e.target.value);savePrefs()};
+  $('#publicBtn').onclick=openPublic;$('#stageOnlyBtn').onclick=()=>document.body.classList.toggle('stageOnly');
+- $('#startQuizBtn').onclick=startQuiz;$('#homeBtn').onclick=showHome;$('#prevBtn').onclick=prevQuestion;$('#nextBtn').onclick=nextQuestion;$('#cockpit').addEventListener('click',onCockpitClick);$('#planBtn').onclick=()=>openPlanner();['#bankSearch','#bankTopic','#bankDifficulty'].forEach(s=>{const e=$(s);if(e){e.oninput=renderBank;e.onchange=renderBank}});
++ $('#startQuizBtn').onclick=startQuiz;$('#homeBtn').onclick=showHome;$('#prevBtn').onclick=prevQuestion;$('#nextBtn').onclick=nextQuestion;$('#cockpit').addEventListener('click',onCockpitClick);$('#importContentBtn').onclick=()=>openImportDialog();$('#importBody').addEventListener('click',onImportClick);$('#importBody').addEventListener('change',e=>{if(e.target.dataset.imp==='file'&&e.target.files?.[0]){const f=e.target.files[0];e.target.value='';importContent(f)}});$('#importClose').onclick=()=>$('#importDialog').close();$('#planBtn').onclick=()=>openPlanner();['#bankSearch','#bankTopic','#bankDifficulty'].forEach(s=>{const e=$(s);if(e){e.oninput=renderBank;e.onchange=renderBank}});
+  $('#addTeamBtn').onclick=()=>{addTeam($('#teamName').value);$('#teamName').value=''};$('#teamName').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#addTeamBtn').click()}};$('#sampleTeamsBtn').onclick=()=>{if(state.screen!=='home'&&state.screen!=='rules')return toast('Torna alla Home per modificare le squadre.');if(state.teams.length&&!confirm('Sostituire le squadre e iniziare una nuova partita?'))return;if(state.session.responses.length)STORE.archiveSnapshot(buildSnapshot('sample.teams'));newSession(true);state.completedRounds={};state.planRun=null;clearPending();state.teams=['Blu','Rossi','Verdi','Gialli'].map(name=>Object.assign(SS.makeParticipant(name,'team'),{score:0}));syncNetParticipants();showHome()};
+  $('#undoScoreBtn').onclick=undoPending;$('#fillAbstainBtn').onclick=fillMissingAbstain;$('#commitScoreBtn').onclick=commitScores;$('#fillAnswersBtn').onclick=fillMissingAbstain;$('#commitAnswersBtn').onclick=commitScores;
+- $('#newQuestionBtn').onclick=()=>openQuestionDialog();$('#questionForm').onsubmit=saveQuestionFromDialog;$('#shuffleQuestionsBtn').onclick=shuffleQuestions;$('#exportBankBtn').onclick=exportBank;$('#importBankInput').onchange=e=>{if(e.target.files?.[0])importBank(e.target.files[0]);e.target.value=''};$('#openPacksBtn2').onclick=()=>PKG&&PKG.open();$('#packsBtn').onclick=()=>PKG&&PKG.open();$('#resetBankBtn').onclick=resetBank;$('#showLeaderboardBtn').onclick=showLeaderboard;
++ $('#newQuestionBtn').onclick=()=>openQuestionDialog();$('#questionForm').onsubmit=saveQuestionFromDialog;$('#shuffleQuestionsBtn').onclick=shuffleQuestions;$('#exportBankBtn').onclick=exportBank;$('#importBankInput').onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(f)importContent(f)};$('#openPacksBtn2').onclick=()=>PKG&&PKG.open();$('#packsBtn').onclick=()=>PKG&&PKG.open();$('#resetBankBtn').onclick=resetBank;$('#showLeaderboardBtn').onclick=showLeaderboard;
+  $('#exportJsonBtn').onclick=exportJSON;$('#exportCsvBtn').onclick=exportCSV;$('#exportReportBtn').onclick=exportReport;$('#exportLogBtn').onclick=exportLog;
+  $('#settingsBtn').onclick=openSettings;$('#settingsForm').onsubmit=saveSettings;$('#settingsCancel').onclick=()=>$('#settingsDialog').close();
+  $('#devicesBtn').onclick=()=>DEV&&DEV.open();
+@@ -912,8 +1037,7 @@
+  const x=validateGame(type,raw),sets=pack().arcadeSets[type];const at=index==null?sets.length:index;if(at>=200)throw Error('Archivio pieno: massimo 200 manche per gioco.');sets[at]=x;persistGames();$('#gameEditorDialog').close();editingGame=null;state.screen='arcade';state.arcade={type,presetIndex:at};loadArcadePreset(at,false);tab('games');toast('Manche salvata e pronta. Esporta i giochi per conservarne una copia.');
+  }catch(error){$('#gameEditorError').textContent=error.message}}
+ function exportGames(){const data={format:'secchione-games',version:3,pack:state.packKey,games:Object.fromEntries(PE.GAME_TYPES.map(k=>[k,pack().arcadeSets[k]||[]]))};download(`giochi_${state.packKey}.json`,JSON.stringify(data,null,2),'application/json')}
+-async function importGames(file){try{const data=JSON.parse((await file.text()).replace(/^﻿/,''));const res=PE.importV3Games(data,pack());if(res.errors.length)throw Error(res.errors.slice(0,2).join(' · '));let count=0;for(const k of PE.GAME_TYPES){const add=res.games[k]||[];if(!add.length)continue;if(add.length+(pack().arcadeSets[k]||[]).length>200)throw Error('Massimo 200 manche per tipo.');count+=add.length}if(!count)throw Error('Archivio vuoto.');for(const k of PE.GAME_TYPES){const add=res.games[k]||[];if(add.length)(pack().arcadeSets[k]=pack().arcadeSets[k]||[]).push(...add)}persistGames();renderAll();toast(`${count} manche aggiunte all’archivio.`)}catch(e){toast('Importazione annullata: '+e.message)}}
+-function bindGameEditor(){$('#gameEditorDialog').addEventListener('close',()=>{if(editingGame?.wasRunning&&state.arcade===editingGame.round&&!state.timer.running&&state.timer.remaining>0)startTimer(currentBed());editingGame=null});document.addEventListener('click',e=>{const b=e.target.closest('[data-edit-game]');if(b)openGameEditor(b.dataset.editGame)});$('#gameEditorForm').onsubmit=saveGameEditor;$('#closeGameEditor').onclick=$('#cancelGameEditor').onclick=()=>$('#gameEditorDialog').close();$('#exportGamesBtn').onclick=exportGames;$('#importGamesInput').onchange=e=>{const f=e.target.files?.[0];if(f)importGames(f);e.target.value=''}}
++function bindGameEditor(){$('#gameEditorDialog').addEventListener('close',()=>{if(editingGame?.wasRunning&&state.arcade===editingGame.round&&!state.timer.running&&state.timer.remaining>0)startTimer(currentBed());editingGame=null});document.addEventListener('click',e=>{const b=e.target.closest('[data-edit-game]');if(b)openGameEditor(b.dataset.editGame)});$('#gameEditorForm').onsubmit=saveGameEditor;$('#closeGameEditor').onclick=$('#cancelGameEditor').onclick=()=>$('#gameEditorDialog').close();$('#exportGamesBtn').onclick=exportGames;$('#importGamesInput').onchange=e=>{const f=e.target.files?.[0];e.target.value='';if(f)importContent(f)}}
+ /* Migrazione silenziosa delle personalizzazioni v3 (stessa origine file://). */
+ function migrateV3Prefs(){if(prefs.version===35||prefs.migratedFromV3)return;let n=0;Object.values(P).forEach(pk=>{if(!pk.v3Key)return;const v3=STORE.loadV3Prefs(pk.v3Key);if(!v3)return;if(v3.banks&&Array.isArray(v3.banks[pk.v3Key])&&!bankOverrides[pk.id]){const r=PE.importV3Questions(v3.banks[pk.v3Key],pk,()=>SS.uuid());if(!r.errors.length&&r.questions.length){bankOverrides[pk.id]=r.questions;n++}}if(v3.games&&!customGames[pk.id]){const r=PE.importV3Games({games:v3.games},pk);if(!r.errors.length){const g=Object.fromEntries(EDITABLE_GAMES.map(k=>[k,r.games[k]||[]]).filter(([,v])=>v.length));if(Object.keys(g).length){customGames[pk.id]=g;n++}}}});prefs.migratedFromV3=true;savePrefs();if(n)setTimeout(()=>toast('Importate le domande e i giochi personalizzati della v3.'),800)}
+ 
+@@ -927,7 +1051,7 @@
+  setActivePacks(wanted.length?wanted:[Object.keys(P)[0]],{shuffle:!!prefs.mixShuffle});newSession(false);
+  $('#audioBtn').textContent=state.sound?'🔊':'🔇';$('#volumeRange').value=state.volume;$('#motionBtn').textContent=state.motion?'Mascotte: animata':'Mascotte: ferma';
+  bindStatic();bindGameEditor();bindNet();if(DEV)DEV.init({getTeams:()=>state.teams,toast,esc,onChange:()=>{renderTeams();renderAnswerPanel();renderNetStatus()}});
+- if(PKG)PKG.init({client:PKC,esc,toast,download,getActive:()=>state.activePacks.slice(),getShuffle:()=>state.mixShuffle,setShuffle:v=>{state.mixShuffle=!!v;savePrefs()},activate:(ids,o)=>activatePacks(ids,o),onLibraryChanged:()=>refreshLibrary().then(()=>renderAll()),dropOverrides:id=>{/* Pack Studio ha salvato: il pacchetto installato torna l'unica fonte (via le copie dell'archivio/editor di questo browser) */let ch=false;if(bankOverrides[id]){delete bankOverrides[id];ch=true}if(customGames[id]){delete customGames[id];ch=true}if(ch)savePrefs();return ch}});
++ if(PKG)PKG.init({importContent:f=>importContent(f),client:PKC,esc,toast,download,getActive:()=>state.activePacks.slice(),getShuffle:()=>state.mixShuffle,setShuffle:v=>{state.mixShuffle=!!v;savePrefs()},activate:(ids,o)=>activatePacks(ids,o),onLibraryChanged:()=>refreshLibrary().then(()=>renderAll()),dropOverrides:id=>{/* Pack Studio ha salvato: il pacchetto installato torna l'unica fonte (via le copie dell'archivio/editor di questo browser) */let ch=false;if(bankOverrides[id]){delete bankOverrides[id];ch=true}if(customGames[id]){delete customGames[id];ch=true}if(ch)savePrefs();return ch}});
+  $('#setPacksBtn').onclick=()=>{$('#settingsDialog').close();PKG&&PKG.open()};
+  if(PLAN_UI)PLAN_UI.init({esc,toast,download,catalogParts,getActivePacks:()=>state.activePacks.slice(),getPlans:()=>savedPlans,savePlans:list=>{savedPlans=list;savePrefs();renderCockpit()},startPlan,runningPlanId:()=>planLive()?state.planRun.planId:null});
+  /* scalette: la copia sul server (data/prefs.json) ripristina quelle che il browser non ha più (pulizia dati, porta diversa) */
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/engine/packlib.js Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/packlib.js
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/engine/packlib.js	2026-10-05 17:45:06.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/packlib.js	2026-10-05 19:49:55.019263400 +0200
+@@ -577,6 +577,48 @@
+     return out;
+   }
+ 
++  /* ---------- IMPORTA CONTENUTI (v3.7.3): un solo ingresso, il tipo si riconosce dal contenuto ---------- */
++  /**
++   * Che cosa contiene un file .json già letto:
++   *  'questions' (archivio domande: elenco, o { questions: [...] }), 'games' (archivio giochi { games: {tipo: [...]} }),
++   *  'pack' (pacchetto completo), 'plan' (scaletta), 'results' (partita/risultati: non è un contenuto), 'unknown'.
++   */
++  function contentKind(data) {
++    if (Array.isArray(data)) return { kind: 'questions', list: data };
++    if (!data || typeof data !== 'object') return { kind: 'unknown' };
++    if (data.format === PE.FORMAT) return { kind: 'pack' };
++    if (data.format === 'secchione-scaletta') return { kind: 'plan' };
++    if (data.format === 'secchione-snapshot' || data.format === 'secchione-session' || (data.session && data.session.sessionId)) return { kind: 'results' };
++    if (data.format === 'secchione-games' || (data.games && typeof data.games === 'object' && !Array.isArray(data.games) && !Array.isArray(data.questions))) return { kind: 'games' };
++    if (Array.isArray(data.questions)) return { kind: 'questions', list: data.questions };
++    return { kind: 'unknown' };
++  }
++  /** Manche pronte per il pacchetto: senza i campi di servizio della sessione mista (_packId, _packTitle…). */
++  function cleanGameSet(set) {
++    var x = clone(set);
++    Object.keys(x).forEach(function (k) { if (k.charAt(0) === '_') delete x[k]; });
++    return x;
++  }
++  /**
++   * Sostituzione dei giochi (nessuna unione): i tipi presenti nel file sostituiscono quelli del pacchetto,
++   * i tipi assenti dal file restano come sono. Restituisce i giochi risultanti e il riepilogo per tipo.
++   */
++  function replaceGames(current, imported) {
++    var games = {}, rows = [];
++    PE.GAME_TYPES.forEach(function (t) {
++      var now = ((current || {})[t] || []), add = ((imported || {})[t] || []);
++      var replaced = add.length > 0;
++      games[t] = replaced ? add.map(cleanGameSet) : now.map(cleanGameSet);
++      if (now.length || add.length) rows.push({ type: t, before: now.length, inFile: add.length, after: games[t].length, replaced: replaced });
++    });
++    return { games: games, rows: rows, replacedTypes: rows.filter(function (r) { return r.replaced; }).map(function (r) { return r.type; }), imported: rows.reduce(function (n, r) { return n + r.inFile; }, 0) };
++  }
++  /** Id di una domanda da salvare nel pacchetto: senza il prefisso "packId/" della regia. */
++  function storedQuestionId(id) {
++    var s = String(id == null ? '' : id);
++    return s.indexOf('/') >= 0 ? s.slice(s.lastIndexOf('/') + 1) : s;
++  }
++
+   /** Registra nella sessione i pack usati (con versione, materia e argomenti) senza duplicati. */
+   function recordActivation(session, runtimes, when) {
+     if (!session) return;
+@@ -631,6 +673,10 @@
+     storedQuestion: storedQuestion,
+     composeArcade: composeArcade,
+     recordActivation: recordActivation,
+-    provenance: provenance
++    provenance: provenance,
++    contentKind: contentKind,
++    cleanGameSet: cleanGameSet,
++    replaceGames: replaceGames,
++    storedQuestionId: storedQuestionId
+   };
+ });
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/engine/roundControl.js Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/roundControl.js
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/engine/roundControl.js	2026-10-05 17:45:06.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/roundControl.js	2026-10-05 20:02:28.566100100 +0200
+@@ -208,6 +208,10 @@
+     ghigliottina: { start: 'startGhBtn', reveal: 'revealGhFinalBtn', revealLabel: '● RIVELA PAROLA FINALE', aids: [] },
+     chain: { start: 'startChainBtn', reveal: 'chainSolveBtn', revealLabel: '● SOLUZIONE', aids: [['letter', '+ LETTERA', 'chainRevealBtn']] }
+   };
++  /* Articolo davanti alla posizione: "IL 5° POSTO", "L'8° POSTO", "L'11° POSTO" (si legge otto, undici, ottanta…). */
++  function elides(n) { return n === 8 || n === 11 || (n >= 80 && n < 90) || (n >= 800 && n < 900); }
++  function placeLabel(n) { return (elides(n) ? "L'" : 'IL ') + n + '° POSTO'; }
++  function placeFrom(n) { return (elides(n) ? "dall'" : 'dal ') + n + '°'; }
+   function cockpit(c) {
+     c = c || {};
+     var main = [], sec = [], stage = c.screen || 'home';
+@@ -271,8 +275,15 @@
+       }
+     } else if (c.screen === 'leaderboard') {
+       stage = 'leaderboard';
+-      if (plan) main.push(nextAction());
+-      else if (c.plan && c.plan.finished) { main.push(A('home', '⌂ HOME', 'mainHomeBtn', 'primary')); sec.push(A('report', '📄 REPORT DI CLASSE', 'mainReportBtn')); }
++      var pod = c.podium;
++      if (pod && pod.shown < pod.total) {
++        /* v3.7.3: classifica finale condotta dalla regia, una posizione per AVANTI, il 1° per ultimo */
++        stage = 'podium';
++        var last = pod.total - pod.shown === 1;
++        main.push(A('revealNext', last ? '★ RIVELA IL 1° POSTO' : '▶ RIVELA ' + placeLabel(pod.nextRank), 'revealNextBtn', last ? 'amber' : 'primary', { sub: pod.shown + ' di ' + pod.total + ' rivelati', kbd: '→' }));
++        sec.push(A('revealAll', 'MOSTRA TUTTA LA CLASSIFICA', 'revealAllBtn'));
++      } else if (plan) main.push(nextAction());
++      else if ((c.plan && c.plan.finished) || pod) { main.push(A('home', '⌂ HOME', 'mainHomeBtn', 'primary')); sec.push(A('report', '📄 REPORT DI CLASSE', 'mainReportBtn')); }
+       else main.push(A('next', 'TORNA ALLE DOMANDE →', 'nextQBtn', 'primary'));
+     } else {
+       stage = 'home';
+@@ -295,6 +306,6 @@
+     LETTERS: LETTERS, rebuildRound: rebuildRound, isLocked: isLocked, roundOpen: roundOpen, applyDeferred: applyDeferred,
+     applyEdit: applyEdit, cancelRound: cancelRound, prepareRepeat: prepareRepeat, deviceSummary: deviceSummary,
+     progress: progress, searchBank: searchBank, bankFacets: bankFacets, cleanAccepted: cleanAccepted, clone: clone,
+-    cockpit: cockpit, freeOmissionAlert: freeOmissionAlert, GAME_IDS: GAME_IDS
++    cockpit: cockpit, freeOmissionAlert: freeOmissionAlert, placeLabel: placeLabel, placeFrom: placeFrom, GAME_IDS: GAME_IDS
+   };
+ });
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/host/packs-ui.js Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/host/packs-ui.js
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/js/host/packs-ui.js	2026-10-05 17:45:06.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/host/packs-ui.js	2026-10-05 19:52:26.071019400 +0200
+@@ -224,6 +224,8 @@
+         if (!hasFiles(e)) return;
+         e.preventDefault();
+         var files = e.dataTransfer.files;
++        // v3.7.3: un solo file va a IMPORTA CONTENUTI, che riconosce domande, giochi, scalette e pacchetti
++        if (ctx.importContent && files.length === 1) { ctx.importContent(files[0]); return; }
+         UI.open().then(function () { return importFiles(files); });
+       });
+     },
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/server/server.js Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/server/server.js
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/server/server.js	2026-10-05 18:33:20.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/server/server.js	2026-10-05 20:06:04.903701500 +0200
+@@ -24,7 +24,7 @@
+ var packDisk = require('./packstore-disk.js');
+ var netinfo = require('./netinfo.js');
+ 
+-var VERSION = '3.7.2';
++var VERSION = '3.7.3';
+ var ROOT = path.join(__dirname, '..');
+ var DEFAULT_PORT = 8765;
+ 
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/tests/content_import_podium_373.test.js Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/tests/content_import_podium_373.test.js
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/tests/content_import_podium_373.test.js	1970-01-01 01:00:00.000000000 +0100
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/tests/content_import_podium_373.test.js	2026-10-05 20:04:18.598436000 +0200
+@@ -0,0 +1,290 @@
++'use strict';
++/* v3.7.3 CONTENT IMPORT AND PODIUM REVEAL: IMPORTA CONTENUTI (riconoscimento, sostituzione, persistenza)
++   e classifica finale rivelata dall'ultimo al primo posto. */
++var assert = require('assert');
++var fs = require('fs');
++var path = require('path');
++var vm = require('vm');
++var zlib = require('zlib');
++var test = require('./harness.js').test;
++var H = require('./helpers.js');
++var RC = require('../js/engine/roundControl.js');
++var PE = require('../js/engine/packs.js');
++var PL = require('../js/engine/packlib.js');
++var PS = require('../js/engine/packstudio.js');
++var SS = require('../js/engine/session.js');
++var SC = require('../js/engine/scoring.js');
++var disk = require('../server/packstore-disk.js');
++
++var ROOT = path.join(__dirname, '..');
++function source(rel) { return fs.readFileSync(path.join(ROOT, rel), 'utf8'); }
++function inflate(b) { return new Uint8Array(zlib.inflateRawSync(Buffer.from(b))); }
++function same(a, b, msg) { assert.strictEqual(JSON.stringify(a), JSON.stringify(b), msg); }
++function extract(names) {
++  var src = source('js/app.js');
++  return names.map(function (name) {
++    var start = src.indexOf('function ' + name + '(');
++    assert.ok(start >= 0, 'funzione della regia: ' + name);
++    var rest = src.slice(start);
++    var next = /^(async )?function \w+\(/m.exec(rest.slice(rest.indexOf('\n') + 1));
++    return next ? rest.slice(0, rest.indexOf('\n') + 1 + next.index) : rest;
++  }).join('\n');
++}
++function runtimeOf(dir) { return PE.toRuntime(PE.validatePack(require('../tools/build_packs.js').loadPackFolder(dir)).pack, { origin: 'installed' }); }
++function copyDir(src, dst) { fs.mkdirSync(dst, { recursive: true }); fs.readdirSync(src).forEach(function (f) { var p = path.join(src, f); if (fs.statSync(p).isDirectory()) copyDir(p, path.join(dst, f)); else fs.copyFileSync(p, path.join(dst, f)); }); }
++var RT = runtimeOf(path.join(ROOT, 'packs/arte_romana'));
++
++/* ---------------- 1. riconoscimento del file ---------------- */
++test('Importa contenuti: il tipo si riconosce dal contenuto (domande, giochi, pacchetto, scaletta, risultati, altro)', function () {
++  var bank = PL.composeBank([{ pack: RT, questions: RT.questions }]);
++  assert.strictEqual(PL.contentKind(JSON.parse(JSON.stringify(bank))).kind, 'questions', 'export ARCHIVIO (elenco)');
++  assert.strictEqual(PL.contentKind({ questions: bank }).kind, 'questions');
++  assert.strictEqual(PL.contentKind({ format: 'secchione-games', version: 3, games: RT.arcadeSets }).kind, 'games', 'export GIOCHI');
++  assert.strictEqual(PL.contentKind({ version: 3, games: { chain: [] } }).kind, 'games', 'export giochi della v3');
++  assert.strictEqual(PL.contentKind({ format: PE.FORMAT, id: 'x', questions: [] }).kind, 'pack');
++  assert.strictEqual(PL.contentKind({ format: 'secchione-scaletta', items: [] }).kind, 'plan');
++  assert.strictEqual(PL.contentKind({ format: 'secchione-snapshot', session: { sessionId: 's' } }).kind, 'results', 'JSON COMPLETO dei risultati');
++  assert.strictEqual(PL.contentKind({ hello: 'world' }).kind, 'unknown');
++  assert.strictEqual(PL.contentKind('testo').kind, 'unknown');
++  assert.strictEqual(PL.contentKind(null).kind, 'unknown');
++});
++
++test('Importa contenuti: giochi = sostituzione dei tipi presenti nel file, gli altri restano; campi della sessione mista tolti', function () {
++  var chain = [Object.assign({}, RT.arcadeSets.chain[0], { _packId: 'altro', _packTitle: 'Altro', label: 'Nuova staffetta' })];
++  var r = PL.replaceGames(RT.arcadeSets, { chain: chain, indovina: [] });
++  assert.strictEqual(r.imported, 1);
++  same(r.replacedTypes, ['chain']);
++  assert.strictEqual(r.games.chain.length, 1);
++  assert.strictEqual(r.games.chain[0].label, 'Nuova staffetta');
++  assert.ok(!('_packId' in r.games.chain[0]) && !('_packTitle' in r.games.chain[0]));
++  PE.GAME_TYPES.filter(function (t) { return t !== 'chain'; }).forEach(function (t) { assert.strictEqual(r.games[t].length, (RT.arcadeSets[t] || []).length, t + ' invariato'); });
++  var row = r.rows.filter(function (x) { return x.type === 'chain'; })[0];
++  same([row.before, row.inFile, row.after, row.replaced], [RT.arcadeSets.chain.length, 1, 1, true]);
++  assert.strictEqual(PL.replaceGames(RT.arcadeSets, {}).imported, 0, 'file vuoto: nulla da sostituire');
++});
++
++test('Importa contenuti: esporta ARCHIVIO → reimporta → id originali senza prefisso del pacchetto', function () {
++  var exported = JSON.parse(JSON.stringify(PL.composeBank([{ pack: RT, questions: RT.questions }])));
++  var res = PE.importV3Questions(PL.contentKind(exported).list, RT, function () { return SS.uuid(); });
++  assert.strictEqual(res.errors.length, 0);
++  var stored = res.questions.map(function (q) { var x = PL.storedQuestion(q); x.id = PL.storedQuestionId(x.id); return x; });
++  same(stored.map(function (q) { return q.id; }), RT.questions.map(function (q) { return q.id; }));
++  assert.strictEqual(PL.storedQuestionId('arte_romana/rom001'), 'rom001');
++  assert.strictEqual(PL.storedQuestionId('rom001'), 'rom001');
++});
++
++/* ---------------- 2. salvataggio nel pacchetto installato (fonte unica, chiudi/riapri) ---------------- */
++async function diskCtx() {
++  var dir = H.tempDir(), packsDir = path.join(dir, 'packs');
++  copyDir(path.join(ROOT, 'packs/arte_romana'), path.join(packsDir, 'arte_romana'));
++  var lib = disk.diskLibrary({ packsDir: packsDir, trashDir: path.join(dir, 'cestino') });
++  await lib.list();
++  var ctx = {
++    PS: PS, PL: PL, PE: PE, C: { clone: function (x) { return JSON.parse(JSON.stringify(x)); } },
++    state: { packKey: 'arte_romana', mixed: false, bank: PL.composeBank([{ pack: RT, questions: RT.questions }]) },
++    P: { arte_romana: RT }, customGames: {}, bankOverrides: {}, prefsSaved: 0, refreshed: 0, rebuilt: 0, packSaveChain: Promise.resolve(),
++    savePrefs: function () { ctx.prefsSaved++; }, refreshLibrary: function () { ctx.refreshed++; return Promise.resolve(true); },
++    buildPacks: function () { ctx.rebuilt++; return ctx.P; }, buildMixPack: function () { return null; }, activeRuntimes: function () { return []; },
++    packQuestionsFromBank: function () { return []; },
++    PKC: {
++      openBytes: function (id) { return lib.exportZip(id).then(function (r) { return r.ok ? { ok: true, bytes: r.bytes, filename: r.filename } : r; }); },
++      save: function (id, bytes, mode) { return lib.save(id + '.zip', bytes, { mode: mode, expectedId: id, inflate: disk.inflate }); }
++    },
++    Promise: Promise, Object: Object
++  };
++  vm.runInNewContext('var packSaveChain=Promise.resolve();\n' + extract(['savePackQuestions', 'savePackGames']), ctx);
++  return { ctx: ctx, dir: dir, packsDir: packsDir, reopen: function () { var l2 = disk.diskLibrary({ packsDir: packsDir, trashDir: path.join(dir, 'cestino') }); return l2.exportZip('arte_romana').then(function (ex) { return PL.validateImport(PL.readImport(ex.filename, ex.bytes, { inflate: inflate })).pack; }); } };
++}
++
++test('Importa giochi: sostituzione salvata nel pacchetto su disco, versione aumentata, copia nel cestino; resta dopo la riapertura', async function () {
++  var d = await diskCtx();
++  try {
++    var base = JSON.parse(fs.readFileSync(path.join(d.packsDir, 'arte_romana', 'pack.json'), 'utf8')).version;
++    var plan = PL.replaceGames(RT.arcadeSets, { photopuzzle: [Object.assign({}, RT.arcadeSets.photopuzzle[0], { label: 'Solo questa' })] });
++    var r = await d.ctx.savePackGames('arte_romana', plan.games);
++    assert.strictEqual(r.where, 'pack', JSON.stringify(r));
++    assert.strictEqual(r.version, PS.bumpVersion(base));
++    var pack = await d.reopen();
++    assert.strictEqual(pack.games.photopuzzle.length, 1);
++    assert.strictEqual(pack.games.photopuzzle[0].label, 'Solo questa');
++    assert.strictEqual(pack.games.chain.length, RT.arcadeSets.chain.length, 'gli altri tipi restano');
++    assert.strictEqual(pack.questions.length, RT.questions.length, 'le domande non cambiano');
++    assert.ok(fs.readdirSync(path.join(d.dir, 'cestino')).some(function (n) { return /^arte_romana_.*_prima-della-modifica$/.test(n); }));
++    same(d.ctx.customGames, {}, 'nessuna copia parallela nel browser');
++    // pacchetto in sola lettura: tutti i tipi finiscono nella copia del browser (anche Photopuzzle e Abbinamenti)
++    d.ctx.PKC.openBytes = function () { return Promise.resolve({ ok: false }); };
++    var ro = await d.ctx.savePackGames('arte_romana', plan.games);
++    assert.strictEqual(ro.where, 'browser');
++    assert.strictEqual(d.ctx.customGames.arte_romana.photopuzzle.length, 1);
++    assert.strictEqual(d.ctx.customGames.arte_romana.abbinamenti.length, RT.arcadeSets.abbinamenti.length);
++    assert.ok(d.ctx.rebuilt >= 1, 'runtime ricostruito');
++  } finally { H.rmrf(d.dir); }
++});
++
++test('Importa domande: 5 domande esportate e modificate sostituiscono le 72 nel pacchetto; il backup le ripristina', async function () {
++  var d = await diskCtx();
++  try {
++    var exported = JSON.parse(JSON.stringify(d.ctx.state.bank));
++    var five = exported.slice(0, 5); five[0].question = 'Modificata fuori dal programma?';
++    var res = PE.importV3Questions(PL.contentKind(five).list, RT, function () { return SS.uuid(); });
++    var qs = res.questions.map(function (q) { var x = PL.storedQuestion(q); x.id = PL.storedQuestionId(x.id); return x; });
++    var r = await d.ctx.savePackQuestions('arte_romana', { all: qs });
++    assert.strictEqual(r.where, 'pack');
++    var pack = await d.reopen();
++    assert.strictEqual(pack.questions.length, 5);
++    assert.strictEqual(pack.questions[0].question, 'Modificata fuori dal programma?');
++    assert.strictEqual(pack.questions[0].id, RT.questions[0].id);
++    var back = PE.importV3Questions(PL.contentKind(exported).list, RT, function () { return SS.uuid(); }).questions.map(function (q) { var x = PL.storedQuestion(q); x.id = PL.storedQuestionId(x.id); return x; });
++    await d.ctx.savePackQuestions('arte_romana', { all: back });
++    assert.strictEqual((await d.reopen()).questions.length, RT.questions.length, 'backup ripristinato');
++  } finally { H.rmrf(d.dir); }
++});
++
++/* ---------------- 3. regia: cablaggio di IMPORTA CONTENUTI ---------------- */
++test('Importa contenuti: un solo ingresso (pulsante, ARCHIVIO, GIOCHI, trascinamento), conferma con backup, niente vecchi import paralleli', function () {
++  var html = source('index.html'), app = source('js/app.js'), pk = source('js/host/packs-ui.js');
++  assert.ok(/id="importContentBtn"[^>]*>📥 IMPORTA CONTENUTI</.test(html));
++  assert.ok(/<dialog id="importDialog"/.test(html));
++  assert.ok(html.indexOf('Importa qui un file .json esportato dall’archivio domande') >= 0);
++  assert.ok(html.indexOf('Importa qui un file .json esportato con ESPORTA GIOCHI') >= 0);
++  assert.ok(/\$\('#importBankInput'\)\.onchange=.{0,120}importContent\(f\)/.test(app));
++  assert.ok(/\$\('#importGamesInput'\)\.onchange=.{0,120}importContent\(f\)/.test(app));
++  assert.ok(/ctx\.importContent && files\.length === 1/.test(pk), 'trascinare un file sulla regia apre IMPORTA CONTENUTI');
++  assert.strictEqual(app.indexOf('function importBank('), -1, 'vecchio import domande rimosso');
++  assert.strictEqual(app.indexOf('function importGames('), -1, 'vecchio import giochi (che aggiungeva) rimosso');
++  ['ESPORTA BACKUP PRIMA DI CONTINUARE', 'CONTINUA SENZA BACKUP', 'Sostituzione, non unione', 'Hai importato', 'Pacchetto installato correttamente', 'Verranno sostituite le'].forEach(function (s) { assert.ok(app.indexOf(s) >= 0, s); });
++  assert.ok(/for\(const type of PE\.GAME_TYPES\)/.test(app), 'la copia del browser accetta tutti i tipi di gioco');
++});
++
++test('Importa contenuti: bloccato con domanda/gioco in corso e in sessione mista; il dialogo descrive cosa e dove', function () {
++  var ctx = { RC: RC, state: { screen: 'question', phase: 'running', mixed: false } };
++  vm.runInNewContext(extract(['importBusyReason']), ctx);
++  assert.ok(/in corso/.test(ctx.importBusyReason()));
++  ctx.state = { screen: 'arcade', arcade: { started: true }, mixed: false };
++  assert.ok(/in corso/.test(ctx.importBusyReason()));
++  ctx.state = { screen: 'home', mixed: true };
++  assert.ok(/Sessione mista/.test(ctx.importBusyReason()));
++  ctx.state = { screen: 'home', mixed: false };
++  assert.strictEqual(ctx.importBusyReason(), '');
++  // testo del riepilogo
++  var el = { innerHTML: '' };
++  var r = { $: function () { return el; }, esc: function (s) { return String(s); }, gameName: function (t) { return t; }, importStep: null };
++  vm.runInNewContext(extract(['importKindsHTML', 'importBackupHTML', 'renderImportDialog']), r);
++  r.importStep = { kind: 'questions', name: 'domande.json', questions: [{ question: 'Q1' }, { question: 'Q2' }], before: 72, packTitle: 'Arte romana' };
++  vm.runInNewContext('importStep=this.importStep;renderImportDialog()', r);
++  assert.ok(/archivio domande/.test(el.innerHTML) && /2 domande/.test(el.innerHTML) && /72 domande/.test(el.innerHTML) && /Arte romana/.test(el.innerHTML));
++  assert.ok(/data-imp="backup"/.test(el.innerHTML) && /data-imp="go"/.test(el.innerHTML) && /data-imp="cancel"/.test(el.innerHTML));
++  r.importStep = { kind: 'pack', name: 'p.zip' };
++  vm.runInNewContext('importStep=this.importStep;renderImportDialog()', r);
++  assert.ok(/pacchetto completo/.test(el.innerHTML) && /libreria pacchetti/.test(el.innerHTML));
++  assert.strictEqual(el.innerHTML.indexOf('data-imp="backup"'), -1, 'installare un pacchetto non sostituisce nulla: nessun backup richiesto');
++});
++
++/* ---------------- 4. classifica finale ---------------- */
++function podiumCtx(teams, responses) {
++  var s = SS.createSession({});
++  s.rounds = [{ roundInstanceId: 'r1', committed: true }, { roundInstanceId: 'r2', committed: true }, { roundInstanceId: 'rx', committed: false }];
++  s.responses = responses || [];
++  var calls = [];
++  var ctx = {
++    RC: RC, SC: SC, calls: calls, BRAND_LOGO: 'logo.svg', Date: Date,
++    state: { screen: 'home', teams: teams, session: s, finalReveal: null, roundResultsVisible: false, bank: [{ id: 'q1' }], qIndex: 0 },
++    esc: function (x) { return String(x).replace(/</g, '&lt;'); }, pack: function () { return { title: 'Arte romana' }; },
++    leaveQuestionGuard: function () { return true; }, stopTimer: function () {}, renderAll: function () { calls.push('render'); }, cloneAudio: function (n) { calls.push('sound:' + n); },
++    showTransition: function (t) { calls.push('transition:' + t); }, autosave: function () {}, logEvent: function (e) { calls.push('log:' + e.event); }, arcadeEpoch: 0,
++    planLive: function () { return null; }, planNext: function () {}
++  };
++  vm.runInNewContext('var arcadeEpoch=0;\n' + extract(['teamOutcomeStats', 'finalStandings', 'podiumInfo', 'revealNextPlace', 'revealAllPlaces', 'showLeaderboard', 'leaderboardHTML', 'nextQuestion']), ctx);
++  return ctx;
++}
++var SIX = [{ id: 'a', name: 'Alfa', score: 500 }, { id: 'b', name: 'Beta', score: 475 }, { id: 'c', name: 'Gamma', score: 450 }, { id: 'd', name: 'Delta', score: 50 }, { id: 'e', name: 'Zeta', score: 0 }, { id: 'f', name: 'Eta', score: 0 }];
++
++test('Classifica finale: posizioni con pari merito, esiti contati solo sui round confermati', function () {
++  var ctx = podiumCtx(SIX, [
++    { roundInstanceId: 'r1', participantId: 'a', outcome: 'correct' }, { roundInstanceId: 'r2', participantId: 'a', outcome: 'wrong' },
++    { roundInstanceId: 'r1', participantId: 'e', outcome: 'omitted' }, { roundInstanceId: 'rx', participantId: 'a', outcome: 'correct' },
++    { roundInstanceId: 'r2', participantId: 'a', outcome: 'correct', voided: true }
++  ]);
++  var rows = ctx.finalStandings();
++  same(rows.map(function (r) { return r.name + ':' + r.rank + (r.tie ? 'T' : ''); }), ['Alfa:1', 'Beta:2', 'Gamma:3', 'Delta:4', 'Eta:5T', 'Zeta:5T']);
++  same(rows[0].stats, { correct: 1, wrong: 1, omitted: 0 }, 'round non confermato e risposta annullata esclusi');
++  same(rows.filter(function (r) { return r.id === 'e'; })[0].stats, { correct: 0, wrong: 0, omitted: 1 });
++});
++
++test('Classifica finale: AVANTI rivela una posizione alla volta dall\'ultima, il 1° per ultimo; poi AVANTI non fa altro', function () {
++  var ctx = podiumCtx(SIX);
++  ctx.showLeaderboard({ final: true });
++  assert.strictEqual(ctx.state.screen, 'leaderboard');
++  same(ctx.state.finalReveal.shown, 0);
++  assert.ok(ctx.calls.indexOf('transition:CLASSIFICA FINALE') >= 0);
++  var html = ctx.leaderboardHTML();
++  assert.ok(/finalScene isIntro/.test(html) && /Ecco il verdetto/.test(html) && /si parte dal 5° posto/.test(html), 'schermata introduttiva');
++  var seen = [];
++  for (var i = 0; i < 6; i++) {
++    ctx.nextQuestion();
++    var h = ctx.leaderboardHTML();
++    var open = (h.match(/class="finalCard(?! locked)[^"]*"/g) || []).length, locked = (h.match(/finalCard locked/g) || []).length;
++    assert.strictEqual(open + locked, 6); assert.strictEqual(open, i + 1);
++    assert.strictEqual((h.match(/ enter"/g) || []).length, 1, 'anima solo la carta appena rivelata');
++    seen.push(ctx.podiumInfo().shown);
++  }
++  same(seen, [1, 2, 3, 4, 5, 6]);
++  assert.ok(ctx.calls.indexOf('sound:final') > ctx.calls.lastIndexOf('sound:reveal'), 'suono finale per il 1° posto');
++  assert.ok(ctx.calls.indexOf('log:leaderboard.final') >= 0);
++  var before = ctx.calls.length;
++  ctx.nextQuestion(); ctx.nextQuestion();
++  assert.strictEqual(ctx.state.finalReveal.shown, 6, 'nessun passo oltre il 1°');
++  assert.strictEqual(ctx.calls.length, before, 'AVANTI a verdetto completo non fa nulla');
++  var done = ctx.leaderboardHTML();
++  assert.ok(/finalCard podium p1/.test(done) && /ORO/.test(done) && /ARGENTO/.test(done) && /BRONZO/.test(done) && /EX AEQUO/.test(done) && /VERDETTO/.test(done));
++});
++
++test('Classifica finale: ★ CLASSIFICA a metà partita mostra subito tutto; MOSTRA TUTTO; molte squadre = podio 2–1–3; nomi protetti', function () {
++  var ctx = podiumCtx(SIX);
++  ctx.showLeaderboard({ type: 'click' }); // evento del pulsante: NON è la finale
++  assert.strictEqual(ctx.state.finalReveal, null);
++  var h = ctx.leaderboardHTML();
++  assert.strictEqual((h.match(/finalCard locked/g) || []).length, 0);
++  assert.ok(/<h1>CLASSIFICA<\/h1>/.test(h));
++  ctx.showLeaderboard({ final: true }); ctx.revealNextPlace(); ctx.revealAllPlaces();
++  assert.strictEqual(ctx.podiumInfo().shown, 6);
++  var twelve = []; for (var i = 0; i < 12; i++) twelve.push({ id: 't' + i, name: i === 3 ? '<b>Squadra</b>' : 'Squadra ' + i, score: 1000 - i * 50 });
++  var big = podiumCtx(twelve);
++  big.showLeaderboard({ final: true }); big.revealAllPlaces();
++  var hb = big.leaderboardHTML();
++  assert.ok(/finalScene many/.test(hb) && /finalPodium/.test(hb) && /finalRest/.test(hb));
++  var podium = hb.slice(hb.indexOf('finalPodium'), hb.indexOf('finalRest'));
++  same((podium.match(/resultPos">(\d+)°/g) || []).map(function (x) { return x.replace(/\D/g, ''); }), ['2', '1', '3'], 'ordine 2–1–3');
++  assert.ok(hb.indexOf('<b>Squadra</b>') < 0 && hb.indexOf('&lt;b>Squadra') >= 0, 'nome squadra protetto');
++  var three = podiumCtx(SIX.slice(0, 3)); three.showLeaderboard({ final: true }); three.revealAllPlaces();
++  assert.ok(/finalScene few/.test(three.leaderboardHTML()));
++});
++
++test('Regia one screen: durante la classifica finale l\'azione principale è RIVELA, con articolo corretto e ★ per il 1°', function () {
++  var m = RC.cockpit({ screen: 'leaderboard', teams: 12, podium: { shown: 0, total: 12, nextRank: 11 } });
++  same(m.main.map(function (x) { return x.act; }), ['revealNext']);
++  assert.strictEqual(m.main[0].label, '▶ RIVELA L\'11° POSTO');
++  assert.strictEqual(m.main[0].sub, '0 di 12 rivelati');
++  same(m.secondary.map(function (x) { return x.act; }), ['revealAll']);
++  assert.strictEqual(RC.cockpit({ screen: 'leaderboard', teams: 6, podium: { shown: 2, total: 6, nextRank: 4 } }).main[0].label, '▶ RIVELA IL 4° POSTO');
++  var last = RC.cockpit({ screen: 'leaderboard', teams: 6, podium: { shown: 5, total: 6, nextRank: 1 } });
++  assert.strictEqual(last.main[0].label, '★ RIVELA IL 1° POSTO'); assert.strictEqual(last.main[0].tone, 'amber');
++  var done = RC.cockpit({ screen: 'leaderboard', teams: 6, podium: { shown: 6, total: 6, nextRank: 1 } });
++  same(done.main.map(function (x) { return x.act; }).concat(done.secondary.map(function (x) { return x.act; })), ['home', 'report']);
++  same([RC.placeLabel(8), RC.placeLabel(80), RC.placeLabel(5), RC.placeFrom(11), RC.placeFrom(6)], ['L\'8° POSTO', 'L\'80° POSTO', 'IL 5° POSTO', 'dall\'11°', 'dal 6°']);
++  var app = source('js/app.js');
++  assert.ok(/revealNext:revealNextPlace,revealAll:revealAllPlaces/.test(app), 'azioni collegate alla regia');
++  assert.ok(/showLeaderboard\(\{final:true\}\)/.test(app.slice(app.indexOf('function nextQuestion'), app.indexOf('function prevQuestion'))), 'fine archivio = classifica finale');
++  assert.ok(/function planFinish\(\)[^\n]*showLeaderboard\(\{final:true\}\)/.test(app), 'fine scaletta = classifica finale');
++  assert.ok(/finalReveal:state\.finalReveal\?\{shown:state\.finalReveal\.shown,lastAt:0\}:null,planRun/.test(app), 'il punto del reveal sopravvive al recovery');
++});
++
++test('Classifica finale: animazioni solo transform/opacity e movimento ridotto rispettato', function () {
++  var css = source('css/show.css');
++  ['finalCardIn', 'finalWinnerIn', 'finalShine', 'finalIntroIn'].forEach(function (k) {
++    var m = new RegExp('@keyframes ' + k + '\\{((?:[^{}]*\\{[^{}]*\\})+)\\}').exec(css);
++    assert.ok(m, 'keyframes ' + k);
++    (m[1].match(/[a-z-]+(?=:)/g) || []).forEach(function (p) { assert.ok(p === 'transform' || p === 'opacity', k + ' anima ' + p); });
++  });
++  assert.ok(/prefers-reduced-motion:reduce\)\{\.finalCard\.enter/.test(css));
++});
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/tests/session_planner_370.test.js Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/tests/session_planner_370.test.js
+--- BASELINE_v3.7.2_REVEAL_FIX/Il_Secchione_v3.7.2_REVEAL_FIX/tests/session_planner_370.test.js	2026-10-05 18:32:25.000000000 +0200
++++ Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/tests/session_planner_370.test.js	2026-10-05 19:53:25.658276700 +0200
+@@ -418,7 +418,7 @@
+   assert.ok(/function nextQuestion\(\)\{\n if\(planLive\(\)\)return planNext\(\);/.test(app), 'AVANTI = nextQuestion');
+   assert.ok(/function goQuestion\(i\)\{RC\.applyDeferred\(state\);state\.repeatOf=null;/.test(app), 'repeatOf non sopravvive a un cambio di domanda');
+   assert.strictEqual((app.match(/newSession\(true\);state\.completedRounds=\{\};state\.planRun=null;/g) || []).length, 2);
+-  assert.ok(/const VERSION='3\.7\.2';/.test(app));
++  assert.ok(/const VERSION='3\.7\.3';/.test(app));
+ });
+ 
+ test('Persistenza: le scalette salvate nelle preferenze tornano dal server (GET /api/host/prefs, solo regia)', async function () {

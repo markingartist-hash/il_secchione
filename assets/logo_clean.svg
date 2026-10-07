@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 235" role="img" aria-label="Il Secchione">
+  <defs>
+    <linearGradient id="gradS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff24a"/>
+      <stop offset="100%" stop-color="#f3a400"/>
+    </linearGradient>
+    <linearGradient id="gradWord" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#57d8ff"/>
+      <stop offset="100%" stop-color="#14b2f0"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000" flood-opacity=".55"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)" font-family="Arial Black, Impact, system-ui, sans-serif" font-weight="900">
+    <text x="32" y="75" font-size="54" fill="#56d4ff" stroke="#03253b" stroke-width="8" paint-order="stroke">il</text>
+    <text x="28" y="188" font-size="182" font-style="italic" fill="url(#gradS)" stroke="#ff163c" stroke-width="12" stroke-linejoin="round" paint-order="stroke">S</text>
+    <text textLength="840" lengthAdjust="spacingAndGlyphs" x="145" y="188" font-size="158" fill="url(#gradWord)" stroke="#07304c" stroke-width="10" paint-order="stroke">ecchione</text>
+  </g>
+</svg>

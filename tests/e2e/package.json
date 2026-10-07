@@ -1,0 +1,7 @@
+{
+  "name": "secchione-e2e-development-only",
+  "private": true,
+  "version": "3.5.2",
+  "scripts": { "test": "node run.cjs" },
+  "devDependencies": { "playwright": "1.62.1" }
+}

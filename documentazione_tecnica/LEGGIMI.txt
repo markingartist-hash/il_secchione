@@ -1,0 +1,53 @@
+IL SECCHIONE · v3.7.3 CONTENT IMPORT AND PODIUM REVEAL
+Novità v3.7.3: CHANGELOG_V3_7_3.md (IMPORTA CONTENUTI: un solo pulsante per qualunque file esportato, con backup;
+               classifica finale rivelata dall'ultimo al primo posto, una posizione per AVANTI)
+Novità v3.7.1: CHANGELOG_V3_7_1.md (tastiera testuale più stabile sui tablet; dopo il reveal,
+               primo AVANTI = classifica del round a tutto schermo, secondo AVANTI = contenuto successivo)
+Novità v3.6.1: CHANGELOG_V3_6_1.md (flusso rapido in classe, 60 s giochi scritti, mini-classifica, 3 astensioni gratuite)
+
+ESTRAI TUTTO LO ZIP, poi doppio clic su AVVIA_IL_SECCHIONE.bat.
+Node Windows x64 incluso in runtime: nessuna installazione necessaria.
+Conserva tutte le sottocartelle accanto al BAT.
+Novità: CHANGELOG_v3.5.4_MASCOT_ANIMATED.md (mascotte animata)
+        CHANGELOG_v3.5.3_PACK_STUDIO.md (Pack Studio, CSV protetti)
+Audit della base: AUDIT_v3.5.2_PILOT.md — modifiche della base: CHANGELOG_v3.5.2_PILOT.md
+
+AVVIO
+- Senza tablet:  doppio clic su AVVIA_SENZA_TABLET.bat  (oppure apri index.html con Chrome o Edge)
+- Con i tablet:  doppio clic su AVVIA_IL_SECCHIONE.bat  (Node portable incluso)
+                 NON chiudere la finestra nera durante la lezione.
+
+PRIMA VOLTA?  Leggi GUIDA_RAPIDA_DOCENTE.md (10 minuti).
+
+NUOVI ARGOMENTI (PACCHETTI)
+- Nella regia: pulsante PACCHETTI -> IMPORTA PACCHETTO (file .zip), oppure trascina lo .zip sulla finestra.
+- Oppure trascina lo .zip su IMPORTA_PACCHETTO.bat (usa Node portable incluso).
+- Funziona anche con lo ZIP di un'edizione v3 (es. Il_Secchione_PREISTORIA_v3.0.zip).
+- Prova con i due pacchetti della cartella PACK_ESEMPI.
+
+CREARE O MODIFICARE UN PACCHETTO (PACK STUDIO)
+- Nella regia: PACCHETTI -> PACK STUDIO (nuovo) oppure MODIFICA su un pacchetto.
+- Oppure apri studio.html. Guida: PACK_STUDIO.md
+
+DOCUMENTI
+README.md                 panoramica e istruzioni esatte (senza tablet, con tablet, test rete, ripresa)
+GUIDA_RAPIDA_DOCENTE.md   una partita completa passo per passo, tasti rapidi, problemi comuni
+NETWORK_SETUP.md          Node.js, Wi-Fi della scuola, hotspot del PC, router dedicato, firewall
+PACK_STUDIO.md            creare e modificare pacchetti con Pack Studio, senza scrivere file
+PACK_FORMAT.md            come scrivere nuovi pack di domande e giochi (modello in PACK_TEMPLATE)
+EXPORT_CSV.md             formato dei CSV e protezione dalle formule nei fogli di calcolo
+TEST_CHECKLIST.md         controlli da fare prima di una lezione con i tablet
+CHANGELOG_V3_5.md         novità: implementato, testato, parziale, non implementato
+ARCHITECTURE.md           per chi sviluppa
+ASSET_AUDIT.md            immagini e suoni: origine e licenze da verificare
+CURRENT_STATE.md          audit della versione 3.0 di partenza
+
+CONTENUTI
+Pack "Arte romana": 72 domande e 33 manche (14 Photopuzzle, 8 Indovina, 3 Abbinamenti,
+4 Parola Segreta, 4 Staffetta di parole), con le immagini ricavate dalle due dispense
+usate in classe. SOLUZIONI_DOCENTE.html contiene l'elenco delle soluzioni.
+La cartella legacy_v3 contiene le esportazioni della v3, importabili dalla regia.
+
+SALVATAGGI
+La partita si salva da sola. Se il browser o il PC si chiudono, riapri il Secchione e premi RIPRENDI.
+Con il server attivo una copia viene salvata anche nella cartella data (da non distribuire).

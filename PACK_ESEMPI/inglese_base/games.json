@@ -1,0 +1,74 @@
+{
+  "games": {
+    "indovina": [
+      {
+        "label": "Mystery animal",
+        "theme": "Animals",
+        "subject": "Elephant",
+        "candidates": [
+          "Elephant",
+          "Lion",
+          "Giraffe",
+          "Monkey"
+        ],
+        "clues": [
+          "I am very big.",
+          "I am grey.",
+          "I have a long trunk."
+        ],
+        "seconds": 60
+      }
+    ],
+    "ghigliottina": [
+      {
+        "label": "Secret word 1",
+        "theme": "Weather",
+        "answer": "RAIN",
+        "pairs": [
+          [
+            "Umbrella",
+            "Sunglasses"
+          ],
+          [
+            "Cloud",
+            "Desert"
+          ],
+          [
+            "Wet",
+            "Dry"
+          ],
+          [
+            "Drop",
+            "Flame"
+          ],
+          [
+            "Puddle",
+            "Sand"
+          ]
+        ],
+        "seconds": 60
+      }
+    ],
+    "chain": [
+      {
+        "label": "From school to home",
+        "theme": "Everyday words",
+        "links": [
+          {
+            "from": "SCHOOL",
+            "to": "BOOK"
+          },
+          {
+            "from": "BOOK",
+            "to": "PAGE"
+          },
+          {
+            "from": "PAGE",
+            "to": "WORD"
+          }
+        ],
+        "seconds": 60
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "browser": "153.0.8010.53",
+  "channel": "chrome",
+  "checks": [
+    "HOST: sei squadre; sei PLAYER con PIN, richiesta e approvazione reale; SHOW collegato",
+    "MCQ 1: 6 browser, selezione/INVIA/ricezione/reveal/punti; timer reale 30 s",
+    "MCQ 2: 6 browser, selezione/INVIA/ricezione/reveal/punti; seconda domanda",
+    "Refresh PLAYER: stessa squadra e ricevuta conservate",
+    "Indovina 1: tastiera virtuale, INVIA, soluzione SHOW e commit",
+    "Indovina 2: tastiera virtuale, INVIA, soluzione SHOW e commit",
+    "MCQ 3: 6 browser, selezione/INVIA/ricezione/reveal/punti; seconda domanda",
+    "Pack Manager: importazione inglese_base, attivazione, punteggi conservati e nuova domanda con INVIA",
+    "Refresh HOST e RIPRENDI: sessione e punteggi conservati",
+    "Fallback file:// con browser offline: quattro squadre e avvio MCQ",
+    "Nessun errore JavaScript, nessuna risorsa Internet, nessuna domanda/soluzione nei frame PLAYER anche dopo reveal"
+  ],
+  "errors": [],
+  "external": [],
+  "playerFrames": 182
+}

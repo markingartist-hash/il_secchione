@@ -1,0 +1,51 @@
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: ANSWER_MATCHER.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: ARCHITECTURE.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: ASSET_AUDIT.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: AUDIT_v3.5.2_PILOT.md
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/AVVIA_IL_SECCHIONE.bat and Il_Secchione_1.0_RC1_TRAINING/AVVIA_IL_SECCHIONE.bat differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/AVVIA_SENZA_TABLET.bat and Il_Secchione_1.0_RC1_TRAINING/AVVIA_SENZA_TABLET.bat differ
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_V3_5.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_V3_6_0.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_V3_6_1.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_V3_7_0.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_V3_7_1.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_V3_7_2.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_V3_7_3.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_v3.5.2_PILOT.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_v3.5.3_PACK_STUDIO.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CHANGELOG_v3.5.4_MASCOT_ANIMATED.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: CURRENT_STATE.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: EXPORT_CSV.md
+Only in Il_Secchione_1.0_RC1_TRAINING: GUIDA_DOCENTE.html
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: GUIDA_RAPIDA_DOCENTE.md
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/IMPORTA_PACCHETTO.bat and Il_Secchione_1.0_RC1_TRAINING/IMPORTA_PACCHETTO.bat differ
+Only in Il_Secchione_1.0_RC1_TRAINING: INIZIA_QUI.html
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: LEGGIMI.txt
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: NETWORK_SETUP.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: PACK_FORMAT.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: PACK_STUDIO.md
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: README.md
+Only in Il_Secchione_1.0_RC1_TRAINING: RISOLUZIONE_PROBLEMI.html
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: SOLUZIONI_DOCENTE.html
+Only in Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL: TEST_CHECKLIST.md
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/css/classroom.css and Il_Secchione_1.0_RC1_TRAINING/css/classroom.css differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/css/show.css and Il_Secchione_1.0_RC1_TRAINING/css/show.css differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/css/studio.css and Il_Secchione_1.0_RC1_TRAINING/css/studio.css differ
+Only in Il_Secchione_1.0_RC1_TRAINING/data: logs
+Only in Il_Secchione_1.0_RC1_TRAINING/data: sessions
+Only in Il_Secchione_1.0_RC1_TRAINING: documentazione_tecnica
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/index.html and Il_Secchione_1.0_RC1_TRAINING/index.html differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/app.js and Il_Secchione_1.0_RC1_TRAINING/js/app.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/packs.js and Il_Secchione_1.0_RC1_TRAINING/js/engine/packs.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/roundControl.js and Il_Secchione_1.0_RC1_TRAINING/js/engine/roundControl.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/scoring.js and Il_Secchione_1.0_RC1_TRAINING/js/engine/scoring.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/engine/session.js and Il_Secchione_1.0_RC1_TRAINING/js/engine/session.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/host/devices-ui.js and Il_Secchione_1.0_RC1_TRAINING/js/host/devices-ui.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/host/packs-ui.js and Il_Secchione_1.0_RC1_TRAINING/js/host/packs-ui.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/js/studio/studio.js and Il_Secchione_1.0_RC1_TRAINING/js/studio/studio.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/server/room.js and Il_Secchione_1.0_RC1_TRAINING/server/room.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/server/server.js and Il_Secchione_1.0_RC1_TRAINING/server/server.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/tests/content_import_podium_373.test.js and Il_Secchione_1.0_RC1_TRAINING/tests/content_import_podium_373.test.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/tests/room.test.js and Il_Secchione_1.0_RC1_TRAINING/tests/room.test.js differ
+Files Il_Secchione_v3.7.3_CONTENT_IMPORT_AND_PODIUM_REVEAL/tests/session_planner_370.test.js and Il_Secchione_1.0_RC1_TRAINING/tests/session_planner_370.test.js differ
+Only in Il_Secchione_1.0_RC1_TRAINING/tests: training_rc1.test.js

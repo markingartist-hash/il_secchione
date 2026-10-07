@@ -1,0 +1,10 @@
+Il Secchione 1.0.0-rc2a.1 · copia di lavoro · 6 ottobre 2026 · registro della regia letto dal salvataggio del browser
+(chiave il-secchione-v35-session), dopo Photopuzzle e Indovina giocati con una pulsantiera /player vera.
+
+16:39:56 score 4b29a1 delta 295      <- Photopuzzle, calcolo LOCALE della regia (2049 ms su 45000 ms)
+16:39:57 score.verified              <- il server conferma: nessuna correzione
+16:40:29 score 4b29a1 delta 290      <- Indovina, calcolo LOCALE della regia (4353 ms su 45000 ms)
+16:40:29 score.verified              <- il server conferma: nessuna correzione
+
+record photopuzzle 2049ms availableMs=45000
+record indovina 4353ms availableMs=45000

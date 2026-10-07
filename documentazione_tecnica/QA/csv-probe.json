@@ -1,0 +1,5 @@
+{
+  "probe": "=1+1",
+  "csvContainsUnneutralizedFormula": true,
+  "executedInSpreadsheet": false
+}

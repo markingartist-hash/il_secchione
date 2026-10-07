@@ -1,0 +1,8 @@
+[
+  { "id": "q001", "category": "Vocabulary", "topic": "Colours", "difficulty": 1, "question": "What colour is the sky on a sunny day?", "options": ["Blue", "Red", "Green", "Black"], "correct": "A", "explanation": "On a sunny day the sky is blue.", "seconds": 15 },
+  { "id": "q002", "category": "Vocabulary", "topic": "Animals", "difficulty": 1, "question": "Which animal says “woof”?", "options": ["Cat", "Cow", "Dog", "Duck"], "correct": "C", "explanation": "Dogs say “woof”.", "seconds": 15 },
+  { "id": "q003", "category": "Grammar", "topic": "Verb to be", "difficulty": 1, "question": "Complete: “She ___ my sister.”", "options": ["am", "is", "are", "be"], "correct": "B", "explanation": "Third person singular: she is.", "seconds": 20 },
+  { "id": "q004", "category": "Grammar", "topic": "Plurals", "difficulty": 2, "question": "What is the plural of “child”?", "options": ["Childs", "Childes", "Children", "Childrens"], "correct": "C", "explanation": "“Children” is an irregular plural.", "seconds": 20 },
+  { "id": "q005", "category": "Vocabulary", "topic": "Days", "difficulty": 1, "question": "Which day comes after Monday?", "options": ["Sunday", "Tuesday", "Thursday", "Friday"], "correct": "B", "explanation": "Monday, Tuesday, Wednesday…", "seconds": 15 },
+  { "id": "q006", "category": "Grammar", "topic": "Present simple", "difficulty": 2, "question": "Complete: “He ___ football every Saturday.”", "options": ["play", "plays", "playing", "is play"], "correct": "B", "explanation": "Present simple, third person: plays.", "seconds": 25 }
+]

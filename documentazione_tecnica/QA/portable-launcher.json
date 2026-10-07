@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "version": "3.5.2_PILOT",
+  "runtime": "C:\\Users\\admin\\Documents\\Codex\\2026-09-30\\adat\\work\\Portable avvio con spazi\\runtime\\node.exe",
+  "pathDuringTest": "C:\\Windows\\System32",
+  "launcher": "AVVIA_IL_SECCHIONE.bat originale",
+  "directoryWithSpaces": true,
+  "browserAutoOpenSuppressedUsingExistingFlag": true,
+  "hostHTTP": 200,
+  "nodeSignature": "Valid"
+}

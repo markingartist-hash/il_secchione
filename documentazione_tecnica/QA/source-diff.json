@@ -1,0 +1,90 @@
+{
+  "sourceArchive": "Il_Secchione_v3.5.1_CLASSROOM_KEYBOARD_GIOCHI.zip",
+  "sourceSHA256": "005f184a535edf671f4d8a5e055c78eb2de227e700b48dc7e318c532a9dfda2f",
+  "changed": [
+    {
+      "file": "GUIDA_RAPIDA_DOCENTE.md",
+      "before": "5c6a0b04381739de166633c15867c2bd57aa15e9afc21ba98797343f76994165",
+      "after": "9e28ac3896e33f4c5129e0dd7de4178cdc1dd036bee9c44ac386ddc4da0de9d7"
+    },
+    {
+      "file": "LEGGIMI.txt",
+      "before": "e1d4e068abd293ae21eaeebc01e9ce0c4b167cdd32006d170db87368ae8f1857",
+      "after": "278515fad3669737b8b619740d32b13c24c4e025b305a914eb870cd7091c85a4"
+    },
+    {
+      "file": "NETWORK_SETUP.md",
+      "before": "617f0e54132c19474533f7066f2c2bd4063e49ddc45e2f55e52d7244d22fb2cd",
+      "after": "ae2879c35b98bd1f971d19a3a9c38d026173adbd1894b96a9c9a656981e54a1b"
+    },
+    {
+      "file": "README.md",
+      "before": "0e783b803ff73b466d04149865277ad9ca8c3c350f46588ea03ec34d0d1b5a1a",
+      "after": "3796a4dd46c95cd0109dcb40bd4c74a15c5e69d36448c7179b12ec640350b86b"
+    },
+    {
+      "file": "js/app.js",
+      "before": "85b076fb5261ebdac95a033e43d9b1c5d6079e7d8e74e630f8c29ecd215544d2",
+      "after": "81ebf3a598d4d64f990122cb82fb99b5a0a98db318e1cdfe528b8daf244dc95c"
+    },
+    {
+      "file": "js/player.js",
+      "before": "214b1aef514f98d308dc89ddcc821dd74b2ab81457f2ca1f9467e29a5a69c88c",
+      "after": "30353ef5787749346850ac89b8fb0afd8acf1cf926a285c72bfb0ac7aa387b8a"
+    },
+    {
+      "file": "server/packstore-disk.js",
+      "before": "d15974b7dbfff34154d92392081000612a652b8920658ac57fc0b4efdd152a46",
+      "after": "3a4e4302af55e45fb269cb3be8da2389b6921b23647c33d2358a3f7ff93923a3"
+    },
+    {
+      "file": "server/room.js",
+      "before": "9c54d3aff2e35e042a5bc0fb3e0ee6066d0f14a4c2c780786d9d72a11491bd38",
+      "after": "07b8d8a0ab70be5b8e9c76e2b429f11fd2f908d525ddf46f5b2f3134c75b9f1a"
+    },
+    {
+      "file": "server/server.js",
+      "before": "ea2eae31b42548c57930895a0f89deaf87b5be8c829695ebfb7a84bde07d4359",
+      "after": "08434bfc2be323dea7238c788c9d9d2cf594902f73060905eb165deefaad420b"
+    },
+    {
+      "file": "server/ws.js",
+      "before": "c300f6167c387ad2719a80cc803f3e89bbd70f696c4ec3f1d9e7f52ea053c5ea",
+      "after": "3d3d72aace534f93c7cdbae9678b38d18185a66904526627f2987cb68dced900"
+    },
+    {
+      "file": "js/lib/zip.js",
+      "before": "6407c5896696bfc7f1930082552f7a84404eefc78a8b34fb094a20763ee773a1",
+      "after": "c6aeb318c749a365421a56e955d03e2f0391b92dabd70fcb9e4476c976305b39"
+    }
+  ],
+  "originalFilesUnchanged": 132,
+  "originalFileCount": 143,
+  "added": [
+    "AUDIT_v3.5.2_PILOT.md",
+    "CHANGELOG_v3.5.2_PILOT.md",
+    "QA/AUDIT_INIZIALE.md",
+    "QA/baseline-repro.json",
+    "QA/chrome/player-indovina-1.png",
+    "QA/chrome/player-indovina-2.png",
+    "QA/chrome/results.json",
+    "QA/chrome/show-mcq.png",
+    "QA/csv-probe.json",
+    "QA/edge/player-indovina-1.png",
+    "QA/edge/player-indovina-2.png",
+    "QA/edge/results.json",
+    "QA/edge/show-mcq.png",
+    "QA/portable-launcher.json",
+    "QA/simulation.txt",
+    "QA/syntax.json",
+    "QA/tests-unit-integration.txt",
+    "runtime/LICENSE.txt",
+    "runtime/PROVENIENZA.txt",
+    "runtime/node.exe",
+    "tests/e2e/README.md",
+    "tests/e2e/package.json",
+    "tests/e2e/run.cjs",
+    "tests/pilot_hotfix.test.js",
+    "tools/verify_release.js"
+  ]
+}

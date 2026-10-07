@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0-rc2a.1",
+  "name": "RC2A1_HOTFIX",
+  "date": "2026-10-06",
+  "source": "Il_Secchione_1.0_RC2A_POST_PILOT_PORTABLE.zip",
+  "sourceSHA256": "779802ebf333ee1f77f631d1758cd09d437eab587d5c8eabc47c0db38ca9e18c",
+  "supportedRuntime": "bundled portable Node 24 (runtime/node.exe)",
+  "scope": "Hotfix only, no new features: arcade records carry the round availableMs before the local score calculation (host = server at first calculation), recompute falls back to rd.availableMs, tablet checklist wording. Scoring, timers and layout unchanged.",
+  "fixes": [
+    "commitArcadeScores → arcadeRecords(): every arcade record has the authoritative round availableMs; finalizeRound uses it as local fallback, stores it on the round and sends it to the server (RC2-A computed 200 locally and relied on score.server_override)",
+    "recomputeAllRounds and SS.recomputeTotals use rd.availableMs for historic records without availableMs",
+    "Checklist Pulsantiere: \"N tablet collegati · M squadre manuali\" instead of \"N / N collegate\"",
+    "QA erratum: the RC2-A report wrongly stated score.verified for the Photopuzzle; real logs attached"
+  ],
+  "featuresFromRC2A": [
+    "Scoring show_speed (default): correct = round(300 - 100 * elapsed / available), clamped 200..300, real server-measured ms; no measured time = 200; one manually entered CORRECT answer makes all correct answers of the round 200 (no speed bonus); wrong -100 and omission policy unchanged",
+    "availableMs per round (duration + added seconds, pauses excluded), kept by the server (authoritative, persisted) and stored on every response; CSV columns tempo_disponibile_ms and bonus_velocita",
+    "Old saved games keep their profile (show_standard 300/275...); RC1 preferences migrate once to the new default",
+    "Standard times in one place (engine/timer.js DEFAULTS): questions 15 s (also with image), photopuzzle/abbinamenti/indovina/chain/ghigliottina 45 s; explicit seconds always win; normalizer no longer writes defaults; 60 s game minimum removed; tablet round duration = stage timer",
+    "Bundled pack Arte romana 3.6.0: explicit 30/60 s removed (declared); external packs untouched",
+    "Round result screen: outcome, time, points of the round; no positions, podium colours or totals; top-down cascade",
+    "Leaderboard only on command: end of content shows FINE DEI CONTENUTI; ★ CLASSIFICA always starts the reveal from last place; mid-game reveal ends with TORNA AL GIOCO, final with TERMINA PARTITA",
+    "Stage readability: question screen without footer/mascot, answers fill the height (2x2 when short), js/stage-fit.js picks the largest text that fits between min and max % of screen height; question/result/end screens fill 4:3 windows",
+    "Explicit fullscreen button on projector window and /show (F key, hide, reappears after ESC, F11 hint if the browser refuses), regia fullscreen button; click-anywhere fullscreen removed",
+    "Player text keyboard: 5 full-height rows, keys >= 44 px, accents, apostrophe, hyphen, digits behind 123, INVIA inside the keyboard, single send, clear green confirmation"
+  ],
+  "knownLimitations": [
+    "Phone portrait QWERTY letters are 30-33 px wide (height >= 44 px).",
+    "Popup projector window and fullscreen could not be exercised in the embedded test browser (popups/fullscreen blocked); /show was tested.",
+    "Barocco/Preistoria and external packs keep explicit 30/60 s until the Phase B command.",
+    "Real projector legibility, real tablets and classroom rhythm not verified."
+  ],
+  "node": "v24.19.0",
+  "nodePlatform": "win32-x64",
+  "unitAndIntegration": {
+    "passed": 282,
+    "failed": 0,
+    "baselineRC2A": 274,
+    "rc2a1New": 8
+  },
+  "simulatePlayers": "2/6/15/30 devices, no lost or duplicated responses",
+  "manualQA": "Browser repro on RC2-A (score delta 200 → score.server_override) and on RC2-A.1 (Photopuzzle +295 and Indovina +290 computed locally → score.verified) with a real /player page. See documentazione_tecnica/QA/TEST_RESULTS_1.0_RC2A1.md",
+  "contentPacks": "Barocco 3media and Preistoria 1media 1.2.0 (standard times) delivered separately, not inside this ZIP"
+}

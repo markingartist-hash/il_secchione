@@ -1,0 +1,40 @@
+Files Il_Secchione_1.0_RC1_TRAINING/GUIDA_DOCENTE.html and Il_Secchione_1.0_RC2A_POST_PILOT/GUIDA_DOCENTE.html differ
+Files Il_Secchione_1.0_RC1_TRAINING/INIZIA_QUI.html and Il_Secchione_1.0_RC2A_POST_PILOT/INIZIA_QUI.html differ
+Files Il_Secchione_1.0_RC1_TRAINING/RISOLUZIONE_PROBLEMI.html and Il_Secchione_1.0_RC2A_POST_PILOT/RISOLUZIONE_PROBLEMI.html differ
+Files Il_Secchione_1.0_RC1_TRAINING/css/classroom.css and Il_Secchione_1.0_RC2A_POST_PILOT/css/classroom.css differ
+Files Il_Secchione_1.0_RC1_TRAINING/css/player.css and Il_Secchione_1.0_RC2A_POST_PILOT/css/player.css differ
+Files Il_Secchione_1.0_RC1_TRAINING/css/show.css and Il_Secchione_1.0_RC2A_POST_PILOT/css/show.css differ
+Only in Il_Secchione_1.0_RC2A_POST_PILOT/documentazione_tecnica: CHANGELOG_1.0_RC2A_POST_PILOT.md
+Files Il_Secchione_1.0_RC1_TRAINING/documentazione_tecnica/README.md and Il_Secchione_1.0_RC2A_POST_PILOT/documentazione_tecnica/README.md differ
+Files Il_Secchione_1.0_RC1_TRAINING/index.html and Il_Secchione_1.0_RC2A_POST_PILOT/index.html differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/app.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/app.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/core.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/core.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/engine/packs.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/packs.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/engine/packstudio.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/packstudio.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/engine/report.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/report.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/engine/roundControl.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/roundControl.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/engine/scoring.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/scoring.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/engine/session.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/session.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/engine/timer.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/timer.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/player.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/player.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/js/show-client.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/show-client.js differ
+Only in Il_Secchione_1.0_RC2A_POST_PILOT/js: stage-fit.js
+Files Il_Secchione_1.0_RC1_TRAINING/js/studio/studio.js and Il_Secchione_1.0_RC2A_POST_PILOT/js/studio/studio.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/packs/arte_romana/games.json and Il_Secchione_1.0_RC2A_POST_PILOT/packs/arte_romana/games.json differ
+Files Il_Secchione_1.0_RC1_TRAINING/packs/arte_romana/pack.json and Il_Secchione_1.0_RC2A_POST_PILOT/packs/arte_romana/pack.json differ
+Files Il_Secchione_1.0_RC1_TRAINING/packs/arte_romana/questions.json and Il_Secchione_1.0_RC2A_POST_PILOT/packs/arte_romana/questions.json differ
+Files Il_Secchione_1.0_RC1_TRAINING/packs/packs.bundle.js and Il_Secchione_1.0_RC2A_POST_PILOT/packs/packs.bundle.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/server/room.js and Il_Secchione_1.0_RC2A_POST_PILOT/server/room.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/server/server.js and Il_Secchione_1.0_RC2A_POST_PILOT/server/server.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/show.html and Il_Secchione_1.0_RC2A_POST_PILOT/show.html differ
+Files Il_Secchione_1.0_RC1_TRAINING/studio.html and Il_Secchione_1.0_RC2A_POST_PILOT/studio.html differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/classroom_flow_361.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/classroom_flow_361.test.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/classroom_readability_371.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/classroom_readability_371.test.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/content_import_podium_373.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/content_import_podium_373.test.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/pack.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/pack.test.js differ
+Only in Il_Secchione_1.0_RC2A_POST_PILOT/tests: rc2a_post_pilot.test.js
+Files Il_Secchione_1.0_RC1_TRAINING/tests/report.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/report.test.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/scoring.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/scoring.test.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/session_planner_370.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/session_planner_370.test.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/timer.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/timer.test.js differ
+Files Il_Secchione_1.0_RC1_TRAINING/tests/training_rc1.test.js and Il_Secchione_1.0_RC2A_POST_PILOT/tests/training_rc1.test.js differ

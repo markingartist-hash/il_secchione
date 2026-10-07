@@ -1,0 +1,30 @@
+{
+  "format": "secchione-pack",
+  "formatVersion": 1,
+  "id": "esempio_pack",
+  "title": "Pack di esempio",
+  "subtitle": "Modello da copiare",
+  "subject": "Geografia",
+  "grade": 1,
+  "gradeLabel": "Scuola secondaria di primo grado · classe 1ª",
+  "author": "Nome Cognome",
+  "version": "1.0.0",
+  "description": "Pack minimo con poche domande generiche: copia questa cartella, rinominala e sostituisci i contenuti.",
+  "language": "it",
+  "license": "",
+  "files": { "questions": "questions.json", "games": "games.json", "images": "images/" },
+  "theme": {
+    "eyebrow": "IL SECCHIONE",
+    "accent": "#57d8ff",
+    "accent2": "#f5bd63",
+    "homeImage": "",
+    "tags": ["Europa", "Fiumi", "Capitali"]
+  },
+  "texts": {
+    "homeEyebrow": "IL GAME SHOW DELLA CLASSE",
+    "homeClaim": "Osserva. Ragiona. Rispondi.\nConquista la classifica.",
+    "mascotHome": "Pronti\nper la sfida?",
+    "footer": "EUROPA · FIUMI · CAPITALI"
+  },
+  "gameNames": {}
+}

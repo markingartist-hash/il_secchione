@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="secchione-host-key" content="">
+<title>Il Secchione</title>
+<link rel="stylesheet" href="css/show.css">
+<link rel="stylesheet" href="css/classroom.css">
+</head>
+<body>
+<div class="studioApp visualMaster">
+  <header class="studioHeader">
+    <div class="headerBrand"><img src="assets/logo_clean.svg" alt="Il Secchione" width="86"><div><small>IL SECCHIONE</small><strong id="brandTitle">—</strong></div></div>
+    <div class="headerTitle">SCHERMO REGIA <span>(PC)</span></div>
+    <div class="headerStatus"><button type="button" id="fsRegiaBtn" class="btn ghost tiny fsRegiaBtn" title="Regia a schermo intero (ESC per uscire)">⛶ SCHERMO INTERO</button><span class="liveDot"></span><b id="connStatus">AVVIO…</b><small id="connSmall"></small></div>
+  </header>
+
+  <div class="studioGrid">
+    <aside class="teamRail">
+      <div class="themePoster masterPoster composedPoster">
+        <div class="posterCaveMarks" aria-hidden="true"></div>
+        <img class="posterMascotHQ" src="assets/mascot/mascot_present.webp" alt="Mascotte Il Secchione">
+        <div class="posterShade" aria-hidden="true"></div>
+        <img class="posterLogoHQ" src="assets/logo_clean.svg" alt="Il Secchione" width="150">
+        <div class="posterEditionHQ"><span id="posterTitle">—</span><small id="posterSub"></small></div>
+      </div>
+      <div class="railPanel teamsPanel">
+        <div class="railHead"><span>SQUADRE</span><span id="teamCount" class="miniBadge">0</span></div>
+        <div class="teamAdd"><input id="teamName" class="control" placeholder="Nuova squadra" maxlength="40" aria-label="Nome nuova squadra"><button id="addTeamBtn" class="iconBtn" aria-label="Aggiungi squadra">＋</button></div>
+        <button id="sampleTeamsBtn" class="btn ghost railWide">4 SQUADRE PROVA</button>
+        <div id="teamList" class="teamList"></div>
+        <button id="devicesBtn" class="btn primary railWide top8">📱 PULSANTIERE (TABLET)</button>
+        <button id="packsBtn" class="btn ghost railWide top8">📦 PACCHETTI</button>
+        <button id="planBtn" class="btn ghost railWide top8">📋 SCALETTA</button>
+        <button id="importContentBtn" class="btn ghost railWide top8">📥 IMPORTA CONTENUTI</button>
+        <small id="activePackInfo" class="railNote"></small>
+        <button id="settingsBtn" class="btn ghost railWide top8">⚙ IMPOSTAZIONI PARTITA</button>
+        <small id="settingsSummary" class="railNote"></small>
+      </div>
+      <div class="railPanel leftActions">
+        <button id="startQuizBtn" class="btn green railWide heroBtn">▶ AVVIA QUIZ</button>
+        <div class="railNav"><button id="prevBtn" class="btn ghost" aria-label="Domanda precedente">←</button><button id="homeBtn" class="btn ghost">HOME</button><button id="nextBtn" class="btn ghost" aria-label="Domanda successiva">→</button></div>
+        <button id="showLeaderboardBtn" class="btn yellow railWide">★ CLASSIFICA</button>
+      </div>
+    </aside>
+
+    <main class="previewRail">
+      <div class="consoleCap"><span>SCHERMO PUBBLICO <b>(TV)</b> · ANTEPRIMA LIVE</span><div class="consoleLights"><i></i><i></i><i></i></div></div>
+      <div class="screenBezel">
+        <section id="stage" class="stage" aria-live="polite"></section>
+        <div id="transition" class="transition" aria-hidden="true">
+          <div class="transitionGlow"></div><div class="transitionSweep"></div>
+          <div class="transitionNumber" id="transitionNumber">01</div>
+          <div class="transitionContent">
+            <img id="transitionMascot" src="assets/mascot/mascot_present.webp" class="transitionMascot" alt="">
+            <img src="assets/logo_clean.svg" class="transitionLogo" alt="" width="340">
+            <div class="transitionKicker" id="transitionKicker">NUOVA SFIDA</div>
+            <div class="transitionTitle" id="transitionTitle">DOMANDA 01</div>
+            <div class="transitionSub" id="transitionSub"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sessionTools"><button id="rulesBtn" class="btn primary">REGOLE SULLO SCHERMO</button><span class="badge" id="rulesBadge"></span><button id="motionBtn" class="btn ghost">Mascotte: animata</button><button id="newSessionBtn" class="btn ghost">NUOVA PARTITA</button><button id="saveSessionBtn" class="btn ghost">ESPORTA RISULTATI</button></div>
+      <div class="previewStrip">
+        <div><small>STATO</small><b id="sessionBadge">HOME</b></div>
+        <div><small>DOMANDA</small><b id="questionStatus">—</b></div>
+      </div>
+    </main>
+
+    <aside class="controlPane">
+      <div class="directorDeck">
+        <div class="directorTop">
+          <div class="directorLive"><span class="liveDot"></span><div><small>CONTROLLO RAPIDO</small><strong id="directorState">HOME</strong></div></div>
+          <div class="directorClock"><small>TIMER</small><b id="directorTimer">00:30</b></div>
+        </div>
+        <div class="directorTrack"><i id="directorTimerBar"></i></div>
+        <div id="directorHint" class="directorHint">Configura le squadre e avvia il quiz.</div>
+        <div id="directorProgress" class="directorProgress"></div>
+        <div id="deviceLive" class="deviceLive" hidden></div>
+        <div id="cockpit" class="cockpit" aria-label="Comandi della regia">
+          <div id="cockpitStatus" class="cockpitStatus" hidden></div>
+          <div id="cockpitMain" class="cockpitMain"></div>
+          <div id="cockpitSecondary" class="cockpitSecondary" hidden></div>
+        </div>
+      </div>
+
+      <nav class="tabs" id="tabs">
+        <button data-tab="session" class="tabBtn active">DOMANDA</button>
+        <button data-tab="score" class="tabBtn">PUNTI</button>
+        <button data-tab="games" class="tabBtn">GIOCHI</button>
+        <button data-tab="bank" class="tabBtn">ARCHIVIO</button>
+        <button data-tab="results" class="tabBtn">CLASSIFICA</button>
+      </nav>
+
+      <div class="tabViewport">
+        <section id="tab-session" class="tab active">
+          <div class="panel commandPanel">
+            <div class="panelHead"><h2>SOLUZIONE (SOLO REGIA)</h2><span class="badge liveBadge">LIVE</span></div>
+            <div id="privateAnswer" class="answerKey">Nessuna domanda attiva.</div>
+            <div class="timerControl"><span id="controlTimer">00:30</span><div class="timerTrack"><i id="controlTimerBar"></i></div></div>
+          </div>
+
+          <div class="panel answerPanel">
+            <div class="panelHead"><h2>RISPOSTE DELLE SQUADRE</h2><span id="answerBadge" class="badge">—</span></div>
+            <div id="answerGridSession"></div>
+            <div id="agOrderSession"></div>
+            <div class="row gap top8"><button id="fillAnswersBtn" class="btn ghost wide">MANCANTI = Ø</button></div>
+            <button id="commitAnswersBtn" class="btn green xl top8">✓ CONFERMA PUNTI <kbd>Invio</kbd></button>
+            <p id="answerHint" class="kbdHint" hidden>Tastiera: <kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd> risposta · <kbd>0</kbd> omessa · <kbd>↑</kbd><kbd>↓</kbd> squadra · <kbd>Invio</kbd> conferma · <kbd>Ctrl+Z</kbd> annulla</p>
+          </div>
+
+          <div class="panel quickPanel">
+            <div class="panelHead"><h2>GIOCHI BONUS</h2><span class="badge amberBadge">SHOW</span></div>
+            <div id="sessionGameButtons" class="gameButtons compactGames"></div>
+          </div>
+        </section>
+
+        <section id="tab-score" class="tab">
+          <div class="panel scoreMasterPanel">
+            <div class="panelHead"><h2>RACCOLTA PUNTI</h2><span id="scorePhase" class="badge">ATTESA</span></div>
+            <p id="scoreRules" class="help"></p>
+            <div id="scoreKey" class="answerKey"></div><div id="scoreCards"></div><div id="scoreOrder" class="scoreOrder"></div>
+            <div class="row gap top8"><button id="undoScoreBtn" class="btn ghost wide">↶ ANNULLA ULTIMO</button><button id="fillAbstainBtn" class="btn ghost wide">MANCANTI = Ø</button></div>
+            <button id="commitScoreBtn" class="btn green xl top8">✓ CONFERMA PUNTEGGI</button>
+          </div>
+        </section>
+
+        <section id="tab-games" class="tab"><div class="panel"><div class="panelHead"><h2>GIOCHI</h2><span class="badge amberBadge">SHOW</span></div><div id="gameButtons" class="gameButtons"></div></div><div class="panel"><div class="editorActions"><button class="btn ghost" id="exportGamesBtn">ESPORTA GIOCHI</button><label class="btn ghost fileLabel">IMPORTA GIOCHI<input id="importGamesInput" type="file" accept=".json,.zip,application/json"></label></div><p class="help impHelp">Importa qui un file .json esportato con ESPORTA GIOCHI: sostituisce le manche dei tipi presenti nel file. Per un pacchetto completo usa <b>📥 IMPORTA CONTENUTI</b> o <b>📦 PACCHETTI</b>.</p></div><div id="gameControls"></div></section>
+        <section id="tab-bank" class="tab"><div class="panel"><div class="panelHead"><h2>ARCHIVIO DOMANDE</h2><span id="bankCount" class="badge">0</span></div><div class="row wrap gap"><button id="newQuestionBtn" class="btn primary">+ NUOVA</button><button id="shuffleQuestionsBtn" class="btn ghost">MESCOLA</button><button id="exportBankBtn" class="btn ghost">ESPORTA</button><label class="btn ghost fileLabel">IMPORTA<input id="importBankInput" type="file" accept=".json,.zip,application/json"></label><button id="resetBankBtn" class="btn red">RESET</button></div><p class="help impHelp">Importa qui un file .json esportato dall’archivio domande: sostituisce le domande del pacchetto attivo. Per un pacchetto completo usa <b>📥 IMPORTA CONTENUTI</b> o <b>📦 PACCHETTI</b>.</p><div class="row wrap gap top8"><button id="openPacksBtn2" class="btn ghost">📦 PACCHETTI…</button><small class="help" id="packInfo"></small></div><div class="bankSearch top8"><input id="bankSearch" class="control" type="search" placeholder="Cerca: testo, risposte, spiegazione, argomento…" aria-label="Cerca nell'Archivio"><select id="bankTopic" class="control" aria-label="Filtra per argomento"></select><select id="bankDifficulty" class="control" aria-label="Filtra per difficoltà"></select><small id="bankResultInfo" class="help"></small></div><div id="questionList" class="questionList"></div></div></section>
+        <section id="tab-results" class="tab"><div class="panel"><div class="panelHead"><h2>CLASSIFICA</h2><span class="badge amberBadge">SHOW</span></div><div id="resultsList"></div></div>
+          <div class="panel"><div class="panelHead"><h2>ESPORTA RISULTATI</h2><span class="badge">DATI</span></div>
+            <div class="exportGrid"><button id="exportReportBtn" class="btn primary">REPORT DI CLASSE<small>HTML stampabile</small></button><button id="exportCsvBtn" class="btn ghost">RISPOSTE CSV<small>una riga per risposta · sicuro per Excel</small></button><button id="exportJsonBtn" class="btn ghost">COPIA PER L’ASSISTENZA<small>file tecnico della partita · non si reimporta</small></button><button id="exportLogBtn" class="btn ghost">REGISTRO PER L’ASSISTENZA<small>solo se richiesto</small></button></div>
+            <p class="help">Il CSV usa il punto e virgola: si apre direttamente con Excel in italiano.</p></div>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="systemBar">
+    <div class="sysTile audioTile"><span class="sysIcon">◖)))</span><div><strong>AUDIO</strong><small>Ingressi · Timer · Ultimi secondi · Reveal</small></div><button id="audioBtn" class="microBtn" aria-label="Audio acceso/spento">🔊</button><button id="audioTestBtn" class="microBtn" aria-label="Prova audio">♪</button><label class="sysVolume"><input id="volumeRange" type="range" min="0" max="1" step="0.05" value="0.78" aria-label="Volume"></label></div>
+    <div class="sysTile"><span class="sysIcon">▣</span><div><strong>SCHERMO PROIETTORE</strong><small>Finestra da portare sul proiettore</small></div><button id="publicBtn" class="microBtn blue">APRI</button></div>
+    <div class="sysTile"><span class="sysIcon">▰</span><div><strong>ARCHIVIO</strong><small id="archiveInfo"></small></div></div>
+    <div class="sysTile"><span class="sysIcon">📱</span><div><strong>PULSANTIERE</strong><small id="devicesTileSmall">—</small></div></div>
+    <div class="sysTile"><span class="sysIcon">⌁</span><div><strong>SENZA INTERNET</strong><small>Funziona offline</small></div></div>
+    <div class="sysTile"><span class="sysIcon goodIcon">✓</span><div><strong>VISTA PALCO</strong><small>Solo schermo pubblico</small></div><button id="stageOnlyBtn" class="microBtn amber">F8</button></div>
+  </footer>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<dialog id="resumeDialog" class="dialog resumeDialog"><div class="dialogHead"><h2>PARTITA NON CONCLUSA TROVATA</h2></div><p id="resumeSummary" class="help"></p><p class="help">Puoi riprendere esattamente da dove eri rimasto: squadre, punti, risposte registrate e domanda corrente.</p><div class="resumeActions"><button id="resumeBtn" class="btn green xl">▶ RIPRENDI</button><button id="resumeNewBtn" class="btn ghost xl">NUOVA PARTITA</button><button id="resumeExportBtn" class="btn ghost xl">ESPORTA E ARCHIVIA</button></div></dialog>
+
+<dialog id="settingsDialog" class="dialog"><form id="settingsForm"><div class="dialogHead"><h2>Impostazioni partita</h2><button type="button" id="settingsCancel" class="btn ghost" aria-label="Chiudi">×</button></div>
+<fieldset class="setGroup"><legend>Punteggio</legend><div id="setProfile" class="radioList"></div><label id="setRecomputeRow" class="checkRow"><input type="checkbox" id="setRecompute"> Ricalcola anche le domande già confermate</label></fieldset>
+<fieldset class="setGroup"><legend>Dati della sessione (facoltativi)</legend><div class="twoCol"><label>Classe<input id="setClass" class="control" maxlength="40" placeholder="es. 2B"></label><label>Anno scolastico<input id="setYear" class="control" maxlength="9" placeholder="2026/27"></label><label>Anno di corso<input id="setGrade" class="control" type="number" min="1" max="13" placeholder="2"></label><label>Modalità<select id="setMode" class="control"><option value="lesson">Lezione</option><option value="qualification">Qualificazione</option><option value="final">Finale</option></select></label></div><label>Istituto<input id="setInstitution" class="control" maxlength="120"></label></fieldset>
+<fieldset class="setGroup" id="setPackRow"><legend>Contenuti</legend><p class="help">In gara: <b id="setPackNow"></b></p><button type="button" class="btn ghost" id="setPacksBtn">📦 Gestisci pacchetti…</button></fieldset>
+<div class="dialogFoot"><button type="submit" class="btn green">Salva</button></div></form></dialog>
+
+<dialog id="packsDialog" class="dialog packsDialog"><div class="dialogHead"><h2>📦 Pacchetti</h2><button type="button" id="packsClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="packsBody"></div></dialog>
+
+<dialog id="importDialog" class="dialog importDialog"><div class="dialogHead"><h2>📥 Importa contenuti</h2><button type="button" id="importClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="importBody"></div></dialog>
+
+<dialog id="planDialog" class="dialog planDialog"><div class="dialogHead"><h2>📋 Scaletta della puntata</h2><button type="button" id="planClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="planBody"></div></dialog>
+
+<dialog id="devicesDialog" class="dialog devicesDialog"><div class="dialogHead"><h2>📱 Pulsantiere (tablet)</h2><button type="button" id="devicesClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="devicesBody"></div></dialog>
+
+<dialog id="questionDialog" class="dialog"><form method="dialog" id="questionForm"><div class="dialogHead"><h2 id="dialogTitle">Domanda</h2><button formnovalidate value="cancel" class="btn ghost">×</button></div><input type="hidden" id="editIndex"><label>Categoria<input id="qCategory" class="control" required></label><label>Domanda<textarea id="qText" class="control" rows="3" required></textarea></label><div class="twoCol"><label>A<input id="qA" class="control"></label><label>B<input id="qB" class="control"></label><label>C<input id="qC" class="control"></label><label>D<input id="qD" class="control"></label></div><div class="twoCol"><label>Risposta corretta<select id="qCorrect" class="control"><option>A</option><option>B</option><option>C</option><option>D</option></select></label><label>Secondi (5–600)<input id="qSeconds" type="number" min="5" max="600" value="" placeholder="standard" class="control"></label></div><label>Spiegazione<textarea id="qExplanation" class="control" rows="2"></textarea></label><label>Immagine<input id="qImage" class="control" placeholder="es. colosseo.jpg"></label><p id="qLockNote" class="fieldHint lockNote" hidden></p><div class="dialogFoot"><button formnovalidate value="cancel" class="btn ghost">Annulla</button><button id="saveQuestionBtn" value="default" class="btn green">Salva</button><button id="saveLaterBtn" value="later" class="btn green" hidden>Salva per le prossime volte</button><button id="saveRestartBtn" value="restart" class="btn amber" hidden>Salva e riavvia domanda</button></div></form></dialog>
+<dialog id="gameEditorDialog" class="gameEditor"><form id="gameEditorForm">
+<div class="dialogHead"><h2 id="gameEditorTitle">Crea un gioco</h2><button type="button" id="closeGameEditor" class="btn ghost" aria-label="Chiudi">×</button></div>
+<p class="fieldHint">Costruisci una manche completa, su qualunque tema. Il tema sarà visibile sul palco; il titolo identifica la manche nell’archivio.</p>
+<label>Titolo della manche<input id="geLabel" class="control" maxlength="80" required placeholder="Es. La mia nuova sfida"></label>
+<label>Tema visibile ai giocatori<input id="geTheme" class="control" maxlength="70" required placeholder="Es. Arte romana, sport, musica…"></label>
+<label>Durata in secondi (10–300)<input id="geSeconds" class="control" type="number" min="10" max="300" value="" placeholder="standard"></label>
+<div id="geIndovina"><label>Personaggio, oggetto o luogo da indovinare<input id="geSubject" class="control" maxlength="60"></label><label>Alternative: una per riga<textarea id="geCandidates" class="control" rows="5"></textarea></label><p class="fieldHint">Da 2 a 8 alternative diverse. Inserisci anche la soluzione esatta. Tutte verranno mescolate automaticamente.</p><label>Indizi in ordine: uno per riga<textarea id="geClues" class="control" rows="5"></textarea></label><p class="fieldHint">Da 1 a 5 indizi, dal più generico al più preciso. Massimo 180 caratteri ciascuno.</p></div>
+<div id="geGh"><label>Parola finale<input id="geAnswer" class="control" maxlength="40"></label><label>Le 5 coppie: parola collegata | alternativa errata<textarea id="gePairs" class="control" rows="6" placeholder="MARE | BOSCO&#10;SALE | ZUCCHERO"></textarea></label><p class="fieldHint">Esattamente 5 righe. A sinistra del separatore | scrivi la parola che deve restare; a destra l’alternativa. Le posizioni A/B saranno mescolate. Le cinque parole rimaste devono collegarsi alla soluzione finale.</p></div>
+<div id="geChain"><label>Staffetta di parole<textarea id="geLinks" class="control" rows="6" placeholder="PIETRA | SELCE | SCHEGGIATURA | UTENSILE"></textarea></label><p class="fieldHint">Scrivi una sequenza separata da |, oppure una coppia PARTENZA | ARRIVO per riga. Da 1 a 20 collegamenti, massimo 40 caratteri per parola.</p></div>
+<p id="gameEditorError" class="editorError" role="alert"></p><div class="dialogFoot"><button type="button" id="cancelGameEditor" class="btn ghost">Annulla</button><button type="submit" class="btn green" id="saveGameEditor">Salva e carica la manche</button></div>
+</form></dialog>
+
+<script src="js/core.js"></script>
+<script src="js/engine/answerMatcher.js"></script>
+<script src="js/engine/scoring.js"></script>
+<script src="js/engine/timer.js"></script>
+<script src="js/engine/session.js"></script>
+<script src="js/engine/packs.js"></script>
+<script src="js/lib/zip.js"></script>
+<script src="js/engine/packlib.js"></script>
+<script src="js/engine/report.js"></script>
+<script src="js/engine/roundControl.js"></script>
+<script src="js/engine/sessionPlan.js"></script>
+<script src="js/engine/packstudio.js"></script>
+<script src="js/lib/qr.js"></script>
+<script src="packs/packs.bundle.js"></script>
+<script src="js/host/store.js"></script>
+<script src="js/host/net.js"></script>
+<script src="js/host/devices-ui.js"></script>
+<script src="js/host/packs-client.js"></script>
+<script src="js/host/packs-ui.js"></script>
+<script src="js/host/planner-ui.js"></script>
+<script src="js/stage-fit.js"></script>
+<script src="js/app.js"></script>
+</body></html>

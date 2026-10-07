@@ -1,0 +1,23 @@
+{
+  "changed": [
+    "GUIDA_RAPIDA_DOCENTE.md",
+    "README.md",
+    "RELEASE.json",
+    "TEST_CHECKLIST.md",
+    "css/show.css",
+    "index.html",
+    "js/app.js",
+    "packs/packs.bundle.js",
+    "server/server.js",
+    "tests/classroom_flow_361.test.js",
+    "tests/classroom_readability_371.test.js",
+    "tests/session_planner_370.test.js"
+  ],
+  "added": [
+    "CHANGELOG_V3_7_2.md",
+    "QA/TEST_RESULTS_V3_7_2.md",
+    "QA/simulation_v3.7.2.txt",
+    "QA/source-diff-v3.7.1-v3.7.2.json"
+  ],
+  "removed": []
+}

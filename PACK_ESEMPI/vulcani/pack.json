@@ -1,0 +1,17 @@
+{
+  "format": "secchione-pack",
+  "formatVersion": 1,
+  "id": "vulcani",
+  "title": "Vulcani",
+  "subtitle": "Fuoco dalla Terra",
+  "subject": "Scienze",
+  "grade": 2,
+  "gradeLabel": "Scuola secondaria di primo grado · classe 2ª",
+  "author": "Pacchetto di esempio Il Secchione",
+  "version": "1.0.0",
+  "description": "Piccolo pacchetto di prova con immagini e quattro giochi. Le illustrazioni sono disegni schematici generati per il test.",
+  "language": "it",
+  "license": "CC0 (contenuti di esempio creati per il progetto)",
+  "theme": { "eyebrow": "IL SECCHIONE", "accent": "#ff7a45", "accent2": "#ffd258", "homeImage": "etna.png", "tags": ["Vulcani", "Magma", "Eruzioni"] },
+  "texts": { "homeEyebrow": "IL GAME SHOW DI SCIENZE", "homeClaim": "Osserva. Ragiona.\nNon farti travolgere dalla lava!", "mascotHome": "Pronti\nall'eruzione?", "footer": "VULCANI · MAGMA · ERUZIONI" }
+}

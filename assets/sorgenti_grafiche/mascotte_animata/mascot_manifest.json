@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "runtimeRecommendation": "Use assets_optimized/*.webp at runtime; retain PNG masters as source assets.",
+  "states": {
+    "present": {
+      "asset": "mascot_present.webp",
+      "aliases": [
+        "welcome",
+        "present",
+        "reveal",
+        "point",
+        "idle-neutral"
+      ]
+    },
+    "think": {
+      "asset": "mascot_think.webp",
+      "aliases": [
+        "think",
+        "question-open",
+        "waiting-answer"
+      ]
+    },
+    "celebrate": {
+      "asset": "mascot_celebrate.webp",
+      "aliases": [
+        "celebrate",
+        "correct",
+        "champion",
+        "victory"
+      ]
+    },
+    "panic": {
+      "asset": "mascot_panic.webp",
+      "aliases": [
+        "panic",
+        "wrong",
+        "time-up",
+        "timeout"
+      ]
+    }
+  },
+  "animation": {
+    "present": "intro 420ms once; then subtle float 2.8s",
+    "think": "subtle breathing/tilt 2.6s, low amplitude",
+    "celebrate": "jump-pop 650-750ms once, then static",
+    "panic": "shake 450-550ms once, then static"
+  },
+  "constraints": [
+    "No animation on PLAYER.",
+    "Do not derive mascot mood from a single team result when multiple teams answer; preserve existing mood semantics.",
+    "Respect prefers-reduced-motion.",
+    "Preload all four assets to avoid flicker.",
+    "Animate transforms/opacity only.",
+    "Do not change scoring, networking, Pack Studio, or game logic."
+  ]
+}

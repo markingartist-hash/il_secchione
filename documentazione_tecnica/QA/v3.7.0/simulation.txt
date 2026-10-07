@@ -1,0 +1,6 @@
+✓  2 pulsantiere · 5 domande · 10 risposte · ack mediana 2 ms, 95° perc. 7 ms, max 7 ms · 501 ms totali
+✓  6 pulsantiere · 5 domande · 30 risposte · ack mediana 2 ms, 95° perc. 5 ms, max 5 ms · 601 ms totali
+✓ 15 pulsantiere · 5 domande · 75 risposte · ack mediana 2 ms, 95° perc. 4 ms, max 4 ms · 907 ms totali
+✓ 30 pulsantiere · 5 domande · 150 risposte · ack mediana 2 ms, 95° perc. 3 ms, max 4 ms · 1215 ms totali
+
+SIMULAZIONE OK: nessuna risposta persa, nessun duplicato.

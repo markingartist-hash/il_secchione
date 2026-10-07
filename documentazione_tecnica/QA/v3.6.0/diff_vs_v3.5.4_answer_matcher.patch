@@ -1,0 +1,1729 @@
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/ANSWER_MATCHER.md b/ANSWER_MATCHER.md
+--- a/ANSWER_MATCHER.md	2026-10-04 18:45:06.000000000 +0200
++++ b/ANSWER_MATCHER.md	2026-10-05 01:21:52.000000000 +0200
+@@ -49,7 +49,7 @@
+ }
+ ```
+ 
+-Le varianti sono validate e conservate durante importazione, esportazione e caricamento delle manche. L'editor esistente conserva quelle già presenti quando si modifica o copia una manche mantenendone la soluzione; se la soluzione cambia, evita di trasferirle al nuovo riferimento. Per aggiungerle si modifica il JSON: nessun nuovo controllo nell'interfaccia.
++Le varianti sono validate e conservate durante importazione, esportazione e caricamento delle manche. L'editor esistente conserva quelle già presenti quando si modifica o copia una manche mantenendone la soluzione; se la soluzione cambia, evita di trasferirle al nuovo riferimento. Dalla v3.6.0 si aggiungono, modificano, riordinano ed eliminano in **Pack Studio** (scheda Manche speciali, "Risposte alternative accettate"; nella Staffetta per ogni collegamento). Vuoti e doppioni dopo la normalizzazione di questo matcher vengono ignorati al salvataggio.
+ 
+ Il payload `round.open`, i messaggi, il trasporto di rete, il Player e le formule di scoring sono invariati. Il server applica lo stesso matcher alla soluzione canonica già trasmessa. La regia valuta anche le varianti locali e usa il commit arcade esistente per confermare il verdetto finale. Di conseguenza il feedback automatico sul tablet resta quello canonico del server: per varianti lessicali differenti e correzioni manuali, fa fede l'esito confermato in regia. Questo limite del feedback è conservato per rispettare il vincolo di non modificare UI o networking.
+ 
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/CHANGELOG_V3_6_0.md b/CHANGELOG_V3_6_0.md
+--- a/CHANGELOG_V3_6_0.md	1970-01-01 01:00:00.000000000 +0100
++++ b/CHANGELOG_V3_6_0.md	2026-10-05 01:22:27.000000000 +0200
+@@ -0,0 +1,71 @@
++# v3.6.0 CLASSROOM CONTROL — 5 ottobre 2026
++
++Release di **controllo della regia**: durante la lezione il docente corregge un errore, recupera da un imprevisto e controlla i tablet senza tornare alla Home e senza perdere domanda, squadre, punteggi o risposte. Nessuna nuova modalità di gioco, nessun nuovo scoring.
++
++Baseline obbligatoria: `Il_Secchione_v3.5.4_ANSWER_MATCHER_PORTABLE.zip`, SHA-256 `123cdd1ae63f6b8c78b904a50ac6c3bcff19038f475274ea4441d85186ef4484`. Stato iniziale: 208/208 checksum, 165 test superati, simulazione 2/6/15/30 senza perdite. La baseline è conservata immutata in `Desktop\BASELINE_v3.5.4_ANSWER_MATCHER`.
++
++## Novità
++1. **✎ MODIFICA DOMANDA** nella domanda corrente.
++   - Usa la stessa finestra dell'Archivio e salva nel **pacchetto installato**, con lo stesso salvataggio di Pack Studio: sostituzione, copia di sicurezza nel cestino e versione +0.0.1. Nessun quarto sistema di override.
++   - La copia del browser (`bankOverrides`) resta solo come ripiego quando il pacchetto è in sola lettura (pacchetti del programma senza server), e il messaggio lo dice.
++   - Eliminato il ritorno alla Home (`showHome()` / `qRound = null`) dopo una modifica.
++2. **Modifica in anteprima**: resta la stessa domanda (`qIndex`), con squadre, punteggi e sessione intatti. Testi e risposta corretta si aggiornano nella stessa disposizione delle alternative, SHOW compreso. Messaggio "✓ Modifica salvata".
++3. **Round aperto immutabile**: a timer partito la finestra offre due scelte.
++   - **Salva per le prossime volte**: il round continua con la versione giocata, che resta anche dopo un refresh della regia, e la modifica entra quando si lascia la domanda.
++   - **Salva e riavvia domanda**: chiede conferma, annulla il round (nessun punto, risposte scartate, round chiuso sui tablet) e ricostruisce l'anteprima con la versione nuova.
++4. **✕ ANNULLA DOMANDA**: chiede conferma e chiude il round anche sui tablet (`round.close` esistente); le risposte tardive vengono rifiutate.
++   - Elimina solo le risposte del round, non assegna punti e torna all'anteprima della stessa domanda.
++   - Sessione, squadre e punteggi restano; la domanda resta nel pacchetto.
++5. **↺ RIPETI DOMANDA**: dopo la soluzione o la fine del round, un nuovo round pulito (nessuna risposta, tempo o ordine precedenti). I punti del primo tentativo restano; il nuovo round è marcato `repeatOf`. Se i punti non erano confermati, equivale ad ANNULLA.
++6. **Stato pulsantiere sempre visibile**: "📱 5 / 6 COLLEGATE · Disconnessa: 3B (da 12 s, in attesa di riconnessione)" sotto il timer della regia.
++   - Avviso non bloccante quando una pulsantiera si disconnette; nessun popup.
++   - Rafforza l'indicatore già presente nell'intestazione e i pallini per squadra, che restano.
++   - Unica modifica di rete: `teamDevices()` in `net.js` espone il `lastSeen` che il server già inviava. Protocollo invariato.
++7. **Progresso**: "Domanda 7 / 30 · giocate 6 · da giocare 24 · questa: giocata" e il segno "✓ giocata" nell'Archivio. "Saltata" non esisteva e non è stata aggiunta.
++8. **Navigazione sicura**: uscire da una domanda avviata senza risposte chiede conferma e chiude il round anche sui tablet. Prima restava aperto, cioè un "round fantasma". Restano la conferma esistente per le risposte mancanti e la conferma automatica quando hanno risposto tutte.
++9. **Ricerca nell'Archivio**: testo, alternative, spiegazione, argomento, categoria e tag, ignorando maiuscole e accenti; filtri per argomento e difficoltà; **Vai** per aprire una domanda. Nessun filtro per tipo, perché oggi tutte le domande sono a scelta multipla.
++10. **Risposte alternative accettate in Pack Studio**: Photopuzzle, Indovina, Parola Segreta e ogni collegamento della Staffetta.
++    - Si possono aggiungere, modificare, riordinare ed eliminare; la risposta principale resta distinta.
++    - Vuoti e doppioni dopo la normalizzazione dell'**answerMatcher esistente** vengono ignorati al salvataggio, con avviso nel Controllo. Nessun secondo matcher.
++11. **Messaggi coerenti**: lo stesso `toast()` ora distingue ✓ / ⚠ / ✗ con colori diversi e durata maggiore per avvisi ed errori. Nessun `alert()`.
++12. **Ghigliottina sui tablet** (bug segnalato): prima, durante le coppie A/B, il tablet restava in attesa e non si poteva scegliere.
++    - Ora ogni coppia apre un round A/B sul tablet, con lo stesso protocollo delle domande (`layout: 'mcq'`, lettere `A`/`B`, nessun esito inviato).
++    - I voti compaiono sui pulsanti della regia. Quando tutte le pulsantiere collegate hanno votato sceglie la maggioranza; in caso di parità, o in ogni momento, sceglie il docente.
++    - Le coppie non assegnano punti, come prima. La finale con la tastiera resta invariata.
++
++## Funzioni già presenti, rafforzate e non duplicate
++- +10 s, pausa/ripresa, ■ CHIUDI, ● RIVELA, ↺ RIAPRI PUNTI, sblocco del tablet.
++- Indicatore "N/M PULSANTIERE" nell'intestazione e pallini per squadra.
++- Ripresa della partita e riconciliazione col server.
++- Rientro automatico dei tablet; cache dello SHOW per chi si ricollega.
++- Finestra di modifica dell'Archivio, `PackLibrary.save` di Pack Studio, answerMatcher e protezione CSV (non toccati).
++
++## File
++- **Nuovi**:
++  - `js/engine/roundControl.js`: logica pura, testata in Node;
++  - `tests/classroom_control.test.js`: 17 test;
++  - `CHANGELOG_V3_6_0.md`, `QA/TEST_RESULTS_V3_6_0.md`, `QA/CLASSROOM_CONTROL_MANUAL_TEST.md`, `QA/v3.6.0/*`.
++- **Modificati**:
++  - `js/app.js`: regia;
++  - `js/host/net.js`: `lastSeen` nella vista per squadra;
++  - `index.html`: pulsanti, indicatore, ricerca, finestra di modifica, script;
++  - `css/classroom.css`: stili della sola regia;
++  - `js/engine/packstudio.js` e `js/studio/studio.js`: risposte alternative;
++  - `studio.html`: carica l'answerMatcher;
++  - `server/server.js`: solo la stringa `VERSION`;
++  - documentazione, `RELEASE.json`, `SHA256SUMS.txt`.
++- **Invariati**, byte per byte:
++  - `js/engine/answerMatcher.js`, `js/engine/report.js` (CSV), `js/engine/scoring.js`;
++  - `server/room.js`, `server/ws.js`;
++  - `js/player.js`, `player.html`, `css/player.css`, `css/show.css` (mascotte);
++  - `js/show-client.js`;
++  - tutti i test della baseline.
++
++## Limiti noti
++- La modifica dalla regia salva nel pacchetto: ogni salvataggio scrive l'intero pacchetto e lascia una copia nel cestino `data/cestino_pacchetti/`, che va svuotato a mano se cresce.
++- Senza server, i pacchetti del programma sono in sola lettura: la modifica resta nella copia di questo browser (avviso ⚠).
++- In una sessione mista la modifica della domanda corrente salva nel pacchetto d'origine. Nuova, elimina, mescola e importa dell'Archivio restano disattivati, come prima.
++- Un round annullato resta nella memoria del server, chiuso, finché non se ne apre un altro. Le sue risposte non vengono più accettate né usate dalla regia; restano nel log tecnico.
++- Dopo un refresh della regia, un round in corso riprende in pausa (comportamento esistente). La versione giocata e le modifiche in attesa sono conservate.
++- Il "da N s" della disconnessione conta dall'ultimo contatto registrato dal server, che avviene a intervalli di qualche secondo.
++- I voti A/B della Ghigliottina non vengono ricostruiti dopo un refresh della regia; la scelta resta possibile dal docente.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/GUIDA_RAPIDA_DOCENTE.md b/GUIDA_RAPIDA_DOCENTE.md
+--- a/GUIDA_RAPIDA_DOCENTE.md	2026-10-04 16:12:12.000000000 +0200
++++ b/GUIDA_RAPIDA_DOCENTE.md	2026-10-05 01:21:52.000000000 +0200
+@@ -61,7 +61,16 @@
+ - **Ordine delle corrette**: conta l'ordine di registrazione (con i tablet, l'ordine di arrivo). Puoi spostare una squadra più in alto con **▲**.
+ - **Errore dopo la conferma?** Premi **↺ RIAPRI PUNTI**, correggi e conferma di nuovo.
+ - **Tablet che ha sbagliato a premere?** Il pulsante **↺** accanto alla risposta sblocca la squadra, che può rispondere di nuovo.
+-- Se passi a un'altra domanda senza confermare: se tutte le squadre hanno una risposta il programma conferma da solo, altrimenti ti chiede cosa fare.
++- Se passi a un'altra domanda senza confermare: se tutte le squadre hanno una risposta il programma conferma da solo, altrimenti ti chiede cosa fare. Se la domanda è appena partita e non ha risposte, ti chiede se annullarla, così sui tablet non resta aperta.
++
++### Correggere al volo (v3.6.0)
++- **✎ MODIFICA DOMANDA**, sotto i comandi della domanda corrente: apre la domanda senza passare dall'Archivio. La modifica viene salvata nel pacchetto.
++  - **Prima di avviarla**: premi **Salva**. Resti sulla stessa domanda, con squadre e punti intatti, e quando la avvii vale la versione nuova.
++  - **A domanda già avviata**: **Salva per le prossime volte** lascia il round com'era, con le risposte già arrivate. **Salva e riavvia domanda** annulla il round (nessun punto) e torna all'anteprima con la versione nuova.
++- **✕ ANNULLA DOMANDA**: per una domanda lanciata per sbaglio o un problema tecnico. Scarta le risposte di quel round, non assegna punti e torna all'anteprima della stessa domanda.
++- **↺ RIPETI DOMANDA**: dopo la soluzione riapre la domanda come round nuovo, senza le risposte precedenti. I punti già confermati restano.
++- Sotto il timer della regia: **Domanda 7 / 30 · giocate 6 · da giocare 24** e lo stato delle pulsantiere, per esempio **📱 5 / 6 COLLEGATE · Disconnessa: 3B**. Una squadra disconnessa non perde né il posto né i punti.
++- **ARCHIVIO**: casella **Cerca**, che guarda testo, risposte, spiegazione, argomento e tag, più i filtri per argomento e difficoltà. **Vai** apre quella domanda.
+ 
+ ## 5. Giochi bonus
+ 
+@@ -112,6 +121,6 @@
+ ## Pulsantiera nei giochi speciali (v3.5.1)
+ - **PhotoPuzzle, Indovina e Catena:** quando avvii la manche, i tablet passano automaticamente da A/B/C/D a una tastiera virtuale. La squadra compone la soluzione e preme **INVIA**.
+ - **Abbinamenti:** la tastiera è alfanumerica; si può inserire la sequenza mostrata dal gioco (per esempio `1A 2C 3B`).
+-- **Parola Segreta / Ghigliottina:** durante le coppie A/B il tablet resta in attesa; quando parte la **parola finale** compare automaticamente la tastiera.
++- **Parola Segreta / Ghigliottina:** per ogni coppia il tablet mostra i tasti **A** e **B**: ogni squadra vota, e in regia i voti compaiono sui pulsanti. Quando hanno votato tutte le pulsantiere collegate sceglie la maggioranza; in caso di parità, o quando vuoi, scegli tu. Le coppie non danno punti. Quando parte la **parola finale** compare la tastiera.
+ - Il server confronta la risposta digitata con la soluzione ignorando maiuscole/minuscole e accenti. In regia compare comunque la risposta scritta dalla squadra: prima di confermare i punti puoi correggere manualmente **GIUSTA / ERRATA / OMESSA**.
+ - Come nelle domande, una risposta non parte al primo tocco: può essere corretta finché la squadra non preme **INVIA**.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/LEGGIMI.txt b/LEGGIMI.txt
+--- a/LEGGIMI.txt	2026-10-04 16:12:12.000000000 +0200
++++ b/LEGGIMI.txt	2026-10-05 01:21:52.000000000 +0200
+@@ -1,4 +1,5 @@
+-IL SECCHIONE · v3.5.4_MASCOT_ANIMATED
++IL SECCHIONE · v3.6.0 CLASSROOM CONTROL
++Novità v3.6.0: CHANGELOG_V3_6_0.md (controllo della regia durante la lezione)
+ 
+ ESTRAI TUTTO LO ZIP, poi doppio clic su AVVIA_IL_SECCHIONE.bat.
+ Node Windows x64 incluso in runtime: nessuna installazione necessaria.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/PACK_STUDIO.md b/PACK_STUDIO.md
+--- a/PACK_STUDIO.md	2026-10-04 16:12:12.000000000 +0200
++++ b/PACK_STUDIO.md	2026-10-05 01:21:52.000000000 +0200
+@@ -60,6 +60,8 @@
+ | Parola Segreta | la parola finale e 5 coppie: a sinistra la parola collegata, a destra quella che non c'entra |
+ | Staffetta di parole | da 1 a 20 collegamenti tra parole; si possono scrivere anche tutti in una riga: `NEVE \| SORGENTE \| FIUME \| MARE` |
+ 
++**Risposte alternative accettate** (Photopuzzle, Indovina, Parola Segreta e ogni collegamento della Staffetta): sotto la risposta principale, **＋ AGGIUNGI RISPOSTA ALTERNATIVA** per un nome completo, una grafia o un titolo alternativo; **↑** riordina, **✕** elimina. Maiuscole, accenti, articolo iniziale e piccoli errori di battitura sono già tollerati senza scriverli. Alternative vuote o uguali, anche alla principale, vengono ignorate al salvataggio, con un avviso nel Controllo.
++
+ Per ogni manche si indicano anche un titolo, un tema facoltativo e la durata in secondi, da 10 a 300. L'anteprima è una versione semplificata dello schermo della classe.
+ 
+ ### Immagini
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/QA/CLASSROOM_CONTROL_MANUAL_TEST.md b/QA/CLASSROOM_CONTROL_MANUAL_TEST.md
+--- a/QA/CLASSROOM_CONTROL_MANUAL_TEST.md	1970-01-01 01:00:00.000000000 +0100
++++ b/QA/CLASSROOM_CONTROL_MANUAL_TEST.md	2026-10-05 01:23:27.000000000 +0200
+@@ -0,0 +1,33 @@
++# Test realistico manuale — v3.6.0 CLASSROOM CONTROL (5 ottobre 2026)
++
++## Ambiente
++- **Build**: copia temporanea, avviata col Node 24.19 portable incluso; server su `127.0.0.1:8794`.
++- **Browser**: Chromium 152.0.7977.130, il pannello browser dell'app Claude.
++- **Pacchetto reale**: `SECCHIONE_BAROCCO_3MEDIA_v1.1.0.zip`, da `PACCHETTI_SECCHIONE_TRIENNIO_v1.1.0.zip`; 30 domande, 10 manche.
++- **6 pulsantiere**: client WebSocket veri, con lo stesso protocollo del tablet, guidati da uno script di collaudo esterno alla build. Rispondono da soli e votano A/B (4 squadre B, 2 squadre A); per i comandi di disconnessione e riconnessione riusano il proprio token.
++- **Conferme**: le `confirm()` native venivano accettate via script, perché il pannello non mostra le finestre di dialogo. I pulsanti sono quelli veri della regia.
++
++| # | Passo | Esito |
++|---|---|---|
++| 1–2 | Avvio; IMPORTA dal Gestore Pacchetti e ATTIVA Barocco | ✓ v1.1.0, 30 domande |
++| 3 | 6 squadre (3A…3F) | ✓ |
++| 4 | 6 pulsantiere collegate e assegnate | ✓ indicatore **📱 6 / 6 COLLEGATE** |
++| 5–8 | Domanda 1 in anteprima → **✎ MODIFICA DOMANDA** → risposta A→C e testo → **Salva** | ✓ resta domanda 1, fase anteprima, 6 squadre; lettera mostrata ricalcolata (B) nello stesso ordine; palco aggiornato; "✓ Modifica salvata". Su disco: pacchetto v1.1.1, copia nel cestino, nessun override nel browser (`banks: {}`) |
++| 9 | AVVIA DOMANDA | ✓ 6 risposte dai tablet |
++| 10–12 | Modifica durante il round → la finestra propone solo "Salva per le prossime volte" / "Salva e riavvia", con spiegazione → **Salva per le prossime volte** (risposta D, spiegazione nuova) | ✓ stesso round, alternative invariate, 6 risposte intatte, timer in corsa; "⚠ Modifica salvata. Il round corrente mantiene la versione precedente." |
++| 13–14 | **✕ ANNULLA DOMANDA** | ✓ anteprima della domanda 1, risposte eliminate, 0 round e 0 risposte registrati, punteggi e squadre intatti; round **chiuso sul server** (i tablet non possono più rispondere) |
++| 15–16 | Domanda riaperta | ✓ ora vale la modifica rimandata (D, spiegazione aggiornata), modifica in attesa svuotata |
++| 17 | Round completo (tablet → soluzione → punti) | ✓ 3A +300, 3E +275, errate −100; progresso "giocate 1 · da giocare 29 · questa: giocata" |
++| 18–19 | **↺ RIPETI DOMANDA** | ✓ anteprima pulita (nessuna risposta, ordine o tempo precedenti), punteggi invariati; il round rilanciato ha un nuovo id ed è marcato come ripetizione; 6 nuove risposte |
++| — | ANNULLA del round ripetuto | ✓ punteggi invariati |
++| 20–21 | Disconnessione della pulsantiera di 3B | ✓ **📱 5 / 6 COLLEGATE · Disconnessa: 3B (da 10 s, in attesa di riconnessione)**, avviso "⚠ 1 pulsantiera disconnessa: 3B", intestazione "5/6 PULSANTIERE", pallino spento; squadra e punteggio di 3B intatti |
++| 22–23 | Riconnessione col token | ✓ "riconnessa" come 3B; **📱 6 / 6 COLLEGATE**; nessun dispositivo duplicato |
++| 24–25 | Pack Studio → Parola Segreta "Bernini" → **＋ AGGIUNGI RISPOSTA ALTERNATIVA** ×3, elimina con ✕, alternativa "Gian Lorenzo Bernini" e doppione "bernini" → SALVA | ✓ avviso "1 risposta alternativa vuota o doppia verrà ignorata"; su disco `acceptedAnswers: ["Gian Lorenzo Bernini"]`; v1.1.3; le modifiche fatte prima dalla regia restano (una sola fonte) |
++| — | La regia riceve l'avviso dello Studio → ATTIVA | ✓ manche con l'alternativa |
++| 26 | **Ghigliottina sui tablet**: AVVIA | ✓ round A/B aperto sui tablet a ogni coppia; voti 4 B / 2 A sulle 5 coppie, scelta automatica a maggioranza; una scelta sbagliata dimezza il montepremi (1600); finale con tastiera |
++| 27 | Finale: le 6 pulsantiere scrivono "Gian Lorenzo Bernini" | ✓ tutte **corretta**, `accepted_variant` (answerMatcher esistente); punti confermati |
++| 28 | Riavvio del server e ricarica della regia → RIPRENDI | ✓ "PARTITA NON CONCLUSA TROVATA" |
++| 29 | Dopo il riavvio | ✓ squadre e punteggi (3A 600 · 3B 175 · 3C 150 · 3D 125 · 3E 475 · 3F 75), 2 round, domanda 1 modificata, alternativa presente, pacchetto v1.1.3 |
++| R | Refresh della regia **durante un round aperto con una modifica "per dopo" in attesa** | ✓ ripresa sulla stessa domanda col round in pausa; il round usa ancora la versione giocata (D), la modifica in attesa (A) è conservata; ANNULLA la applica |
++
++**Console**: nessun errore, a parte due tentativi di riconnessione WebSocket durante il riavvio voluto del server.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/QA/TEST_RESULTS_V3_6_0.md b/QA/TEST_RESULTS_V3_6_0.md
+--- a/QA/TEST_RESULTS_V3_6_0.md	1970-01-01 01:00:00.000000000 +0100
++++ b/QA/TEST_RESULTS_V3_6_0.md	2026-10-05 01:23:53.000000000 +0200
+@@ -0,0 +1,43 @@
++# Risultati test — v3.6.0 CLASSROOM CONTROL (5 ottobre 2026)
++
++## Stato iniziale (baseline immutata)
++- `Il_Secchione_v3.5.4_ANSWER_MATCHER_PORTABLE.zip`, SHA-256 `123cdd1ae63f6b8c78b904a50ac6c3bcff19038f475274ea4441d85186ef4484`, 54 777 243 byte.
++- `tools/verify_release.js`: 208/208 file corrispondenti.
++- `node tests/run.js`: **165 superati, 0 falliti**.
++- `tools/simulate_players.js`: 2/6/15/30 pulsantiere OK.
++
++## Test automatici v3.6.0 (Node 24.19 portable incluso)
++**182 superati, 0 falliti**: i 165 della baseline, invariati e non modificati, più 17 nuovi in `tests/classroom_control.test.js`. Log: `QA/v3.6.0/tests-unit-integration.txt`.
++
++| Area richiesta | Test |
++|---|---|
++| Modifica della domanda corrente | in anteprima: qIndex, squadre, punteggi e sessione invariati, risposta corretta ricalcolata nello stesso ordine; **codice reale di `app.js`**: salvataggio nel pacchetto installato su disco (nessun override), riavvio (nuova libreria), export ZIP con la modifica, versione aumentata, copia nel cestino, ripiego nel browser per i pacchetti in sola lettura |
++| Round in corso | "salva per dopo" lascia intatti round e risposte, la modifica entra lasciando la domanda; "salva e riavvia" elimina solo il round corrente, anteprima aggiornata |
++| Annulla | nessun punto, risposte del round eliminate, sessione e squadre preservate, domanda nel pacchetto; `app.js`: round chiuso sui tablet, conferma obbligatoria; server: risposte tardive rifiutate (`round_closed`), round rilanciato pulito con la risposta corretta aggiornata |
++| Ripeti | nuovo round pulito, punteggi invariati, `repeatOf`; nessun round da chiudere se già confermato |
++| Navigazione | uscire da una domanda avviata senza risposte chiede conferma e chiude il round (niente round fantasma) |
++| acceptedAnswers | crea, modifica, elimina, riordina, vuoti e doppioni normalizzati ignorati, principale distinta, Staffetta per collegamento; salva → riavvio → export → elimina → reimporta → riapertura nello Studio; l'answerMatcher le accetta (`accepted_variant`) |
++| Connessioni | indicatore 3/3 → 2/3 con nome e "da N s" → 3/3, squadre non eliminate, squadre manuali a parte; server: pulsantiera disconnessa resta assegnata, `lastSeen` presente, riconnessione con token |
++| Ricerca | testo (accenti ignorati) in domanda, alternative e spiegazione; argomento, difficoltà, tag; valori dei filtri dai dati |
++| Progresso | corrente, totale, giocate, da giocare |
++| Ghigliottina sui tablet | round A/B (`mcq`, lettere A/B, nessun esito); voti contati; maggioranza automatica; parità → docente; il voto non è una risposta da punteggio; server: tasti A/B al tablet, voto inoltrato senza esito |
++| Recovery | SHOW che si ricollega riceve palco e timer correnti; istantanea della regia salvata e riletta sul server con la versione giocata del round aperto; tablet che si ricollega (anche test della baseline) |
++
++## Stress test (`tools/simulate_players.js`)
++| Pulsantiere | Risposte | ack mediana | 95° perc. | max | Esito |
++|---|---|---|---|---|---|
++| 2 | 10 | 7 ms | 9 ms | 9 ms | ✓ |
++| 6 | 30 | 3 ms | 7 ms | 8 ms | ✓ |
++| 15 | 75 | 2 ms | 11 ms | 12 ms | ✓ |
++| 30 | 150 | 3 ms | 8 ms | 9 ms | ✓ |
++
++Nessuna risposta persa né duplicata. Nessuna regressione significativa rispetto alla baseline (30 pulsantiere: max 5 ms → 9 ms, sempre sotto i 10 ms; la simulazione gira in loopback).
++
++## Collaudo manuale
++Scenario completo dei 29 passi più il recovery durante un round aperto: `QA/CLASSROOM_CONTROL_MANUAL_TEST.md`.
++
++- **Browser**: Chromium 152.0.7977.130 (pannello browser dell'app Claude).
++- **Non eseguiti**: Chrome ed Edge installati e la suite Playwright `tests/e2e/`, che richiede Playwright, non installato. Stesso motore Chromium, ma non verificati separatamente.
++
++## Smoke test dallo ZIP finale
++Vedi la sezione in fondo, compilata dopo la creazione dello ZIP.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/QA/v3.6.0/simulation.txt b/QA/v3.6.0/simulation.txt
+--- a/QA/v3.6.0/simulation.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/QA/v3.6.0/simulation.txt	2026-10-05 01:23:33.000000000 +0200
+@@ -0,0 +1,6 @@
++✓  2 pulsantiere · 5 domande · 10 risposte · ack mediana 7 ms, 95° perc. 9 ms, max 9 ms · 567 ms totali
++✓  6 pulsantiere · 5 domande · 30 risposte · ack mediana 3 ms, 95° perc. 7 ms, max 8 ms · 590 ms totali
++✓ 15 pulsantiere · 5 domande · 75 risposte · ack mediana 2 ms, 95° perc. 11 ms, max 12 ms · 783 ms totali
++✓ 30 pulsantiere · 5 domande · 150 risposte · ack mediana 3 ms, 95° perc. 8 ms, max 9 ms · 1025 ms totali
++
++SIMULAZIONE OK: nessuna risposta persa, nessun duplicato.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/QA/v3.6.0/tests-unit-integration.txt b/QA/v3.6.0/tests-unit-integration.txt
+--- a/QA/v3.6.0/tests-unit-integration.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/QA/v3.6.0/tests-unit-integration.txt	2026-10-05 01:23:30.000000000 +0200
+@@ -0,0 +1,216 @@
++
++answerMatcher.test.js
++  ✓ answerMatcher: Il Colosseo / Colosseo → normalized (1 ms)
++  ✓ answerMatcher: L'Ara Pacis / Ara Pacis → normalized (0 ms)
++  ✓ answerMatcher: Vocazione di San Matteo / La Vocazione di san Matteo → normalized (0 ms)
++  ✓ answerMatcher: Caravaggio / Caravagio → fuzzy (1 ms)
++  ✓ answerMatcher: Ratto di Proserpina / Ratto delle Sabine → wrong (0 ms)
++  ✓ answerMatcher: exact, normalized, accepted_variant, fuzzy e wrong distinguibili (1 ms)
++  ✓ answerMatcher: Unicode composto/decomposto, diacritici estesi, spazi e punteggiatura (0 ms)
++  ✓ answerMatcher: apostrofi normalizzati e un solo articolo italiano iniziale facoltativo (0 ms)
++  ✓ answerMatcher: soglie 5/6/11/12 e lunghezza più corta conservativa (0 ms)
++  ✓ answerMatcher: inserimenti, cancellazioni e trasposizioni Damerau-Levenshtein (1 ms)
++  ✓ answerMatcher: parole sostituite, mancanti, aggiunte e riordinate sono errate (0 ms)
++  ✓ answerMatcher: un distrattore noto non viene accettato per somiglianza (0 ms)
++  ✓ answerMatcher: numeri, segni, decimali e codici non hanno tolleranza typo (0 ms)
++  ✓ answerMatcher: vuoti, null, sola punteggiatura o diacritici e riferimenti invalidi non passano (1 ms)
++  ✓ answerMatcher: stesso modulo browser/Node, nessuna mutazione e fallback Unicode legacy (2 ms)
++
++answerMatcher_integration.test.js
++  ✓ matcher integrato: photopuzzle, riferimento del gioco e dati grezzi conservati (5 ms)
++  ✓ matcher integrato: indovina, riferimento del gioco e dati grezzi conservati (1 ms)
++  ✓ matcher integrato: ghigliottina, riferimento del gioco e dati grezzi conservati (1 ms)
++  ✓ matcher integrato: chain, riferimento del gioco e dati grezzi conservati (2 ms)
++  ✓ matcher integrato: abbinamenti, riferimento del gioco e dati grezzi conservati (1 ms)
++  ✓ matcher integrato: acceptedAnswers accettate in Photopuzzle, Indovina, finale e Staffetta (5 ms)
++  ✓ matcher integrato: nella Staffetta le varianti appartengono al singolo collegamento (2 ms)
++  ✓ matcher integrato: distrattori di Indovina e codici sbagliati di Abbinamenti restano errati (2 ms)
++  ✓ matcher integrato: correzione docente, replica tablet, ripresa e commit conservano l’esito manuale (9 ms)
++  ✓ matcher integrato: risposta registrata a mano non viene sovrascritta dal tablet (1 ms)
++  ✓ matcher integrato: varianti sopravvivono a validazione, runtime ed export/import JSON (4 ms)
++  ✓ matcher integrato: valutazione server comune, omesse e altri layout invariati (1 ms)
++  ✓ matcher integrato: modifica/copia di una manche conserva le varianti solo se la soluzione resta uguale (1 ms)
++  ✓ matcher integrato: HTTP serve il modulo condiviso; flow tablet reale normalizza e tollera un typo (62 ms)
++
++browser_store.test.js
++  ✓ salva, chiudi, riapri: lo snapshot è ritrovato (1 ms)
++  ✓ una partita non conclusa NON viene sovrascritta da una nuova finché il docente non sceglie (0 ms)
++  ✓ riprendi: salvare la stessa sessione è sempre consentito (1 ms)
++  ✓ l'archivio conserva al massimo 3 partite (0 ms)
++
++classroom_control.test.js
++  ✓ modifica domanda corrente in anteprima: stessa domanda, squadre e punteggi intatti, risposta corretta nuova (0 ms)
++  ✓ round aperto immutabile: "salva per dopo" non tocca il round, la modifica entra lasciando la domanda (1 ms)
++  ✓ "salva e riavvia": annulla solo il round corrente, anteprima della stessa domanda aggiornata, nessun punto (0 ms)
++  ✓ ANNULLA DOMANDA: risposte del round eliminate, nessun punto, sessione e squadre preservate (0 ms)
++  ✓ RIPETI DOMANDA: nuovo round pulito, punti del primo tentativo invariati, marcato come ripetizione (0 ms)
++  ✓ stato pulsantiere: disconnessione e riconnessione aggiornano l'indicatore senza eliminare squadre (0 ms)
++  ✓ progresso della sessione: domanda corrente, giocate e da giocare (0 ms)
++  ✓ ricerca nell'Archivio: testo (accenti ignorati), spiegazione, argomento, difficoltà (9 ms)
++  ✓ acceptedAnswers: crea, modifica, elimina; vuoti e doppioni (dopo normalizzazione) ignorati; principale distinta (2 ms)
++  ✓ acceptedAnswers sopravvivono a salva → riavvio → export ZIP → elimina → reimporta, e l'answerMatcher le accetta (30 ms)
++  ✓ regia: MODIFICA DOMANDA salva nel pacchetto installato (non in un override); dopo riavvio ed export la modifica c'è (133 ms)
++  ✓ regia: ANNULLA chiude il round anche sui tablet; RIPETI dopo i punti non chiude nulla e marca il nuovo round (2 ms)
++  ✓ regia: uscire da una domanda avviata senza risposte non lascia un round fantasma sui tablet (1 ms)
++  ✓ Ghigliottina su tablet: per ogni coppia un round A/B; voti contati; la maggioranza delle pulsantiere collegate sceglie (2 ms)
++  ✓ server: dopo ANNULLA le risposte tardive sono rifiutate; il round rilanciato è pulito; voto A/B accettato senza esito (40 ms)
++  ✓ server: pulsantiera disconnessa e riconnessa resta assegnata alla stessa squadra; lastSeen disponibile alla regia (193 ms)
++  ✓ recovery: lo SHOW che si ricollega riceve subito palco e timer correnti; la regia ritrova la partita salvata sul server (202 ms)
++
++csv_safety.test.js
++  ✓ CSV v2: regola di neutralizzazione cella per cella (0 ms)
++  ✓ CSV risposte: testi ostili di squadre, pack e studenti neutralizzati; punti negativi restano numeri (1 ms)
++  ✓ CSV dati grezzi ({raw:true}): celle esattamente come registrate, stesso formato (0 ms)
++  ✓ log tecnico CSV: risposte e motivi neutralizzati, latenze e delta punti numerici; grezzo su richiesta (1 ms)
++  ✓ report HTML: i testi ostili restano testo (nessun markup eseguibile) (1 ms)
++
++mascot.test.js
++  ✓ mascotte: i 4 WebP sono quelli forniti (non ridisegnati), validi e leggeri; i PNG master stanno fuori dal runtime (3 ms)
++  ✓ mascotte: mappatura umore → posa identica in regia (app.js) e SHOW (show-client.js), come da specifica (3 ms)
++  ✓ mascotte: panic solo a tempo scaduto (evento globale), mai per l'esito di una squadra (1 ms)
++  ✓ mascotte: animazioni solo transform/opacity, durate della specifica, one-shot ripetibili, movimento ridotto (1 ms)
++  ✓ mascotte: il Player (pulsantiera) non ha mascotte né animazioni nuove (0 ms)
++  ✓ mascotte: le 4 pose sono servite dal server anche ai dispositivi in rete (SHOW), senza 404 (93 ms)
++
++pack.test.js
++  ✓ pack installato arte_romana valido: 72 domande, 33 manche (14/8/3/4/4) (2 ms)
++  ✓ ogni immagine citata dal pack esiste davvero su disco (3 ms)
++  ✓ import v3: domande_romana.json valido, prefissi immagine tolti, id conservati (2 ms)
++  ✓ import v3: giochi_romana.json valido (Indovina, Ghigliottina, Catena) (1 ms)
++  ✓ PACK_TEMPLATE valido; le bozze non entrano in gara (1 ms)
++  ✓ pack non valido rifiutato con messaggi comprensibili (7 ms)
++  ✓ archivio domande non valido (v3) rifiutato per intero (2 ms)
++  ✓ durata: i secondi della domanda sono conservati (5–600) e 30 di default (1 ms)
++  ✓ il bundle generato contiene il pack ed è aggiornato (2 ms)
++
++packmanager.test.js
++  ✓ zip: CRC-32 di riferimento e andata/ritorno con nomi UTF-8 (0 ms)
++  ✓ zip: la decompressione JavaScript (usata nel browser) coincide con zlib (31 ms)
++  ✓ zip: legge uno .zip creato con "Comprimi" di Windows (Compress-Archive) (4 ms)
++  ✓ zip: file non zip, troncato o danneggiato → errore chiaro (2 ms)
++  ✓ importazione: un solo file .zip porta domande, giochi e immagini (libreria del browser) (2 ms)
++  ✓ importazione su disco: cartella packs/<id> completa, install.json, bundle aggiornato (12 ms)
++  ✓ comando unico: node tools/pack_manager.js import <file.zip> (anche più file) (109 ms)
++  ✓ importazione di un pack in file singolo .json con immagini incorporate (2 ms)
++  ✓ migrazione automatica: uno .zip di un'edizione v3 viene convertito al volo (1 ms)
++  ✓ migrazione automatica su disco: i pack già presenti (es. Arte romana) vengono registrati (35 ms)
++  ✓ pacchetti non validi rifiutati senza scrivere nulla (8 ms)
++  ✓ collisione di id: un pack diverso con lo stesso id riceve un nuovo id, l'originale non cambia (28 ms)
++  ✓ stesso contenuto importato due volte: "già installato", nessuna copia (3 ms)
++  ✓ collisione degli id delle domande tra pack diversi: nella sessione mista restano distinti (2 ms)
++  ✓ attivazione: la sessione registra pack, versione, materia e argomenti (2 ms)
++  ✓ cambio pack nella stessa sessione: squadre e storico restano, i pack usati si accumulano (2 ms)
++  ✓ multi-pack: sessione mista con domande e giochi di più pack e provenienza per risposta (2 ms)
++  ✓ duplicazione: copia indipendente con nuovo id e titolo; seconda copia con id diverso (70 ms)
++  ✓ esportazione: .zip conforme, reimportabile identico (andata e ritorno) (13 ms)
++  ✓ esportazione del pack Arte romana completo (72 domande, 33 manche, 24 immagini) (35 ms)
++  ✓ eliminazione: spostamento nel cestino, non più in elenco; l'ultimo pack non si elimina (23 ms)
++  ✓ libreria del browser: i pack del programma sono in sola lettura, la copia usa le loro immagini (4 ms)
++  ✓ server: elenco, importazione, duplicazione, esportazione ed eliminazione via /api/host/packs (86 ms)
++
++packstudio.test.js
++  ✓ nuovo pacchetto: valori iniziali, codice dal titolo, validazione che chiede almeno una domanda (0 ms)
++  ✓ domande: crea, duplica, sposta, elimina con codici unici (1 ms)
++  ✓ validazione: indica quale domanda correggere e perché (0 ms)
++  ✓ argomento, categoria e tag: conservati nel pacchetto e validati (1 ms)
++  ✓ bozze escluse dalla gara: avviso, e errore se nessuna domanda è approvata (0 ms)
++  ✓ immagini: nome sicuro e senza cartelle, estensione dai byte reali, nomi unici (1 ms)
++  ✓ immagini: associazione, uso, rinomina con aggiornamento dei riferimenti, eliminazione protetta (0 ms)
++  ✓ immagine citata ma assente: errore sulla domanda giusta (0 ms)
++  ✓ riapertura di un pacchetto con immagini in sottocartelle: spostate direttamente in images/ (1 ms)
++  ✓ manche speciali: tutte e cinque si creano vuote (non valide) e diventano valide una volta compilate (1 ms)
++  ✓ manche: duplica, sposta, elimina; la Parola Segreta richiede esattamente 5 coppie (1 ms)
++  ✓ esportazione ZIP: conforme al formato, immagini piatte, reimportabile e riapribile nello Studio (0 ms)
++  ✓ un pacchetto con errori non si esporta (1 ms)
++  ✓ riapertura del pacchetto Arte romana completo: modifica e nuovo ZIP valido (72 domande, 33 manche, 24 immagini) (50 ms)
++  ✓ versione: incremento automatico e impronta che cambia solo se cambia il contenuto (0 ms)
++  ✓ salvataggio in libreria (browser): nuovo, conflitto senza conferma, sostituzione esplicita (2 ms)
++  ✓ salvataggio: rifiutate immagini in sottocartelle e sostituzione di un pacchetto del programma in sola lettura (2 ms)
++  ✓ salvataggio su disco: sostituzione atomica con copia di sicurezza nel cestino e bundle aggiornato (15 ms)
++  ✓ server: PUT /api/host/packs/<id> (nuovo, conflitto, sostituzione) e pagina /studio solo per la regia (52 ms)
++
++pilot_hotfix.test.js
++  ✓ P0: token Unicode non termina join o answer (0 ms)
++  ✓ P0: token Unicode via WebSocket rifiutato, server ancora operativo (27 ms)
++  ✓ P1: limite DEFLATE durante decompressione (browser e Node) (10 ms)
++  ✓ P1: ZIP con dimensione contraffatta bloccato prima del CRC (4 ms)
++  ✓ P1: INVIA si riattiva al secondo round mcq anche con ACK vecchio (2 ms)
++  ✓ P1: INVIA si riattiva al secondo round text anche con ACK vecchio (1 ms)
++  ✓ P1: retry del round corrente conservato; reset senza round pulisce invio (0 ms)
++  ✓ P1: Host estraneo e Origin cross-site rifiutati, locale consentito (28 ms)
++  ✓ P1: hello SHOW ripetuto non duplica schermi o cambia ruolo (214 ms)
++  ✓ P1: errore stream statico interrompe solo la richiesta (14 ms)
++  ✓ P1: hello Player falliti non azzerano il limite di frequenza (24 ms)
++  ✓ P1: migrazione conserva le sorgenti che non riesce a importare (1 ms)
++  ✓ Player: nessun correct/explanation/domanda MCQ prima o dopo reveal (0 ms)
++
++qr.test.js
++  ✓ format bits conformi alla tabella ISO (livelli M e L, maschere 0–7) (3 ms)
++  ✓ version bits della versione 7 = 0x07C94 (5 ms)
++  ✓ Reed-Solomon: ogni blocco ha sindromi nulle sulle radici α^0..α^(n-1) (16 ms)
++  ✓ dimensione e pattern di posizionamento corretti (0 ms)
++  ✓ toSVG produce un SVG con sfondo bianco (0 ms)
++
++report.test.js
++  ✓ CSV: BOM, separatore ;, una riga per risposta, testo risposta dal mescolamento (0 ms)
++  ✓ statistiche: classifica, % corrette, categorie, domande difficili, tempi solo se misurati (0 ms)
++  ✓ report HTML autonomo, con le sezioni richieste e la nota formativa (1 ms)
++  ✓ risposte annullate (punti riaperti) escluse dalle statistiche ma presenti nel CSV (0 ms)
++  ✓ log tecnico: regia e server uniti in ordine di tempo (0 ms)
++
++room.test.js
++  ✓ round chiuso: risposta rifiutata (1 ms)
++  ✓ round aperto: risposta accettata con timestamp e tempo del SERVER (0 ms)
++  ✓ prima risposta definitiva: seconda diversa rifiutata, seconda uguale idempotente (0 ms)
++  ✓ due tablet della stessa squadra: vale il primo (0 ms)
++  ✓ roundInstanceId vecchio o sconosciuto rifiutato (0 ms)
++  ✓ token non valido, dispositivo espulso o non assegnato: rifiutati (1 ms)
++  ✓ risposta non valida per il layout rifiutata (0 ms)
++  ✓ pausa: risposte rifiutate; ripresa: il tempo in pausa non conta (0 ms)
++  ✓ scadenza: tolleranza di rete, poi chiusura automatica (0 ms)
++  ✓ +10 s sposta la scadenza (0 ms)
++  ✓ sblocco del docente: la squadra può rispondere di nuovo (1 ms)
++  ✓ la vista del dispositivo non contiene MAI la soluzione prima del reveal (0 ms)
++  ✓ ingressi: PIN errato e ingressi chiusi rifiutati; rientro con token anche a ingressi chiusi (0 ms)
++  ✓ riassegnazione: nuovo token, il vecchio non vale più (0 ms)
++  ✓ commit: i dati dei tablet vengono dal server, il punteggio è ricalcolato (0 ms)
++  ✓ persistenza: dopo un riavvio il round aperto torna in pausa e i token restano validi (1 ms)
++  ✓ squadra rimossa: il dispositivo torna in attesa (0 ms)
++  ✓ arcade testuale: la pulsantiera accetta la parola, il server valuta e conserva kind/gameType (0 ms)
++  ✓ arcade testuale: accenti e maiuscole non cambiano l’esito (0 ms)
++
++scoring.test.js
++  ✓ legacy_v3: corrette 300/275/250, errata −100, astensione −100 (0 ms)
++  ✓ show_standard: omessa vale 0, errata −100 (0 ms)
++  ✓ learning: corretta 1, errata 0, omessa 0, il tempo non conta (0 ms)
++  ✓ ordine delle corrette: decide il campo order, non la posizione nell'array (1 ms)
++  ✓ errori e omesse non occupano posizioni tra le corrette (0 ms)
++  ✓ minimo per una corretta: 0 punti (13ª corretta e oltre) (0 ms)
++  ✓ record duplicati: vale il primo per ordine; i record annullati sono ignorati (0 ms)
++  ✓ esito non valido rifiutato (0 ms)
++  ✓ profilo sconosciuto → profilo predefinito show_standard (0 ms)
++  ✓ totals somma eventi e rettifiche, ignora gli annullati (0 ms)
++  ✓ rulesSummary leggibile per ogni profilo (0 ms)
++  ✓ punteggio derivato dai dati grezzi: lo storico si ricalcola con un altro profilo (0 ms)
++  ✓ record manuale: responseTimeMs sempre null, inputMode manual (0 ms)
++  ✓ outcomeForAnswer: lettera, omessa, maiuscole (0 ms)
++
++server.test.js
++  ✓ HTTP: pagine pubbliche, regia solo dal PC, cartelle riservate vietate (48 ms)
++  ✓ HTTP da un altro dispositivo: niente regia, niente domande né soluzioni (47 ms)
++  ✓ flusso completo: join, assegnazione, round, risposte, reveal, commit (35 ms)
++  ✓ riconnessione: refresh del tablet → "riconnesso come", nessuna squadra duplicata; ingressi chiusi (163 ms)
++  ✓ persistenza server: salva, chiudi, riapri, riprendi (stesso PIN, stessi token) (330 ms)
++  ✓ snapshot della regia su disco: POST, GET, archivio (26 ms)
++  ✓ limite di frequenza: un client che inonda il server viene frenato (22 ms)
++
++timer.test.js
++  ✓ secondsFor usa il campo seconds della domanda (15, 60) e 30 come predefinito (0 ms)
++  ✓ countdown: start e scorrere del tempo (0 ms)
++  ✓ pausa e ripresa: il tempo in pausa non viene consumato (0 ms)
++  ✓ +10 secondi in corsa e da fermo; la durata cresce con il tempo aggiunto (1 ms)
++  ✓ fine: start su timer esaurito non riparte (0 ms)
++  ✓ snapshot per autosave: sempre fermo, conserva il residuo (0 ms)
++  ✓ percentuale residua (0 ms)
++
++182 superati, 0 falliti
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/README.md b/README.md
+--- a/README.md	2026-10-04 18:45:58.000000000 +0200
++++ b/README.md	2026-10-05 01:21:52.000000000 +0200
+@@ -1,4 +1,6 @@
+-# Il Secchione v3.5.4_MASCOT_ANIMATED
++# Il Secchione v3.6.0 CLASSROOM CONTROL
++
++**v3.6.0**: controllo della regia durante la lezione, cioè modifica della domanda corrente senza perdere il contesto, round aperto immutabile, **ANNULLA** e **RIPETI DOMANDA**, stato delle pulsantiere sempre visibile, progresso, ricerca nell'Archivio, risposte alternative in Pack Studio e Ghigliottina A/B sui tablet. Vedi [CHANGELOG_V3_6_0.md](CHANGELOG_V3_6_0.md) e [QA/TEST_RESULTS_V3_6_0.md](QA/TEST_RESULTS_V3_6_0.md).
+ 
+ **Patch ANSWER_MATCHER**: [Matcher condiviso](ANSWER_MATCHER.md), normalizzazione, varianti e typo conservativi; UI, networking e formule di punteggio invariati.
+ 
+@@ -117,9 +119,9 @@
+ node tools/simulate_players.js
+ ```
+ 
+-Il primo esegue 136 test su scoring, timer, risposte, persistenza, pack, Gestore Pacchetti, Pack Studio, zip, report e CSV, QR, server e mascotte. Il secondo simula 2, 6, 15 e 30 pulsantiere.
++Il primo esegue 182 test su scoring, timer, risposte, persistenza, pack, Gestore Pacchetti, Pack Studio, zip, report e CSV, QR, server e mascotte. Il secondo simula 2, 6, 15 e 30 pulsantiere.
+ 
+-Runtime supportato: il **Node 24 portable incluso** in `runtime/`; con questo passano tutti i 136 test. Solo per informazione: con Node 8.16 ne passano 128; i 2 di `pilot_hotfix.test.js` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2.
++Runtime supportato: il **Node 24 portable incluso** in `runtime/`; con questo passano tutti i 182 test. Solo per informazione: con Node 8.16 ne passano 128; i 2 di `pilot_hotfix.test.js` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2.
+ 
+ ## Requisiti
+ - **Regia**: Chrome o Edge recenti su Windows (Firefox e Safari recenti dovrebbero funzionare, ma non sono stati provati).
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/RELEASE.json b/RELEASE.json
+--- a/RELEASE.json	2026-10-04 18:45:58.000000000 +0200
++++ b/RELEASE.json	2026-10-05 01:24:08.000000000 +0200
+@@ -1,48 +1,41 @@
+ {
+-  "version": "3.5.4_MASCOT_ANIMATED",
+-  "date": "2026-10-04",
+-  "source": "Il_Secchione_v3.5.4_MASCOT_ANIMATED_PORTABLE.zip",
+-  "sourceSHA256": "6ef47300da4c39966e4ab663f9929b5c5b9b4724eee0a75aeab0a3df8ef549fb",
+-  "mascotAssets": "SECCHIONE_MASCOT_ANIMATED_ASSETS_FOR_CLAUDE.zip",
+-  "mascotAssetsSHA256": "5635662259368b3021d32a1fa77b65f84205629c9e9f666140317007f86d46f8",
++  "version": "3.6.0",
++  "name": "CLASSROOM_CONTROL",
++  "date": "2026-10-05",
++  "source": "Il_Secchione_v3.5.4_ANSWER_MATCHER_PORTABLE.zip",
++  "sourceSHA256": "123cdd1ae63f6b8c78b904a50ac6c3bcff19038f475274ea4441d85186ef4484",
+   "node": "v24.19.0",
+   "nodePlatform": "win32-x64",
+   "nodeSHA256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+   "supportedRuntime": "bundled portable Node 24 (runtime/node.exe)",
+   "unitAndIntegration": {
+-    "passed": 165,
++    "passed": 182,
+     "failed": 0,
+-    "baselineV354": 136,
+-    "answerMatcher": 29
++    "baselineV354AnswerMatcher": 165,
++    "classroomControl": 17
+   },
+   "simulatePlayers": "2/6/15/30 devices, no lost or duplicated responses",
+-  "manualQA": "HOST + SHOW: present, think, panic at time-up, celebrate, double celebrate retrigger, rapid think-present-celebrate, re-renders without replays, SHOW refresh and reconnect after server restart, 1366x768 and 1920x1080 (amplitudes, no overlap), reduced motion, no 404, no Internet requests, Player unchanged. See QA/v3.5.4/COLLAUDO.md",
+-  "scope": "Shared text answer matcher; UI rendering, networking transport/message schemas and scoring formulas unchanged.",
+-  "previousRelease": {
+-    "version": "3.5.3_PACK_STUDIO",
+-    "realPacks": "PACCHETTI_SECCHIONE_TRIENNIO_v1.1.0.zip (full cycle on SECCHIONE_PREISTORIA_1MEDIA_v1.1.0)",
+-    "resolvedP1": "CSV formula neutralization: contract v2, see EXPORT_CSV.md"
+-  },
++  "manualQA": "Realistic 29-step classroom scenario with real pack SECCHIONE_BAROCCO_3MEDIA_v1.1.0 and 6 WebSocket tablets, plus recovery during an open round. Browser: Chromium 152.0.7977.130 (Claude app browser pane). See QA/CLASSROOM_CONTROL_MANUAL_TEST.md",
++  "scope": "Teacher workflow / classroom control. answerMatcher, CSV protection, scoring, Player, room/ws protocol, mascot and show unchanged.",
++  "features": [
++    "Edit current question (saved to the installed pack, no Home reset)",
++    "Open round immutable: save for later / save and restart",
++    "Cancel question",
++    "Repeat question (scores kept, repeatOf)",
++    "Always-visible tablet status with disconnected team names",
++    "Session progress",
++    "Safe navigation (no ghost rounds)",
++    "Archive search and filters",
++    "acceptedAnswers editor in Pack Studio",
++    "Typed non-blocking messages",
++    "Ghigliottina A/B voting on tablets (bug fix)"
++  ],
+   "e2e": {
+-    "note": "Playwright suite not re-run for 3.5.3/3.5.4; values below refer to 3.5.2_PILOT",
++    "note": "Playwright suite not re-run for 3.5.3-3.6.0; values below refer to 3.5.2_PILOT",
+     "chrome": "153.0.8010.53",
+     "edge": "154.0.4258.53",
+     "checksPerBrowser": 11,
+     "playerContexts": 6
+   },
+-  "knownPendingP1": null,
+-  "patch": "ANSWER_MATCHER",
+-  "answerMatcher": {
+-    "module": "js/engine/answerMatcher.js",
+-    "statuses": [
+-      "exact",
+-      "normalized",
+-      "accepted_variant",
+-      "fuzzy",
+-      "wrong"
+-    ],
+-    "variantsEvaluatedBy": "host, using local game references and existing arcade commit",
+-    "manualOverridePreserved": true,
+-    "note": "Canonical server feedback on Player unchanged; see ANSWER_MATCHER.md."
+-  }
++  "knownPendingP1": null
+ }
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/TEST_CHECKLIST.md b/TEST_CHECKLIST.md
+--- a/TEST_CHECKLIST.md	2026-10-04 16:12:12.000000000 +0200
++++ b/TEST_CHECKLIST.md	2026-10-05 01:21:52.000000000 +0200
+@@ -29,7 +29,7 @@
+ | mascotte (v3.5.4) | WebP identici a quelli forniti, mappatura umore → posa uguale in regia e SHOW, panic solo a tempo scaduto, animazioni solo transform/opacity con durate della specifica, movimento ridotto, Player senza mascotte, pose servite anche in rete | ✅ 6 test |
+ | multiplayer | 2 / 6 / 15 / 30 pulsantiere simulate: join, assegnazione, chiusura ingressi, risposte quasi contemporanee con doppi tocchi, reveal, commit, disconnessione e riconnessione, intruso a ingressi chiusi | ✅ nessuna risposta persa né duplicata (30 tablet × 20 domande: 600 risposte, ack massimo 10 ms) |
+ 
+-Totale: **136 test superati** con il runtime supportato, il Node 24 portable incluso (24.19). La v3.5.3 ne aveva 130, verificati anche con Node 24.21. Solo per informazione, con Node 8.16 ne passano 128: i 2 test di `pilot_hotfix` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2. Non sono un blocco.
++Totale v3.6.0: **182 test superati** (i 165 della v3.5.4_ANSWER_MATCHER più 17 di `tests/classroom_control.test.js`); prima della v3.6.0: **136 test superati** con il runtime supportato, il Node 24 portable incluso (24.19). La v3.5.3 ne aveva 130, verificati anche con Node 24.21. Solo per informazione, con Node 8.16 ne passano 128: i 2 test di `pilot_hotfix` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2. Non sono un blocco.
+ 
+ > La simulazione gira sullo stesso PC (loopback): misura la correttezza del server, **non** la qualità del Wi-Fi della scuola. Per quella servono i test B2, B3 e B7.
+ 
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/css/classroom.css b/css/classroom.css
+--- a/css/classroom.css	2026-10-04 16:12:12.000000000 +0200
++++ b/css/classroom.css	2026-10-05 01:06:35.000000000 +0200
+@@ -125,3 +125,24 @@
+ .pkMix .checkRow{margin:0!important}
+ body.pkDragging::after{content:"Rilascia il file .zip per importare il pacchetto";position:fixed;inset:12px;border:4px dashed #ffd258;border-radius:16px;background:#070f1bcc;color:#ffd258;font:800 28px "Segoe UI",Arial,sans-serif;display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none}
+ .pkImport small{display:block;font-weight:400;font-size:10px;opacity:.85;margin-top:2px}
++
++/* v3.6.0 Classroom Control: comandi della domanda corrente, stato pulsantiere, progresso, ricerca Archivio, messaggi */
++.ctlRow{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:5px}
++.ctlRow .btn{padding:9px 4px;font-size:11px}
++.directorProgress{font-size:11px;color:#9fc3df;margin-top:6px;letter-spacing:.02em}
++.directorProgress:empty{display:none}
++.deviceLive{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-top:8px;padding:6px 9px;border-radius:7px;font-size:11px;border:1px solid #2c4a66;background:#0b1a2b}
++.deviceLive b{font-size:12px;letter-spacing:.04em}
++.deviceLive small{color:#9bb0c5;font-size:10px}
++.deviceLive.ok b{color:#62e5ab}
++.deviceLive.warn{border-color:#d36677;background:#2c1119}
++.deviceLive.warn b,.deviceLive.warn span{color:#ffb3bf}
++.lockNote{background:#1d1a0e;border:1px solid #5e4d1c;border-radius:7px;padding:8px 10px;color:#ffe39a!important;line-height:1.45}
++.bankSearch{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) auto;gap:6px;align-items:center}
++.bankQ.isCurrent{background:#12304b;border-radius:6px;padding-left:6px;padding-right:6px}
++.curTag{color:#ffd258}
++.warn{color:#ffd258}
++.toast.ok{background:#62e5ab;color:#06281c}
++.toast.warn{background:#f5cc60;color:#182637}
++.toast.err{background:#ff8b9a;color:#2c0710}
++@media(max-width:720px){.bankSearch{grid-template-columns:1fr 1fr}}
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/index.html b/index.html
+--- a/index.html	2026-10-04 18:45:58.000000000 +0200
++++ b/index.html	2026-10-05 01:06:18.000000000 +0200
+@@ -76,6 +76,8 @@
+         </div>
+         <div class="directorTrack"><i id="directorTimerBar"></i></div>
+         <div id="directorHint" class="directorHint">Configura le squadre e avvia il quiz.</div>
++        <div id="directorProgress" class="directorProgress"></div>
++        <div id="deviceLive" class="deviceLive" hidden></div>
+       </div>
+ 
+       <nav class="tabs" id="tabs">
+@@ -92,6 +94,7 @@
+             <div class="panelHead"><h2>DOMANDA CORRENTE</h2><span class="badge liveBadge">LIVE</span></div>
+             <button id="launchQuestionBtn" class="btn amber xl commandLaunch">▶ AVVIA DOMANDA <kbd>Spazio</kbd></button>
+             <div class="cmdRow top8"><button id="pauseQuestionBtn" class="btn ghost">⏸ PAUSA</button><button id="addTimeBtn" class="btn ghost">+10 s</button><button id="endQuestionBtn" class="btn ghost">■ CHIUDI</button><button id="revealBtn" class="btn red">● RIVELA</button></div>
++            <div class="ctlRow top8"><button id="editQuestionBtn" class="btn ghost" hidden>✎ MODIFICA DOMANDA</button><button id="cancelQuestionBtn" class="btn ghost" hidden>✕ ANNULLA DOMANDA</button><button id="repeatQuestionBtn" class="btn ghost" hidden>↺ RIPETI DOMANDA</button></div>
+             <div id="privateAnswer" class="answerKey">Nessuna domanda attiva.</div>
+             <div class="timerControl"><span id="controlTimer">00:30</span><div class="timerTrack"><i id="controlTimerBar"></i></div></div>
+           </div>
+@@ -123,7 +126,7 @@
+         </section>
+ 
+         <section id="tab-games" class="tab"><div class="panel"><div class="panelHead"><h2>GIOCHI</h2><span class="badge amberBadge">SHOW</span></div><div id="gameButtons" class="gameButtons"></div></div><div class="panel editorActions"><button class="btn ghost" id="exportGamesBtn">ESPORTA GIOCHI</button><label class="btn ghost fileLabel">IMPORTA GIOCHI<input id="importGamesInput" type="file" accept="application/json,.json"></label></div><div id="gameControls"></div></section>
+-        <section id="tab-bank" class="tab"><div class="panel"><div class="panelHead"><h2>ARCHIVIO DOMANDE</h2><span id="bankCount" class="badge">0</span></div><div class="row wrap gap"><button id="newQuestionBtn" class="btn primary">+ NUOVA</button><button id="shuffleQuestionsBtn" class="btn ghost">MESCOLA</button><button id="exportBankBtn" class="btn ghost">ESPORTA</button><label class="btn ghost fileLabel">IMPORTA<input id="importBankInput" type="file" accept="application/json,.json"></label><button id="resetBankBtn" class="btn red">RESET</button></div><div class="row wrap gap top8"><button id="openPacksBtn2" class="btn ghost">📦 PACCHETTI…</button><small class="help" id="packInfo"></small></div><div id="questionList" class="questionList"></div></div></section>
++        <section id="tab-bank" class="tab"><div class="panel"><div class="panelHead"><h2>ARCHIVIO DOMANDE</h2><span id="bankCount" class="badge">0</span></div><div class="row wrap gap"><button id="newQuestionBtn" class="btn primary">+ NUOVA</button><button id="shuffleQuestionsBtn" class="btn ghost">MESCOLA</button><button id="exportBankBtn" class="btn ghost">ESPORTA</button><label class="btn ghost fileLabel">IMPORTA<input id="importBankInput" type="file" accept="application/json,.json"></label><button id="resetBankBtn" class="btn red">RESET</button></div><div class="row wrap gap top8"><button id="openPacksBtn2" class="btn ghost">📦 PACCHETTI…</button><small class="help" id="packInfo"></small></div><div class="bankSearch top8"><input id="bankSearch" class="control" type="search" placeholder="Cerca: testo, risposte, spiegazione, argomento…" aria-label="Cerca nell'Archivio"><select id="bankTopic" class="control" aria-label="Filtra per argomento"></select><select id="bankDifficulty" class="control" aria-label="Filtra per difficoltà"></select><small id="bankResultInfo" class="help"></small></div><div id="questionList" class="questionList"></div></div></section>
+         <section id="tab-results" class="tab"><div class="panel"><div class="panelHead"><h2>CLASSIFICA</h2><span class="badge amberBadge">SHOW</span></div><div id="resultsList"></div></div>
+           <div class="panel"><div class="panelHead"><h2>ESPORTA RISULTATI</h2><span class="badge">DATI</span></div>
+             <div class="exportGrid"><button id="exportReportBtn" class="btn primary">REPORT DI CLASSE<small>HTML stampabile</small></button><button id="exportCsvBtn" class="btn ghost">RISPOSTE CSV<small>una riga per risposta · sicuro per Excel</small></button><button id="exportJsonBtn" class="btn ghost">JSON COMPLETO<small>backup e ripresa</small></button><button id="exportLogBtn" class="btn ghost">LOG TECNICO<small>per i pilot</small></button></div>
+@@ -156,7 +159,7 @@
+ 
+ <dialog id="devicesDialog" class="dialog devicesDialog"><div class="dialogHead"><h2>📱 Pulsantiere (tablet)</h2><button type="button" id="devicesClose" class="btn ghost" aria-label="Chiudi">×</button></div><div id="devicesBody"></div></dialog>
+ 
+-<dialog id="questionDialog" class="dialog"><form method="dialog" id="questionForm"><div class="dialogHead"><h2 id="dialogTitle">Domanda</h2><button formnovalidate value="cancel" class="btn ghost">×</button></div><input type="hidden" id="editIndex"><label>Categoria<input id="qCategory" class="control" required></label><label>Domanda<textarea id="qText" class="control" rows="3" required></textarea></label><div class="twoCol"><label>A<input id="qA" class="control"></label><label>B<input id="qB" class="control"></label><label>C<input id="qC" class="control"></label><label>D<input id="qD" class="control"></label></div><div class="twoCol"><label>Risposta corretta<select id="qCorrect" class="control"><option>A</option><option>B</option><option>C</option><option>D</option></select></label><label>Secondi (5–600)<input id="qSeconds" type="number" min="5" max="600" value="30" class="control"></label></div><label>Spiegazione<textarea id="qExplanation" class="control" rows="2"></textarea></label><label>Immagine<input id="qImage" class="control" placeholder="es. colosseo.jpg"></label><div class="dialogFoot"><button formnovalidate value="cancel" class="btn ghost">Annulla</button><button id="saveQuestionBtn" value="default" class="btn green">Salva</button></div></form></dialog>
++<dialog id="questionDialog" class="dialog"><form method="dialog" id="questionForm"><div class="dialogHead"><h2 id="dialogTitle">Domanda</h2><button formnovalidate value="cancel" class="btn ghost">×</button></div><input type="hidden" id="editIndex"><label>Categoria<input id="qCategory" class="control" required></label><label>Domanda<textarea id="qText" class="control" rows="3" required></textarea></label><div class="twoCol"><label>A<input id="qA" class="control"></label><label>B<input id="qB" class="control"></label><label>C<input id="qC" class="control"></label><label>D<input id="qD" class="control"></label></div><div class="twoCol"><label>Risposta corretta<select id="qCorrect" class="control"><option>A</option><option>B</option><option>C</option><option>D</option></select></label><label>Secondi (5–600)<input id="qSeconds" type="number" min="5" max="600" value="30" class="control"></label></div><label>Spiegazione<textarea id="qExplanation" class="control" rows="2"></textarea></label><label>Immagine<input id="qImage" class="control" placeholder="es. colosseo.jpg"></label><p id="qLockNote" class="fieldHint lockNote" hidden></p><div class="dialogFoot"><button formnovalidate value="cancel" class="btn ghost">Annulla</button><button id="saveQuestionBtn" value="default" class="btn green">Salva</button><button id="saveLaterBtn" value="later" class="btn green" hidden>Salva per le prossime volte</button><button id="saveRestartBtn" value="restart" class="btn amber" hidden>Salva e riavvia domanda</button></div></form></dialog>
+ <dialog id="gameEditorDialog" class="gameEditor"><form id="gameEditorForm">
+ <div class="dialogHead"><h2 id="gameEditorTitle">Crea un gioco</h2><button type="button" id="closeGameEditor" class="btn ghost" aria-label="Chiudi">×</button></div>
+ <p class="fieldHint">Costruisci una manche completa, su qualunque tema. Il tema sarà visibile sul palco; il titolo identifica la manche nell’archivio.</p>
+@@ -178,6 +181,8 @@
+ <script src="js/lib/zip.js"></script>
+ <script src="js/engine/packlib.js"></script>
+ <script src="js/engine/report.js"></script>
++<script src="js/engine/roundControl.js"></script>
++<script src="js/engine/packstudio.js"></script>
+ <script src="js/lib/qr.js"></script>
+ <script src="packs/packs.bundle.js"></script>
+ <script src="js/host/store.js"></script>
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/js/app.js b/js/app.js
+--- a/js/app.js	2026-10-04 18:45:58.000000000 +0200
++++ b/js/app.js	2026-10-05 01:10:46.000000000 +0200
+@@ -10,9 +10,10 @@
+ const STORE=window.SecchioneStore,NET=window.SecchioneNet,DEV=window.SecchioneDevicesUI;
+ const PL=window.SecchionePackLib,PKC=window.SecchionePacksClient,PKG=window.SecchionePacksUI;
+ const AM=window.SecchioneAnswerMatcher;
++const RC=window.SecchioneRoundControl,PS=window.SecchionePackStudio;
+ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+ const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+-const VERSION='3.5.4_MASCOT_ANIMATED';
++const VERSION='3.6.0';
+ const BRAND_LOGO='assets/logo_clean.svg';
+ const SOUND={
+  click:'assets/sounds_hq/rank_lock_hq.wav',transition:'assets/sounds_hq/transition_soft.wav',question:'assets/sounds_hq/question_in.wav',
+@@ -45,7 +46,7 @@
+ const state={
+  motion:prefs.motion!==false,packKey:P[prefs.packKey]?prefs.packKey:Object.keys(P)[0],activePacks:[],mixed:false,mixPack:null,mixShuffle:!!prefs.mixShuffle,bank:[],teams:[],screen:'home',qIndex:0,qRound:null,phase:'preview',answerVisible:false,
+  pending:{},pendingOrder:[],correctOrder:[],pendingHistory:[],entryMeta:{},entrySeq:0,cursor:0,
+- questionScored:false,arcade:null,completedRounds:{},timer:TM.create(30),round:null,session:null,
++ questionScored:false,arcade:null,completedRounds:{},deferredEdits:{},repeatOf:null,timer:TM.create(30),round:null,session:null,
+  sound:prefs.sound!==false,volume:Number.isFinite(Number(prefs.volume))?Number(prefs.volume):.78
+ };
+ 
+@@ -99,7 +100,7 @@
+ function q(){return state.bank[state.qIndex]||null}
+ function imagePath(name,packId){name=String(name||'');if(!name||/["<>\r\n]/.test(name))return '';if(/^(data:image\/(png|jpeg|webp|gif);base64,|blob:|https?:|file:)/i.test(name))return esc(name);if(/^[a-z]+:/i.test(name))return '';if(/^(immagini|packs|assets)\//.test(name))return esc(name);const pk=P[packId]||P[state.packKey]||pack();let n=name;(pk.imagePrefixes||[]).forEach(p=>{if(n.startsWith(p))n=n.slice(p.length)});if(pk.imageMap&&pk.imageMap[n])return esc(pk.imageMap[n]);return esc(pk.imageBase+n)}
+ function setTheme(doc=document){const pk=pack();doc.documentElement.style.setProperty('--accent',pk.accent);doc.documentElement.style.setProperty('--accent2',pk.accent2);doc.documentElement.style.setProperty('--theme-bg',`url("${imagePath(pk.homeImage)}")`);doc.documentElement.dataset.pack=state.packKey}
+-function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTO);toastTO=setTimeout(()=>el.classList.remove('show'),2600)}
++function toast(msg,kind){const el=$('#toast');el.textContent=msg;el.className='toast'+(kind?' '+kind:'');void el.offsetWidth;el.classList.add('show');clearTimeout(toastTO);toastTO=setTimeout(()=>el.classList.remove('show'),kind==='warn'||kind==='err'?4200:2600)}
+ function fmt(sec){const s=Math.max(0,Math.ceil(sec));return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+ function tab(name){$$('.tabBtn').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));$$('.tab').forEach(x=>x.classList.toggle('active',x.id===`tab-${name}`))}
+ function cloneAudio(name,vol=1){if(!state.sound||!SOUND[name])return;try{const a=new Audio(SOUND[name]);a.volume=Math.max(0,Math.min(1,state.volume*vol));a.play().catch(()=>{});return a}catch(e){}}
+@@ -119,7 +120,7 @@
+ function buildSnapshot(reason){
+  const s=state.session;s.updatedAt=SS.nowISO();s.participants=state.teams.map(t=>({id:t.id,type:t.type||'team',name:t.name,createdAt:t.createdAt||s.createdAt}));
+  return {format:'secchione-snapshot',version:1,app:VERSION,savedAt:SS.nowISO(),reason:reason||'',packKey:state.packKey,activePacks:state.activePacks,mixShuffle:state.mixShuffle,session:s,
+-  ui:{screen:state.screen,qIndex:state.qIndex,questionId:q()?q().id:null,phase:state.phase,answerVisible:state.answerVisible,questionScored:state.questionScored,qRound:state.qRound,pending:state.pending,pendingOrder:state.pendingOrder,correctOrder:state.correctOrder,entryMeta:state.entryMeta,entrySeq:state.entrySeq,completedRounds:state.completedRounds,arcade:sanitizeArcade(state.arcade),timer:TM.snapshot(state.timer,performance.now()),round:state.round}};
++  ui:{screen:state.screen,qIndex:state.qIndex,questionId:q()?q().id:null,phase:state.phase,answerVisible:state.answerVisible,questionScored:state.questionScored,qRound:state.qRound,pending:state.pending,pendingOrder:state.pendingOrder,correctOrder:state.correctOrder,entryMeta:state.entryMeta,entrySeq:state.entrySeq,completedRounds:state.completedRounds,arcade:sanitizeArcade(state.arcade),timer:TM.snapshot(state.timer,performance.now()),round:state.round,deferredEdits:state.deferredEdits||{},lockedQuestion:RC.isLocked(state)?q():null,repeatOf:state.repeatOf||null}};
+ }
+ function hasProgress(snap){const s=snap&&snap.session;return !!s&&s.status==='active'&&((s.participants||[]).length>0||(s.responses||[]).length>0)}
+ function autosave(reason,delay){clearTimeout(saveTO);saveTO=setTimeout(()=>saveNow(reason),delay==null?120:delay)}
+@@ -134,6 +135,8 @@
+  state.teams=(s.participants||[]).map(p=>({id:p.id,type:p.type||'team',name:p.name,createdAt:p.createdAt,score:0}));recomputeScores();
+  state.completedRounds=ui.completedRounds||{};clearPending();state.round=null;state.arcade=null;
+  const idx=ui.questionId?state.bank.findIndex(x=>x.id===ui.questionId):-1;
++ state.deferredEdits={};state.repeatOf=ui.repeatOf||null;
++ if(ui.screen==='question'&&idx>=0&&ui.lockedQuestion&&ui.lockedQuestion.id===state.bank[idx].id&&(ui.phase!=='preview'||ui.questionScored)&&JSON.stringify(state.bank[idx])!==JSON.stringify(ui.lockedQuestion)){state.deferredEdits[state.bank[idx].id]=state.bank[idx];state.bank[idx]=ui.lockedQuestion}
+  if(ui.screen==='question'&&idx>=0){
+   Object.assign(state,{screen:'question',qIndex:idx,qRound:ui.qRound||C.buildQuestionRound(state.bank[idx]),phase:ui.phase||'preview',answerVisible:!!ui.answerVisible,questionScored:!!ui.questionScored,pending:ui.pending||{},pendingOrder:ui.pendingOrder||[],correctOrder:ui.correctOrder||[],entryMeta:ui.entryMeta||{},entrySeq:ui.entrySeq||0,round:ui.round||null});
+   state.timer=Object.assign(TM.create(ui.timer?ui.timer.duration:TM.secondsFor(q())),ui.timer||{},{running:false});
+@@ -205,8 +208,9 @@
+  const set=(sel,txt)=>{const e=$(sel);if(e)e.textContent=txt};
+  set('#connStatus',label);set('#connSmall',small);set('#connStrip',st.connected?'LAN LOCALE':'NESSUNA');set('#devicesTileSmall',st.available?(st.connected?`${on.length} connesse · PIN ${st.pin||'—'}`:'Server non raggiungibile'):'Avvia con AVVIA_IL_SECCHIONE.bat');
+  document.body.classList.toggle('netOn',!!st.connected);document.body.classList.toggle('netOff',st.available&&!st.connected);
++ renderDeviceLive();
+ }
+-function renderDirectorDeck(){const stateEl=$('#directorState'),hint=$('#directorHint');let label='HOME',msg='Configura le squadre e avvia il quiz.';if(state.screen==='question'){label=`DOMANDA ${state.qIndex+1} / ${state.bank.length}`;msg=state.phase==='preview'?'Mostra la domanda. Premi AVVIA DOMANDA (Spazio) quando la classe è pronta.':state.phase==='running'?(state.timer.running?'Tempo in corso: le risposte possono arrivare dai tablet o essere registrate qui sotto.':'Tempo in PAUSA.'):state.questionScored?'Punti confermati. Premi → per la prossima domanda.':'Registra le risposte mancanti (A B C D o 0) e conferma con Invio.'}else if(state.screen==='arcade'&&state.arcade){label=gameName(state.arcade.type).toUpperCase();msg=state.arcade.started?'Manche in corso. Timer e automatismi sono sincronizzati.':'Regia pronta: avvia la manche quando la classe è pronta.'}else if(state.screen==='leaderboard'){label='CLASSIFICA';msg='Risultati aggiornati.'}if(stateEl)stateEl.textContent=label;if(hint)hint.textContent=msg;updateTimerUI()}
++function renderDirectorDeck(){const stateEl=$('#directorState'),hint=$('#directorHint');let label='HOME',msg='Configura le squadre e avvia il quiz.';if(state.screen==='question'){label=`DOMANDA ${state.qIndex+1} / ${state.bank.length}`;msg=state.phase==='preview'?'Mostra la domanda. Premi AVVIA DOMANDA (Spazio) quando la classe è pronta.':state.phase==='running'?(state.timer.running?'Tempo in corso: le risposte possono arrivare dai tablet o essere registrate qui sotto.':'Tempo in PAUSA.'):state.questionScored?'Punti confermati. Premi → per la prossima domanda.':'Registra le risposte mancanti (A B C D o 0) e conferma con Invio.'}else if(state.screen==='arcade'&&state.arcade){label=gameName(state.arcade.type).toUpperCase();msg=state.arcade.started?'Manche in corso. Timer e automatismi sono sincronizzati.':'Regia pronta: avvia la manche quando la classe è pronta.'}else if(state.screen==='leaderboard'){label='CLASSIFICA';msg='Risultati aggiornati.'}if(stateEl)stateEl.textContent=label;if(hint)hint.textContent=msg;const pr=$('#directorProgress');if(pr){const p=RC.progress(state.bank,state.completedRounds,state.qIndex),cur=state.screen==='question'&&q()?(state.completedRounds[q().id]?' · questa: giocata':' · questa: da giocare'):'';pr.textContent=p.total?`Domanda ${p.current} / ${p.total} · giocate ${p.played} · da giocare ${p.toPlay}${cur}`:''}updateTimerUI()}
+ function renderSessionQuick(){const games=$('#sessionGameButtons');if(games)games.innerHTML=Object.entries(pack().gameNames).filter(([k])=>(pack().arcadeSets[k]||[]).length).map(([k,n])=>`<button class="btn ghost" data-game="${k}">${esc(n)}</button>`).join('')}
+ function renderAll(){setTheme();renderChrome();renderStage();renderPrivate();renderDirectorDeck();renderTeams();renderAnswerPanel();renderScorePanel();renderSessionQuick();renderGamesTab();renderBank();renderResults();syncPublic();if(DEV)DEV.render()}
+ function renderStage(){const el=$('#stage');el.innerHTML=stageHTML();setTimeout(animateMascots,0)}
+@@ -214,9 +218,9 @@
+ 
+ /* ---------------- FLUSSO DOMANDE ---------------- */
+ function startQuiz(){if(state.teams.length<2){toast('Aggiungi almeno due squadre.');tab('session');return}logEvent({event:'quiz.start'});state.qIndex=0;goQuestion(0)}
+-function goQuestion(i){arcadeEpoch++;state.arcade=null;stopTimer();state.screen='question';state.qIndex=Math.max(0,Math.min(state.bank.length-1,i));state.qRound=C.buildQuestionRound(q());state.phase='preview';state.answerVisible=false;state.round=null;state.questionScored=false;clearPending();resetTimer(TM.secondsFor(q()));state.cursor=0;restoreCompletedRound();renderAll();showTransition(`DOMANDA ${String(state.qIndex+1).padStart(2,'0')}`,q()?.category||pack().title,String(state.qIndex+1).padStart(2,'0'));autosave('question.go')}
++function goQuestion(i){RC.applyDeferred(state);ghClosePairRound();arcadeEpoch++;state.arcade=null;stopTimer();state.screen='question';state.qIndex=Math.max(0,Math.min(state.bank.length-1,i));state.qRound=C.buildQuestionRound(q());state.phase='preview';state.answerVisible=false;state.round=null;state.questionScored=false;clearPending();resetTimer(TM.secondsFor(q()));state.cursor=0;restoreCompletedRound();renderAll();showTransition(`DOMANDA ${String(state.qIndex+1).padStart(2,'0')}`,q()?.category||pack().title,String(state.qIndex+1).padStart(2,'0'));autosave('question.go')}
+ /* Uscendo da una domanda aperta non si perdono le risposte: completa = conferma automatica, parziale = decide il docente. */
+-function leaveQuestionGuard(){if(state.screen!=='question'||state.questionScored||!state.round||state.phase==='preview')return true;const any=state.teams.some(t=>t.id in state.pending);if(!any)return true;if(state.phase==='running')closeQuestionTime();const n=state.teams.filter(t=>t.id in state.pending).length;if(n<state.teams.length){if(!confirm(`Mancano le risposte di ${state.teams.length-n} squadre.
++function leaveQuestionGuard(){if(state.screen!=='question'||state.questionScored||!state.round||state.phase==='preview')return true;const any=state.teams.some(t=>t.id in state.pending);if(!any){if(state.phase==='running'){if(!confirm('La domanda è in corso: annullarla e cambiare schermata?\nNessun punto verrà assegnato.')){renderAll();return false}cancelRoundCore('navigazione')}return true}if(state.phase==='running')closeQuestionTime();const n=state.teams.filter(t=>t.id in state.pending).length;if(n<state.teams.length){if(!confirm(`Mancano le risposte di ${state.teams.length-n} squadre.
+ OK = segnale come omesse e conferma i punti.
+ Annulla = resta su questa domanda.`)){renderAll();return false}fillMissingAbstain()}commitQuestionScores(true);return true}
+ function nextQuestion(){if(!state.bank.length||!leaveQuestionGuard())return;const advance=state.screen==='question'||!!state.completedRounds[q()?.id];if(advance&&state.qIndex>=state.bank.length-1){showLeaderboard();return}goQuestion(advance?state.qIndex+1:state.qIndex)}
+@@ -224,7 +228,7 @@
+ function startQuestion(){
+  if(state.screen!=='question'||state.phase!=='preview'||state.questionScored)return;
+  const x=q();state.phase='running';state.answerVisible=false;clearPending();state.cursor=0;resetTimer(TM.secondsFor(x));
+- const r=newRound('question',{questionId:x.id,questionIndex:state.qIndex});r.openedAt=SS.nowISO();
++ const r=newRound('question',Object.assign({questionId:x.id,questionIndex:state.qIndex},state.repeatOf?{repeatOf:state.repeatOf}:{}));state.repeatOf=null;r.openedAt=SS.nowISO();
+  logEvent({event:'round.open',roundInstanceId:r.roundInstanceId,reason:`domanda ${state.qIndex+1} · ${state.timer.duration}s`});
+  NET.openRound({roundInstanceId:r.roundInstanceId,questionId:x.id,number:state.qIndex+1,total:state.bank.length,layout:'mcq',letters:state.qRound.displayed.map(o=>o.letter),correct:state.qRound.correctDisplayLetter,durationMs:Math.round(state.timer.duration*1000)});
+  startTimer('timerBed');renderAll();cloneAudio('question',.82);autosave('round.open',0);
+@@ -232,7 +236,7 @@
+ function closeQuestionTime(){stopTimer();state.phase='scoring';if(state.round){state.round.closedAt=SS.nowISO();NET.closeRound(state.round.roundInstanceId);logEvent({event:'round.close',roundInstanceId:state.round.roundInstanceId})}markOmittedForTabletTeams()}
+ function finishQuestion(){if(state.screen!=='question'||state.phase!=='running')return;closeQuestionTime();renderAll();toast('Tempo chiuso: registra le risposte mancanti.');autosave('round.close',0)}
+ function revealQuestion(){if(state.screen!=='question'||state.phase==='preview'){toast('Avvia prima la domanda.');return}if(state.phase==='running')closeQuestionTime();state.answerVisible=true;if(state.round&&!state.round.revealedAt){state.round.revealedAt=SS.nowISO();NET.revealRound(state.round.roundInstanceId);logEvent({event:'round.reveal',roundInstanceId:state.round.roundInstanceId})}renderAll();cloneAudio('reveal',.88);maybeAutoCommit();autosave('reveal',0)}
+-function showHome(){if(!leaveQuestionGuard())return;arcadeEpoch++;stopTimer();state.screen='home';state.arcade=null;state.round=null;clearPending();renderAll();autosave('home')}
++function showHome(){if(!leaveQuestionGuard())return;ghClosePairRound();arcadeEpoch++;stopTimer();state.screen='home';state.arcade=null;state.round=null;clearPending();renderAll();autosave('home')}
+ function showLeaderboard(){if(!leaveQuestionGuard())return;arcadeEpoch++;stopTimer();state.screen='leaderboard';state.arcade=null;state.round=null;renderAll();cloneAudio('leader',.84);showTransition('CLASSIFICA',pack().title,'TOP');autosave('leaderboard')}
+ function newRound(kind,extra){state.round=Object.assign({roundInstanceId:SS.uuid(),kind,openedAt:null,closedAt:null,revealedAt:null,committed:false},extra||{});state.entrySeq=0;return state.round}
+ 
+@@ -302,6 +306,7 @@
+ function moveCorrectUp(id){if(!canEnter())return;const i=state.correctOrder.indexOf(id);if(i<=0)return;pushHistory();const o=state.correctOrder;[o[i-1],o[i]]=[o[i],o[i-1]];if(state.round)state.round.orderOverridden=true;logEvent({event:'order.override',roundInstanceId:state.round&&state.round.roundInstanceId,participantId:id});afterEntryChange()}
+ /* Risposta arrivata da una pulsantiera (già validata e marcata dal server). */
+ function applyTabletResponse(rec){
++ if(rec&&state.arcade&&state.arcade.type==='ghigliottina'&&state.arcade.pairRoundId&&rec.roundInstanceId===state.arcade.pairRoundId){ghVote(rec);return}
+  if(!rec||!state.round||rec.roundInstanceId!==state.round.roundInstanceId||(state.screen!=='question'&&state.screen!=='arcade')){logEvent({event:'response.tablet.stale',roundInstanceId:rec&&rec.roundInstanceId,participantId:rec&&rec.participantId,accepted:false,reason:'round non attivo in regia'});return}
+  const prev=state.entryMeta[rec.participantId];
+  if(prev&&prev.inputMode==='manual'&&!prev.auto){logEvent({event:'response.tablet.ignored',roundInstanceId:rec.roundInstanceId,participantId:rec.participantId,answer:rec.selectedAnswer,accepted:false,reason:'già registrata a mano dal docente'});return}
+@@ -346,7 +351,7 @@
+  if(missing.length){renderAll();return toast(`Manca la risposta di ${missing.map(t=>t.name).join(', ')}: premi 0 (omessa) oppure MANCANTI = Ø.`)}
+  const x=q(),round=state.qRound;
+  const records=state.teams.map(questionRecord);
+- finalizeRound(records,Object.assign(PL.provenance(x,P[state.packKey]),{questionId:x.id,questionIndex:state.qIndex,number:state.qIndex+1,seconds:state.timer.duration,correctAnswer:round.correctDisplayLetter,displayed:round.displayed.map(o=>({letter:o.letter,sourceIndex:o.sourceIndex})),question:{text:x.question,options:x.options.slice(),correctIndex:C.correctIndex(x),category:x.category,topic:x.topic||'',subject:x.subject||'',grade:x.grade||null,difficulty:x.difficulty||null,explanation:x.explanation||''}}));
++ finalizeRound(records,Object.assign(PL.provenance(x,P[state.packKey]),state.round.repeatOf?{repeatOf:state.round.repeatOf}:{},{questionId:x.id,questionIndex:state.qIndex,number:state.qIndex+1,seconds:state.timer.duration,correctAnswer:round.correctDisplayLetter,displayed:round.displayed.map(o=>({letter:o.letter,sourceIndex:o.sourceIndex})),question:{text:x.question,options:x.options.slice(),correctIndex:C.correctIndex(x),category:x.category,topic:x.topic||'',subject:x.subject||'',grade:x.grade||null,difficulty:x.difficulty||null,explanation:x.explanation||''}}));
+  state.questionScored=true;state.phase='scored';
+  state.completedRounds[x.id]=C.clone({round:state.qRound,pending:state.pending,pendingOrder:state.pendingOrder,correctOrder:state.correctOrder,entryMeta:state.entryMeta,roundInstanceId:state.round.roundInstanceId,openedAt:state.round.openedAt});
+  cloneAudio('correct',.5);renderAll();toast(auto?'Tutte le pulsantiere hanno risposto: punti registrati.':'Punteggi registrati.');autosave('commit',0);
+@@ -409,12 +414,12 @@
+ function renderScorePanel(){if($('#scoreRules'))$('#scoreRules').textContent=`${rules()}. Le corrette prendono punti nell’ordine in cui sono registrate (puoi riordinarle con ▲). Prima di confermare puoi correggere o annullare.`;const box=$('#scoreCards'),key=$('#scoreKey'),phase=$('#scorePhase');if(state.screen==='question'){phase.textContent=state.phase==='running'?'IN CORSO':state.phase==='scoring'?'RACCOLTA':state.questionScored?'SALVATO':'ATTESA';key.innerHTML=q()?`Chiave privata: <b>${esc(state.qRound?.correctDisplayLetter||'—')}</b> · ${esc(state.qRound?.displayed.find(o=>o.letter===state.qRound.correctDisplayLetter)?.text||'')}`:'';box.innerHTML=state.phase==='preview'?'<div class="help">Avvia la domanda per registrare le risposte.</div>':answerGridHTML();$('#scoreOrder').innerHTML=scoreOrderHTML();$('#commitScoreBtn').disabled=!canEnter()||state.phase==='preview';return}
+  if(state.screen==='arcade'&&state.arcade){phase.textContent='GIOCO';key.innerHTML=arcadeScoreKey();box.innerHTML=arcadeScoreCards();$('#commitScoreBtn').disabled=!!state.arcade.scoreCommitted;$('#scoreOrder').innerHTML=scoreOrderHTML();return}
+  phase.textContent='ATTESA';key.innerHTML='';box.innerHTML='<div class="help">Nessuna raccolta punteggi attiva.</div>';$('#scoreOrder').innerHTML='';$('#commitScoreBtn').disabled=true}
+-function renderPrivate(){const x=q(),inQ=state.screen==='question';$('#sessionBadge').textContent=state.screen.toUpperCase();$('#questionStatus').textContent=inQ?({preview:'PRONTA',running:state.timer.running?'IN CORSO':'IN PAUSA',scoring:'RACCOLTA',scored:'CONFERMATA'})[state.phase]||state.phase.toUpperCase():'—';$('#launchQuestionBtn').disabled=!(inQ&&state.phase==='preview'&&!state.questionScored);$('#pauseQuestionBtn').disabled=!(inQ&&state.phase==='running');$('#pauseQuestionBtn').textContent=inQ&&state.phase==='running'&&!state.timer.running?'▶ RIPRENDI':'⏸ PAUSA';$('#addTimeBtn').disabled=!(inQ&&state.phase==='running');$('#endQuestionBtn').disabled=!(inQ&&state.phase==='running');$('#revealBtn').disabled=!(inQ&&state.phase!=='preview')||state.answerVisible;$('#reopenBtn').hidden=!(inQ&&state.questionScored);$('#nextQBtn').disabled=!(inQ||state.screen==='home'&&state.teams.length>1);$('#privateAnswer').innerHTML=x&&inQ?`<b>${esc(state.qRound?.correctDisplayLetter||x.correct)}</b> · ${esc(state.qRound?.displayed.find(o=>o.letter===state.qRound.correctDisplayLetter)?.text||x.options[C.correctIndex(x)]||'')}<br>${esc(x.explanation||'')}${sourceHTML(x)}<small class="sourceRef">Tempo: ${TM.secondsFor(x)} s</small>`:'Nessuna domanda attiva.';updateTimerUI()}
++function renderPrivate(){renderClassroomControls();const x=q(),inQ=state.screen==='question';$('#sessionBadge').textContent=state.screen.toUpperCase();$('#questionStatus').textContent=inQ?({preview:'PRONTA',running:state.timer.running?'IN CORSO':'IN PAUSA',scoring:'RACCOLTA',scored:'CONFERMATA'})[state.phase]||state.phase.toUpperCase():'—';$('#launchQuestionBtn').disabled=!(inQ&&state.phase==='preview'&&!state.questionScored);$('#pauseQuestionBtn').disabled=!(inQ&&state.phase==='running');$('#pauseQuestionBtn').textContent=inQ&&state.phase==='running'&&!state.timer.running?'▶ RIPRENDI':'⏸ PAUSA';$('#addTimeBtn').disabled=!(inQ&&state.phase==='running');$('#endQuestionBtn').disabled=!(inQ&&state.phase==='running');$('#revealBtn').disabled=!(inQ&&state.phase!=='preview')||state.answerVisible;$('#reopenBtn').hidden=!(inQ&&state.questionScored);$('#nextQBtn').disabled=!(inQ||state.screen==='home'&&state.teams.length>1);$('#privateAnswer').innerHTML=x&&inQ?`<b>${esc(state.qRound?.correctDisplayLetter||x.correct)}</b> · ${esc(state.qRound?.displayed.find(o=>o.letter===state.qRound.correctDisplayLetter)?.text||x.options[C.correctIndex(x)]||'')}<br>${esc(x.explanation||'')}${sourceHTML(x)}<small class="sourceRef">Tempo: ${TM.secondsFor(x)} s</small>`:'Nessuna domanda attiva.';updateTimerUI()}
+ 
+ /* ---------------- ARCADE ---------------- */
+ function renderGamesTab(){const buttons=$('#gameButtons');buttons.innerHTML=Object.entries(pack().gameNames).filter(([k])=>(pack().arcadeSets[k]||[]).length).map(([k,n])=>`<button class="btn ${state.arcade?.type===k?'primary':'ghost'}" data-game="${k}">${esc(n)}</button>`).join('');const gc=$('#gameControls');gc.innerHTML=state.screen==='arcade'&&state.arcade?gameControlsHTML():`<div class="panel"><p class="help">Scegli un gioco. Ogni gioco ha più manche pronte e un proprio pulsante di avvio.</p></div>`}
+-function startArcade(type){if(!leaveQuestionGuard())return;arcadeEpoch++;stopTimer();const sets=pack().arcadeSets[type]||[];if(!sets.length)return toast('Nessun set disponibile.');state.screen='arcade';state.round=null;state.arcade={type,presetIndex:0,scoreCommitted:false};clearPending();loadArcadePreset(0,false);tab('games');showTransition(gameName(type),'BONUS SHOW','★');autosave('arcade')}
+-function loadArcadePreset(index,announce=true){arcadeEpoch++;const a=state.arcade,type=a.type,sets=pack().arcadeSets[type]||[];if(!sets.length)return;index=((Number(index)||0)%sets.length+sets.length)%sets.length;a.presetIndex=index;a.label=sets[index].label||`Quiz ${index+1}`;a.played=false;a.scoreCommitted=false;state.round=null;clearPending();stopTimer();const set=C.clone(sets[index]),secs=TM.secondsFor(set);a._packId=sets[index]._packId||state.packKey;if(type==='photopuzzle'){Object.assign(a,{image:set.image,answer:set.answer,cols:6,rows:5,edges:C.makePuzzleEdges(6,5),revealOrder:C.shuffle([...Array(30).keys()]),revealed:0,started:false,pieceInterval:secs/30})}
++function startArcade(type){if(!leaveQuestionGuard())return;ghClosePairRound();arcadeEpoch++;stopTimer();const sets=pack().arcadeSets[type]||[];if(!sets.length)return toast('Nessun set disponibile.');state.screen='arcade';state.round=null;state.arcade={type,presetIndex:0,scoreCommitted:false};clearPending();loadArcadePreset(0,false);tab('games');showTransition(gameName(type),'BONUS SHOW','★');autosave('arcade')}
++function loadArcadePreset(index,announce=true){if(state.arcade&&state.arcade.pairRoundId)ghClosePairRound();arcadeEpoch++;const a=state.arcade,type=a.type,sets=pack().arcadeSets[type]||[];if(!sets.length)return;index=((Number(index)||0)%sets.length+sets.length)%sets.length;a.presetIndex=index;a.label=sets[index].label||`Quiz ${index+1}`;a.played=false;a.scoreCommitted=false;state.round=null;clearPending();stopTimer();const set=C.clone(sets[index]),secs=TM.secondsFor(set);a._packId=sets[index]._packId||state.packKey;if(type==='photopuzzle'){Object.assign(a,{image:set.image,answer:set.answer,cols:6,rows:5,edges:C.makePuzzleEdges(6,5),revealOrder:C.shuffle([...Array(30).keys()]),revealed:0,started:false,pieceInterval:secs/30})}
+  if(type==='indovina'){Object.assign(a,C.buildIndovina(set),{type,presetIndex:index,label:a.label})}
+  if(type==='abbinamenti'){Object.assign(a,C.buildMatching(set),{type,presetIndex:index,label:a.label})}
+  if(type==='ghigliottina'){Object.assign(a,C.buildGhigliottina(set),{type,presetIndex:index,label:a.label})}
+@@ -441,9 +446,15 @@
+ function revealIndovina(){const a=state.arcade;closeArcadeTabletRound(true);a.revealed=true;a.eliminated=a.candidates.map((_,i)=>i).filter(i=>i!==a.answerIndex);stopTimer();a.started=false;renderAll();cloneAudio('final',.82)}
+ function matchingHTML(a){const pct=state.timer.duration?Math.max(0,Math.min(100,state.timer.remaining/state.timer.duration*100)):0;return `<div class="publicBoard matchingBoard"><aside class="publicTimerCol">${publicTimerHTML(a.started?'IN CORSO':'PRONTO')}</aside><main class="publicMain">${arcadeHead(a,gameName('abbinamenti').toUpperCase())}<div class="arcadeContent"><div class="matchWrap"><div class="matchCards">${a.cards.map((c,i)=>`<div class="matchCard"><img src="${imagePath(c.img,a._packId)}" alt="${esc(c.title||'Immagine')}"><div class="matchNum">${i+1}</div><div class="matchAnswer ${a.revealCount>i?'show':''}">${a.revealCount>i?esc(a.solution.split(' ')[i]||''):''}</div></div>`).join('')}</div><div class="termList">${a.names.map((n,i)=>`<div class="term"><b>${C.LETTERS[i]}</b>${esc(n)}</div>`).join('')}</div></div></div>${arcadeFooter(a)}</main>${publicHostHTML('match',gameName('abbinamenti'),'Numeri e lettere: trova le coppie giuste.')}<div class="publicProgress"><i class="liveProgress" style="width:${pct}%"></i></div></div>`}
+ function ghHTML(a){const name=gameName('ghigliottina'),pct=state.timer.duration?Math.max(0,Math.min(100,state.timer.remaining/state.timer.duration*100)):0;if(a.final){return `<div class="publicBoard ghBoard"><aside class="publicTimerCol">${publicTimerHTML(a.started?'FINALE':'PRONTO')}</aside><main class="publicMain">${arcadeHead(a,name.toUpperCase()+' · FINALE')}<div class="arcadeContent"><div class="ghWrap ghWrapFinal"><div class="ghMeta">PAROLA FINALE</div><div class="ghClues">${a.pairs.map(p=>`<span>${esc(p.correct)}</span>`).join('')}</div><div class="ghStatus">MONTEPREMI SCENICO ${a.jackpot}</div><div class="ghFinal ${a.revealedFinal?'revealed':''}">${a.revealedFinal?esc(a.answer):`<span class="ghMask">${esc(C.chainMask(a.answer,[]))}</span>`}</div><div class="jackpot">UNA SOLA PAROLA LE COLLEGA TUTTE</div></div></div>${arcadeFooter(a)}</main>${publicHostHTML('gh',name,'Cinque indizi, una parola. Quale?')}<div class="publicProgress"><i class="liveProgress" style="width:${pct}%"></i></div></div>`}const p=a.pairs[a.step]||a.pairs[a.pairs.length-1];const phase=!p.selected?'SCEGLI LA PAROLA CHE RESTA':!p.resolved?`VERIFICA IN CORSO · SCELTA ${p.selected}`:`RIMANE ${p.correctSide}`;const card=(side,word)=>`<div class="ghWord ${p.selected===side?'selected':''} ${p.selected===side&&!p.resolved?'armed':''} ${p.resolved&&p.correctSide!==side?'lost':''} ${p.resolved&&p.correctSide===side?'survives':''}"><div class="ghPlaque">${side}</div><div class="ghBlade"></div><div class="ghLight"></div><div class="ghText">${esc(word)}</div><div class="ghStamp">${p.resolved?(p.correctSide===side?'RIMANE':'ELIMINATA'):(p.selected===side?'SCELTA':'')}</div></div>`;return `<div class="publicBoard ghBoard"><aside class="publicTimerCol">${publicTimerHTML(a.started?'IN CORSO':'PRONTO')}</aside><main class="publicMain">${arcadeHead(a,name.toUpperCase())}<div class="arcadeContent"><div class="ghWrap"><div class="ghMeta">COPPIA ${a.step+1}/${a.pairs.length} · MONTEPREMI SCENICO ${a.jackpot}</div><div class="ghStatus">${phase}</div><div class="ghPair">${card('A',p.a)}${card('B',p.b)}</div></div></div>${arcadeFooter(a)}</main>${publicHostHTML('gh',name,'Scegli A o B. Quella giusta rimane.')}<div class="publicProgress"><i class="liveProgress" style="width:${pct}%"></i></div></div>`}
+-function chooseGh(side){const epoch=arcadeEpoch,a=state.arcade,p=a.pairs[a.step];if(!a.started)return toast(`Avvia prima ${gameName('ghigliottina')}.`);if(!p||p.selected)return;p.selected=side;a.started=true;renderAll();cloneAudio('select',.62);setTimeout(()=>{if(epoch===arcadeEpoch&&state.screen==='arcade')cloneAudio('cut',.62)},260);setTimeout(()=>{if(epoch!==arcadeEpoch||state.screen!=='arcade')return;p.resolved=true;if(side!==p.correctSide){a.jackpot=Math.max(50,Math.floor(a.jackpot/2));cloneAudio('halve',.75)}else cloneAudio('survive',.68);renderAll();setTimeout(()=>{if(epoch!==arcadeEpoch||state.screen!=='arcade')return;if(a.step>=a.pairs.length-1){a.final=true;a.started=true;clearPending();arcadeStartRound();resetTimer(a.seconds);cloneAudio('ghfinal');renderAll();startTimer('ghBed')}else{a.step++;renderAll()}},1250)},900)}
++function chooseGh(side){const epoch=arcadeEpoch,a=state.arcade,p=a.pairs[a.step];if(!a.started)return toast(`Avvia prima ${gameName('ghigliottina')}.`);if(!p||p.selected)return;ghClosePairRound();p.selected=side;a.started=true;renderAll();cloneAudio('select',.62);setTimeout(()=>{if(epoch===arcadeEpoch&&state.screen==='arcade')cloneAudio('cut',.62)},260);setTimeout(()=>{if(epoch!==arcadeEpoch||state.screen!=='arcade')return;p.resolved=true;if(side!==p.correctSide){a.jackpot=Math.max(50,Math.floor(a.jackpot/2));cloneAudio('halve',.75)}else cloneAudio('survive',.68);renderAll();setTimeout(()=>{if(epoch!==arcadeEpoch||state.screen!=='arcade')return;if(a.step>=a.pairs.length-1){a.final=true;a.started=true;clearPending();arcadeStartRound();resetTimer(a.seconds);cloneAudio('ghfinal');renderAll();startTimer('ghBed')}else{a.step++;ghOpenPairRound();renderAll()}},1250)},900)}
+ function startMatching(){if(state.arcade?.played||state.arcade?.started||state.arcade?.scoreCommitted)return toast('Manche già avviata: usa pausa o carica una nuova manche.');const a=state.arcade;if(!a||a.type!=='abbinamenti')return;a.played=true;a.started=true;a.revealCount=0;a.scoreCommitted=false;clearPending();arcadeStartRound();resetTimer(a.seconds);renderAll();cloneAudio('arcade',.84);startTimer('timerBed')}
+-function startGh(){const a=state.arcade;if(!a||a.type!=='ghigliottina'||a.played)return toast('Carica una nuova manche per ricominciare.');a.played=true;a.started=true;a.scoreCommitted=false;clearPending();arcadeStartRound();resetTimer(a.seconds);renderAll();cloneAudio('arcade',.84)}
++/* Ghigliottina sui tablet (v3.6.0): per ogni coppia un round a scelta A/B (stesso protocollo delle domande, layout mcq).
++   I voti non assegnano punti (i punti restano solo sulla parola finale); la maggioranza delle pulsantiere collegate sceglie, il docente può sempre decidere. */
++function ghOpenPairRound(){const a=state.arcade;if(!a||a.type!=='ghigliottina'||a.final||!a.started)return;const p=a.pairs[a.step];if(!p||p.selected)return;ghClosePairRound();a.pairRoundId=SS.uuid();a.votes={};NET.openRound({roundInstanceId:a.pairRoundId,kind:'arcade',gameType:'ghigliottina',questionId:null,layout:'mcq',letters:['A','B'],correct:null,durationMs:300000});logEvent({event:'round.open',roundInstanceId:a.pairRoundId,reason:`ghigliottina · coppia ${a.step+1} di ${a.pairs.length} (voto A/B)`})}
++function ghClosePairRound(){const a=state.arcade;if(a&&a.pairRoundId){NET.closeRound(a.pairRoundId);logEvent({event:'round.close',roundInstanceId:a.pairRoundId,reason:'voto A/B chiuso'});a.pairRoundId=null}}
++function ghVoteLabel(a,side){if(!a||!a.votes||!a.pairRoundId)return'';const n=Object.values(a.votes).filter(v=>v===side).length;return ` · ${n} ${n===1?'voto':'voti'}`}
++function ghVote(rec){const a=state.arcade,p=a.pairs[a.step];if(!p||p.selected)return;const v=String(rec.selectedAnswer||'').trim().toUpperCase();if(v!=='A'&&v!=='B')return;a.votes=a.votes||{};a.votes[rec.participantId]=v;logEvent({event:'gh.vote',roundInstanceId:rec.roundInstanceId,participantId:rec.participantId,deviceId:rec.deviceId,answer:v,accepted:true});renderAll();const devs=NET.teamDevices(),voters=state.teams.filter(t=>devs[t.id]&&devs[t.id].connected);if(!voters.length||!voters.every(t=>a.votes[t.id]))return;const n={A:0,B:0};voters.forEach(t=>n[a.votes[t.id]]++);if(n.A===n.B){toast(`⚠ Parità ${n.A}–${n.B}: scegli tu A o B.`,'warn');return}const side=n.A>n.B?'A':'B';toast(`✓ Le squadre hanno scelto ${side} (${n.A}–${n.B})`,'ok');chooseGh(side)}
++function startGh(){const a=state.arcade;if(!a||a.type!=='ghigliottina'||a.played)return toast('Carica una nuova manche per ricominciare.');a.played=true;a.started=true;a.scoreCommitted=false;clearPending();arcadeStartRound();resetTimer(a.seconds);ghOpenPairRound();renderAll();cloneAudio('arcade',.84)}
+ function revealGhFinal(){const a=state.arcade;closeArcadeTabletRound(true);a.revealedFinal=true;stopTimer();a.started=false;renderAll();cloneAudio('final',.82)}
+ function chainHTML(a){const link=a.links[a.index]||{from:'—',to:'—'},mask=a.revealed?link.to:C.chainMask(link.to,a.helpPositions.slice(0,a.visibleHelp)),pct=state.timer.duration?Math.max(0,Math.min(100,state.timer.remaining/state.timer.duration*100)):0,s=a.seconds||30,steps=[0,1,2].map(i=>Math.round(i*s/3));return `<div class="publicBoard chainBoard"><aside class="publicTimerCol">${publicTimerHTML(a.started?'IN CORSO':'PRONTO')}</aside><main class="publicMain">${arcadeHead(a,gameName('chain').toUpperCase())}<div class="arcadeContent"><div class="chainWrap"><div class="chainPair"><div class="chainWord">${esc(link.from)}</div><div class="chainArrow">→</div><div class="chainWord chainMask" id="chainMask">${esc(mask)}</div></div><div class="chainProgress">${a.links.map((_,i)=>`<i class="chainDot ${i<=a.index?'on':''}"></i>`).join('')}</div></div></div>${arcadeFooter(a)}</main>${publicHostHTML('chain',gameName('chain'),`Aiuti a ${steps[0]}, ${steps[1]} e ${steps[2]} secondi. Soluzione a ${s}.`)}<div class="publicProgress"><i class="liveProgress" style="width:${pct}%"></i></div></div>`}
+ function prepareChainRound(){const a=state.arcade,word=a.links[a.index]?.to||'';a.helpPositions=C.chainHelpPositions(word);a.visibleHelp=0;a.revealed=false;a.started=false;resetTimer(a.seconds)}
+@@ -464,7 +475,7 @@
+  if(a.type==='photopuzzle')h+=`<button class="btn green xl" id="startPhotoBtn">▶ AVVIA PHOTOPUZZLE</button><div class="row gap top8"><button class="btn ghost wide" id="removePieceBtn">Rimuovi 1 pezzo</button><button class="btn yellow wide" id="revealPuzzleBtn">Rivela tutto</button></div><div class="row gap top8"><button class="btn ghost wide" id="newPuzzleBtn">Nuovo disegno puzzle</button><button class="btn ghost wide" id="pauseArcadeBtn">Pausa / riprendi</button></div><label class="top8">Soluzione<input id="photoAnswer" class="control" value="${esc(a.answer)}"></label><label class="btn ghost wide top8 fileLabel">Carica immagine dal PC<input id="photoUploadInput" type="file" accept="image/*"></label>`;
+  if(a.type==='abbinamenti')h+=`<button class="btn green xl" id="startMatchBtn">▶ AVVIA ABBINAMENTI</button><div class="row gap top8"><button class="btn ghost wide" id="revealMatchOneBtn">Rivela 1</button><button class="btn yellow wide" id="revealMatchAllBtn">Rivela tutti</button></div><button class="btn ghost wide top8" id="reshuffleMatchBtn">Rimescola termini</button><label class="top8">Termini corretti, uno per immagine<textarea id="matchNamesEditor" class="control">${esc((a.sourceNames||a.names).join('\n'))}</textarea></label><button class="btn primary wide" id="applyMatchBtn">Applica termini</button><div class="matchUploadGrid top8">${a.cards.map((c,i)=>`<label class="btn ghost fileLabel">IMG ${i+1}<input type="file" accept="image/*" data-match-upload="${i}"></label>`).join('')}</div><div class="answerKey">Soluzione: <b>${esc(a.solution)}</b></div>`;
+  if(a.type==='indovina')h+=`<button class="btn green xl" id="startIndovinaBtn">▶ AVVIA ${esc(gameName('indovina').toUpperCase())}</button><div class="row gap top8"><button class="btn primary wide" id="nextClueBtn">+ Indizio</button><button class="btn ghost wide" id="eliminateBtn">Elimina 2</button></div><button class="btn yellow wide top8" id="revealIndovinaBtn">Rivela soluzione</button>`;
+- if(a.type==='ghigliottina')h+=a.final?`<button class="btn yellow xl" id="revealGhFinalBtn">Rivela parola finale</button>`:`<button class="btn green xl" id="startGhBtn">▶ AVVIA ${esc(gameName('ghigliottina').toUpperCase())}</button><p class="help">Scegli le cinque parole; il timer di ${a.seconds} secondi partirà nella finale. Il montepremi è solo scenico.</p><div class="row gap"><button class="btn primary wide" data-gh="A" ${a.started?'':'disabled'}>Scegli A</button><button class="btn primary wide" data-gh="B" ${a.started?'':'disabled'}>Scegli B</button></div><button class="btn ghost wide top8" id="resetGhBtn">Ricomincia / mescola A-B</button>`;
++ if(a.type==='ghigliottina')h+=a.final?`<button class="btn yellow xl" id="revealGhFinalBtn">Rivela parola finale</button>`:`<button class="btn green xl" id="startGhBtn">▶ AVVIA ${esc(gameName('ghigliottina').toUpperCase())}</button><p class="help">Scegli le cinque parole; il timer di ${a.seconds} secondi partirà nella finale. Il montepremi è solo scenico.</p><div class="row gap"><button class="btn primary wide" data-gh="A" ${a.started?'':'disabled'}>Scegli A${ghVoteLabel(a,'A')}</button><button class="btn primary wide" data-gh="B" ${a.started?'':'disabled'}>Scegli B${ghVoteLabel(a,'B')}</button></div>${a.pairRoundId?'<p class="help">Le squadre votano A o B sulle pulsantiere: quando hanno votato tutte quelle collegate, sceglie la maggioranza (in caso di parità scegli tu). Puoi scegliere tu in ogni momento.</p>':''}<button class="btn ghost wide top8" id="resetGhBtn">Ricomincia / mescola A-B</button>`;
+  if(a.type==='chain')h+=`<button class="btn green xl" id="startChainBtn">▶ AVVIA PAROLA</button><div class="row gap top8"><button class="btn primary wide" id="chainRevealBtn">+ Lettera</button><button class="btn yellow wide" id="chainSolveBtn">Soluzione</button></div><div class="row gap top8"><button class="btn ghost wide" id="chainNextBtn">Parola successiva</button><button class="btn ghost wide" id="pauseArcadeBtn">Pausa / riprendi</button></div>`;
+  return h+`</div><div class="panel"><button class="btn primary wide" id="openGameScoreBtn">Apri raccolta punti</button><p class="help">${esc(rules())}. Le corrette prendono punti nell’ordine in cui le segni.</p></div>`;
+ }
+@@ -472,11 +483,59 @@
+ 
+ /* ---------------- ARCHIVIO DOMANDE ---------------- */
+ function sourceHTML(x){return Number.isInteger(x?.sourcePage)?`<small class="sourceRef">Fonte: ${esc(x.sourceDeck||'Dispensa')} · pagina ${x.sourcePage}</small>`:''}
+-function renderBank(){const list=$('#questionList');$('#bankCount').textContent=state.bank.length;list.innerHTML=state.bank.map((x,i)=>`<div class="bankQ"><div class="bankQTop"><span>${i+1} · ${state.mixed&&x.source?esc(x.source.packTitle)+' · ':''}${esc(x.category)} · ${TM.secondsFor(x)} s</span><div style="margin-left:auto"><button class="btn ghost tiny" data-edit-q="${i}">Modifica</button> <button class="btn red tiny" data-del-q="${i}">Elimina</button></div></div><div class="bankQText">${esc(x.question)}${sourceHTML(x)}</div></div>`).join('')}
+-function openQuestionDialog(i=null){if(mixedGuard())return;const x=i==null?{category:pack().title,question:'',options:['','','',''],correct:'A',seconds:30,explanation:'',image:''}:state.bank[i];$('#editIndex').value=i==null?'':i;$('#dialogTitle').textContent=i==null?'Nuova domanda':'Modifica domanda';$('#qCategory').value=x.category||'';$('#qText').value=x.question||'';['A','B','C','D'].forEach((L,k)=>$(`#q${L}`).value=x.options?.[k]||'');$('#qCorrect').value=x.correct||'A';$('#qSeconds').value=TM.secondsFor(x);$('#qExplanation').value=x.explanation||'';$('#qImage').value=x.image||'';$('#questionDialog').showModal()}
+-function saveQuestionFromDialog(ev){ev.preventDefault();if(ev.submitter?.value==='cancel'){$('#questionDialog').close();return;}const idx=$('#editIndex').value===''?null:Number($('#editIndex').value),old=idx==null?{}:state.bank[idx];const raw={...old,id:old.id||SS.uuid(),category:$('#qCategory').value.trim()||pack().title,type:'mcq',question:$('#qText').value.trim(),options:['A','B','C','D'].map(L=>$(`#q${L}`).value.trim()),correct:$('#qCorrect').value,explanation:$('#qExplanation').value.trim(),seconds:Number($('#qSeconds').value)||30,image:$('#qImage').value.trim(),subject:old.subject||pack().meta.subject||'',topic:old.topic||pack().title,status:'approved'};let x;try{x=PE.normalizeQuestion(raw,idx==null?state.bank.length:idx,{lenient:true,imagePrefixes:pack().imagePrefixes,makeId:()=>SS.uuid()})}catch(e){return toast(e.message.replace(/^domanda \d+: /,''))}if(idx==null)state.bank.push(x);else state.bank[idx]=x;persistBank();$('#questionDialog').close();renderAll()}
++function renderBank(){const list=$('#questionList');$('#bankCount').textContent=state.bank.length;const f=RC.bankFacets(state.bank),tSel=$('#bankTopic'),dSel=$('#bankDifficulty');if(tSel&&tSel.dataset.sig!==f.topics.join('|')){const v=tSel.value;tSel.innerHTML='<option value="">Tutti gli argomenti</option>'+f.topics.map(t=>`<option${t===v?' selected':''}>${esc(t)}</option>`).join('');tSel.dataset.sig=f.topics.join('|')}if(dSel&&dSel.dataset.sig!==f.difficulties.join('|')){const v=dSel.value;dSel.innerHTML='<option value="">Ogni difficoltà</option>'+f.difficulties.map(d=>`<option value="${d}"${String(d)===v?' selected':''}>Difficoltà ${d}</option>`).join('');dSel.dataset.sig=f.difficulties.join('|')}const query={text:($('#bankSearch')||{}).value||'',topic:tSel?tSel.value:'',difficulty:dSel?dSel.value:''},idx=RC.searchBank(state.bank,query),info=$('#bankResultInfo');if(info)info.textContent=query.text||query.topic||query.difficulty?`${idx.length} di ${state.bank.length}`:'';list.innerHTML=idx.map(i=>{const x=state.bank[i],played=!!state.completedRounds[x.id],cur=state.screen==='question'&&i===state.qIndex,pend=!!(state.deferredEdits||{})[x.id];return `<div class="bankQ${cur?' isCurrent':''}"><div class="bankQTop"><span>${i+1} · ${state.mixed&&x.source?esc(x.source.packTitle)+' · ':''}${esc(x.category)} · ${TM.secondsFor(x)} s${x.difficulty?' · diff. '+x.difficulty:''}${played?' · <b class="good">✓ giocata</b>':''}${cur?' · <b class="curTag">CORRENTE</b>':''}${pend?' · <b class="warn">modifica in attesa</b>':''}</span><div style="margin-left:auto"><button class="btn ghost tiny" data-go-q="${i}"${cur?' disabled':''}>Vai</button> <button class="btn ghost tiny" data-edit-q="${i}">Modifica</button> <button class="btn red tiny" data-del-q="${i}">Elimina</button></div></div><div class="bankQText">${esc(x.question)}${sourceHTML(x)}</div></div>`}).join('')||'<p class="help">Nessuna domanda trovata.</p>'}
++function openQuestionDialog(i=null){if(i==null&&mixedGuard())return;const x=i==null?{category:pack().title,question:'',options:['','','',''],correct:'A',seconds:30,explanation:'',image:''}:((state.deferredEdits||{})[state.bank[i].id]||state.bank[i]);$('#editIndex').value=i==null?'':i;$('#dialogTitle').textContent=i==null?'Nuova domanda':i===state.qIndex&&state.screen==='question'?`Modifica domanda ${i+1} (corrente)`:`Modifica domanda ${i+1}`;questionDialogMode(i);$('#qCategory').value=x.category||'';$('#qText').value=x.question||'';['A','B','C','D'].forEach((L,k)=>$(`#q${L}`).value=x.options?.[k]||'');$('#qCorrect').value=x.correct||'A';$('#qSeconds').value=TM.secondsFor(x);$('#qExplanation').value=x.explanation||'';$('#qImage').value=x.image||'';$('#questionDialog').showModal()}
++function saveQuestionFromDialog(ev){ev.preventDefault();const how=ev.submitter?.value||'default';if(how==='cancel'){$('#questionDialog').close();return;}
++const idx=$('#editIndex').value===''?null:Number($('#editIndex').value),old=idx==null?{}:((state.deferredEdits||{})[state.bank[idx].id]||state.bank[idx]);
++const raw={...old,id:old.id||SS.uuid(),category:$('#qCategory').value.trim()||pack().title,type:'mcq',question:$('#qText').value.trim(),options:['A','B','C','D'].map(L=>$(`#q${L}`).value.trim()),correct:$('#qCorrect').value,explanation:$('#qExplanation').value.trim(),seconds:Number($('#qSeconds').value)||30,image:$('#qImage').value.trim(),subject:old.subject||pack().meta.subject||'',topic:old.topic||pack().title,status:'approved'};
++let x;try{x=PE.normalizeQuestion(raw,idx==null?state.bank.length:idx,{lenient:true,imagePrefixes:pack().imagePrefixes,makeId:()=>SS.uuid()})}catch(e){return toast('✗ '+e.message.replace(/^domanda \d+: /,''),'err')}
++if(idx==null){state.bank.push(x);persistBank();$('#questionDialog').close();renderAll();return}
++if(how==='restart'&&!confirm('Annullare la domanda in corso e riavviarla con la nuova versione?\nLe risposte già ricevute vengono scartate e non si assegnano punti. Squadre e punteggi restano.'))return;
++const rid=state.round&&state.round.roundInstanceId,open=RC.roundOpen(state)&&idx===state.qIndex;
++if(how==='restart'&&open){stopTimer();NET.closeRound(rid);logEvent({event:'round.cancel',roundInstanceId:rid,reason:'modifica e riavvio'})}
++const res=RC.applyEdit(state,idx,x,how==='restart'?'restart':'later');if(res.restarted)resetTimer(TM.secondsFor(q()));
++logEvent({event:'question.edit',reason:`domanda ${idx+1}${res.deferred?' (round in corso: versione precedente mantenuta)':res.restarted?' (round annullato e riavviato)':''}`});
++$('#questionDialog').close();renderAll();autosave('question.edit',0);
++savePackQuestions(x.source&&x.source.packId||state.packKey,{question:editableFields(x)}).then(r=>{if(!r.ok)return toast('✗ Salvataggio fallito: '+(r.reason||''),'err');const where=r.where==='browser'?` (solo in questo browser: ${r.reason})`:'';if(res.deferred)toast('⚠ Modifica salvata. Il round corrente mantiene la versione precedente.'+where,'warn');else if(res.restarted)toast('✓ Modifica salvata: domanda pronta per essere rilanciata'+where,r.where==='browser'?'warn':'ok');else toast('✓ Modifica salvata'+where,r.where==='browser'?'warn':'ok')})}
+ function bankChanged(){showHome();state.qIndex=Math.min(state.qIndex,Math.max(0,state.bank.length-1));state.qRound=null}
+-function persistBank(){bankOverrides[state.packKey]=state.bank.map(PL.storedQuestion);savePrefs();loadBank();bankChanged()}
++/* Archivio: il pacchetto installato è la fonte persistente (stesso salvataggio di Pack Studio). Se è in sola lettura resta la copia di questo browser. */
++function persistBank(){const id=state.packKey,qs=state.bank.filter(b=>(b.source&&b.source.packId||state.packKey)===id).map(PL.storedQuestion);bankChanged();savePackQuestions(id,{all:qs}).then(r=>{if(r.where==='pack')return refreshLibrary().then(()=>{loadBank();renderAll();toast('✓ Archivio salvato nel pacchetto (v'+r.version+')','ok')});loadBank();renderAll();toast(r.ok?'⚠ Archivio salvato solo in questo browser: '+r.reason:'✗ Salvataggio fallito','warn')})}
++function editableFields(x){return {id:x.source&&x.source.questionId||x.id,type:'mcq',category:x.category,question:x.question,options:x.options.slice(),correct:x.correct,explanation:x.explanation,seconds:x.seconds,image:x.image}}
++function packQuestionsFromBank(packId){return state.bank.filter(b=>(b.source&&b.source.packId||state.packKey)===packId).map(PL.storedQuestion)}
++let packSaveChain=Promise.resolve();
++/* Salva domande nel pacchetto installato (change.question = una domanda, change.all = elenco completo dell'Archivio). Un salvataggio alla volta. */
++function savePackQuestions(packId,change){
++ const job=async()=>{
++  const fallback=reason=>{const list=change.all||packQuestionsFromBank(packId).map(b=>b.id===change.question.id?Object.assign({},b,change.question):b);bankOverrides[packId]=list;savePrefs();return {ok:true,where:'browser',reason}};
++  if(!PS||!PKC)return fallback('editor dei pacchetti non disponibile');
++  let r;try{r=await PKC.openBytes(packId)}catch(e){r={ok:false}}
++  if(!r||!r.ok)return fallback('pacchetto del programma in sola lettura');
++  try{
++   const d=PS.draftFromImport(PL.readImport(r.filename,r.bytes),{libraryId:packId});
++   const list=change.all||(bankOverrides[packId]?packQuestionsFromBank(packId).map(b=>b.id===change.question.id?Object.assign({},b,change.question):b):null);
++   if(list){const ids={};list.forEach(b=>ids[b.id]=true);d.questions=list.concat(d.questions.filter(b=>(b.status||'approved')!=='approved'&&!ids[b.id]))}
++   else{const i=d.questions.findIndex(b=>b.id===change.question.id);if(i<0)throw new Error('domanda non trovata nel pacchetto');d.questions[i]=Object.assign({},d.questions[i],change.question)}
++   d.manifest.version=PS.bumpVersion(d.manifest.version);
++   const s=await PKC.save(packId,PS.toZip(d).bytes,'replace');
++   if(!s||!s.ok)throw new Error((s&&s.errors&&s.errors[0])||'salvataggio non riuscito');
++   if(bankOverrides[packId]){delete bankOverrides[packId];savePrefs()}
++   if(!change.all)refreshLibrary();
++   return {ok:true,where:'pack',version:d.manifest.version,backup:s.backup||null};
++  }catch(e){return fallback(e.message)}
++ };
++ packSaveChain=packSaveChain.then(job,job);return packSaveChain;
++}
++/* Finestra di modifica: in anteprima un solo SALVA; a round aperto il round resta immutabile (salva per dopo / salva e riavvia). */
++function questionDialogMode(i){const cur=i!=null&&state.screen==='question'&&i===state.qIndex,locked=cur&&RC.isLocked(state),open=cur&&RC.roundOpen(state);const show=(id,v)=>{const e=$(id);if(e)e.hidden=!v};show('#saveQuestionBtn',!locked);show('#saveLaterBtn',locked);show('#saveRestartBtn',open);const n=$('#qLockNote');if(n){n.hidden=!locked;n.textContent=open?'Il round di questa domanda è già aperto: le risposte arrivate restano legate alla versione giocata. Scegli se salvare per le prossime volte o annullare il round e rilanciare la domanda aggiornata.':'Questa domanda è già stata giocata: la modifica vale per le prossime volte (per rigiocarla usa RIPETI DOMANDA).'}}
++function editCurrentQuestion(){if(state.screen!=='question'||!q())return toast('Apri prima una domanda.','warn');openQuestionDialog(state.qIndex)}
++function cancelRoundCore(reason){const rid=state.round&&state.round.roundInstanceId;stopTimer();if(rid){NET.closeRound(rid);logEvent({event:'round.cancel',roundInstanceId:rid,reason})}const r=RC.cancelRound(state);resetTimer(TM.secondsFor(q()));return r}
++function cancelQuestion(){if(!RC.roundOpen(state))return toast('Nessuna domanda in corso da annullare.','warn');if(!confirm('Annullare la domanda in corso?\nLe risposte di questo round vengono scartate e non si assegnano punti. Squadre e punteggi restano.'))return;cancelRoundCore('annullata dal docente');renderAll();autosave('round.cancel',0);toast('✓ Round annullato: la domanda è pronta per essere rilanciata','ok')}
++function repeatQuestion(){if(state.screen!=='question'||!(state.questionScored||state.phase==='scoring'&&state.round))return toast('Prima gioca la domanda.','warn');const scored=state.questionScored;if(!confirm(scored?'Ripetere la domanda come nuovo round?\nI punti già assegnati restano.':'Ripetere la domanda?\nLe risposte di questo round vengono scartate e non si assegnano punti.'))return;const rid=state.round&&state.round.roundInstanceId;stopTimer();if(rid&&!scored){NET.closeRound(rid);logEvent({event:'round.cancel',roundInstanceId:rid,reason:'ripetizione'})}const r=RC.prepareRepeat(state);logEvent({event:'round.repeat',roundInstanceId:r.repeatOf||rid||null,reason:scored?'punti del primo tentativo mantenuti':'round non confermato scartato'});resetTimer(TM.secondsFor(q()));renderAll();autosave('round.repeat',0);toast('✓ Domanda pronta per essere ripetuta','ok')}
++function renderClassroomControls(){const inQ=state.screen==='question'&&!!q(),open=RC.roundOpen(state);const set=(id,show)=>{const b=$(id);if(b)b.hidden=!show};set('#editQuestionBtn',inQ);set('#cancelQuestionBtn',inQ&&open);set('#repeatQuestionBtn',inQ&&(state.questionScored||state.phase==='scoring'&&!!state.round))}
++let lastOffline=null,deviceTicker=null;
++function fmtAgo(s){return s<60?s+' s':Math.round(s/60)+' min'}
++/* Stato delle pulsantiere sempre visibile nella regia (dati già presenti: NET.teamDevices); avviso non bloccante quando una si disconnette. */
++function renderDeviceLive(){const el=$('#deviceLive');if(!el)return;const st=NET.status(),sum=RC.deviceSummary(state.teams,NET.teamDevices());if(!st.available||!sum.total){el.hidden=true;lastOffline=null;return}el.hidden=false;const ok=!sum.disconnected.length;el.className='deviceLive '+(ok?'ok':'warn');el.innerHTML=`<b>📱 ${sum.connected} / ${sum.total} COLLEGATE</b>`+(ok?'':`<span>${sum.disconnected.length===1?'Disconnessa':'Disconnesse'}: ${sum.disconnected.map(d=>esc(d.name)+(d.agoSec!=null?` <small>(da ${fmtAgo(d.agoSec)}, in attesa di riconnessione)</small>`:'')).join(', ')}</span>`)+(sum.manual?`<small>${sum.manual} squadre senza pulsantiera</small>`:'');const ids=sum.disconnected.map(d=>d.id);if(lastOffline){const fresh=sum.disconnected.filter(d=>lastOffline.indexOf(d.id)<0);if(fresh.length)toast(`⚠ ${fresh.length===1?'1 pulsantiera disconnessa':fresh.length+' pulsantiere disconnesse'}: ${fresh.map(d=>d.name).join(', ')}`,'warn')}lastOffline=ids;if(!ok&&!deviceTicker)deviceTicker=setInterval(()=>{if(!(lastOffline&&lastOffline.length)){clearInterval(deviceTicker);deviceTicker=null;return}renderDeviceLive()},5000)}
+ function resetBank(){if(mixedGuard())return;if(!confirm('Ripristinare le domande originali di questo pack?'))return;delete bankOverrides[state.packKey];loadBank();bankChanged();savePrefs();renderAll()}
+ function exportBank(){download(`domande_${state.packKey}.json`,JSON.stringify(state.bank,null,2),'application/json')}
+ function importBank(file){if(mixedGuard())return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(String(r.result).replace(/^﻿/,''));if(data&&data.format===PE.FORMAT)return toast('Questo file è un PACK completo: usa IMPORTA PACK.');const res=PE.importV3Questions(data,pack(),()=>SS.uuid());if(res.errors.length||!res.questions.length)throw Error(res.errors.slice(0,2).join(' · ')||'archivio vuoto');state.bank=res.questions;persistBank();renderAll();toast(`Archivio importato: ${res.questions.length} domande.`)}catch(e){toast('Archivio non valido: '+e.message)}};r.readAsText(file)}
+@@ -554,7 +613,7 @@
+  $$('.tabBtn').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+  $('#audioBtn').onclick=()=>{state.sound=!state.sound;$('#audioBtn').textContent=state.sound?'🔊':'🔇';savePrefs();if(state.sound)cloneAudio('click');else stopBed()};$('#audioTestBtn').onclick=()=>{state.sound=true;$('#audioBtn').textContent='🔊';cloneAudio('question',.82);playBed('timerBed');setTimeout(()=>cloneAudio('tick',.7),900);setTimeout(()=>cloneAudio('urgent',.9),1800);setTimeout(()=>{stopBed();cloneAudio('correct',.84)},2600)};$('#volumeRange').oninput=e=>{state.volume=Number(e.target.value);savePrefs()};
+  $('#publicBtn').onclick=openPublic;$('#stageOnlyBtn').onclick=()=>document.body.classList.toggle('stageOnly');
+- $('#startQuizBtn').onclick=startQuiz;$('#homeBtn').onclick=showHome;$('#prevBtn').onclick=prevQuestion;$('#nextBtn').onclick=nextQuestion;$('#nextQBtn').onclick=()=>{if(state.screen==='home')startQuiz();else nextQuestion()};$('#launchQuestionBtn').onclick=startQuestion;$('#endQuestionBtn').onclick=finishQuestion;$('#revealBtn').onclick=revealQuestion;$('#pauseQuestionBtn').onclick=togglePause;$('#addTimeBtn').onclick=()=>addSeconds(10);$('#reopenBtn').onclick=reopenScores;
++ $('#startQuizBtn').onclick=startQuiz;$('#homeBtn').onclick=showHome;$('#prevBtn').onclick=prevQuestion;$('#nextBtn').onclick=nextQuestion;$('#nextQBtn').onclick=()=>{if(state.screen==='home')startQuiz();else nextQuestion()};$('#launchQuestionBtn').onclick=startQuestion;$('#endQuestionBtn').onclick=finishQuestion;$('#revealBtn').onclick=revealQuestion;$('#pauseQuestionBtn').onclick=togglePause;$('#addTimeBtn').onclick=()=>addSeconds(10);$('#reopenBtn').onclick=reopenScores;$('#editQuestionBtn').onclick=editCurrentQuestion;$('#cancelQuestionBtn').onclick=cancelQuestion;$('#repeatQuestionBtn').onclick=repeatQuestion;['#bankSearch','#bankTopic','#bankDifficulty'].forEach(s=>{const e=$(s);if(e){e.oninput=renderBank;e.onchange=renderBank}});
+  $('#addTeamBtn').onclick=()=>{addTeam($('#teamName').value);$('#teamName').value=''};$('#teamName').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#addTeamBtn').click()}};$('#sampleTeamsBtn').onclick=()=>{if(state.screen!=='home'&&state.screen!=='rules')return toast('Torna alla Home per modificare le squadre.');if(state.teams.length&&!confirm('Sostituire le squadre e iniziare una nuova partita?'))return;if(state.session.responses.length)STORE.archiveSnapshot(buildSnapshot('sample.teams'));newSession(true);state.completedRounds={};clearPending();state.teams=['Blu','Rossi','Verdi','Gialli'].map(name=>Object.assign(SS.makeParticipant(name,'team'),{score:0}));syncNetParticipants();showHome()};
+  $('#undoScoreBtn').onclick=undoPending;$('#fillAbstainBtn').onclick=fillMissingAbstain;$('#commitScoreBtn').onclick=commitScores;$('#undoAnswersBtn').onclick=undoPending;$('#fillAnswersBtn').onclick=fillMissingAbstain;$('#commitAnswersBtn').onclick=commitScores;
+  $('#newQuestionBtn').onclick=()=>openQuestionDialog();$('#questionForm').onsubmit=saveQuestionFromDialog;$('#shuffleQuestionsBtn').onclick=shuffleQuestions;$('#exportBankBtn').onclick=exportBank;$('#importBankInput').onchange=e=>{if(e.target.files?.[0])importBank(e.target.files[0]);e.target.value=''};$('#openPacksBtn2').onclick=()=>PKG&&PKG.open();$('#packsBtn').onclick=()=>PKG&&PKG.open();$('#resetBankBtn').onclick=resetBank;$('#showLeaderboardBtn').onclick=showLeaderboard;
+@@ -570,6 +629,7 @@
+    const as=e.target.closest('[data-ascore]');if(as){const [id,v]=as.dataset.ascore.split('|'),prev=state.entryMeta[id]||{};const meta=prev.inputMode==='tablet'?{inputMode:'tablet',responseTimeMs:prev.responseTimeMs,receivedAt:prev.receivedAt,deviceId:prev.deviceId,responseId:prev.responseId,serverSeq:prev.serverSeq,selectedAnswer:prev.selectedAnswer,correctAnswer:prev.correctAnswer}:{inputMode:'manual'};setPending(id,v,meta);return}
+    if(e.target.id==='quickScoreBtn')return tab('score');const gb=e.target.closest('[data-game]');if(gb)return startArcade(gb.dataset.game);
+    const ed=e.target.closest('[data-edit-q]');if(ed)return openQuestionDialog(Number(ed.dataset.editQ));
++   const gq=e.target.closest('[data-go-q]');if(gq){if(!leaveQuestionGuard())return;goQuestion(Number(gq.dataset.goQ));return}
+    const dq=e.target.closest('[data-del-q]');if(dq){if(mixedGuard())return;const i=Number(dq.dataset.delQ);if(confirm('Eliminare la domanda?')){if(state.bank.length<=1)return toast('Conserva almeno una domanda.');state.bank.splice(i,1);persistBank();renderAll()}return}
+    const pd=e.target.closest('[data-preset-delta]');if(pd){loadArcadePreset(state.arcade.presetIndex+Number(pd.dataset.presetDelta));return}
+    const gh=e.target.closest('[data-gh]');if(gh)return chooseGh(gh.dataset.gh);
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/js/engine/packstudio.js b/js/engine/packstudio.js
+--- a/js/engine/packstudio.js	2026-10-04 16:12:12.000000000 +0200
++++ b/js/engine/packstudio.js	2026-10-05 01:08:27.000000000 +0200
+@@ -10,10 +10,11 @@
+  */
+ (function (root, factory) {
+   var node = typeof module !== 'undefined' && module.exports;
+-  var api = factory(node ? require('./packs.js') : root.SecchionePackEngine, node ? require('./packlib.js') : root.SecchionePackLib, node ? require('../lib/zip.js') : root.SecchioneZip);
++  var api = factory(node ? require('./packs.js') : root.SecchionePackEngine, node ? require('./packlib.js') : root.SecchionePackLib, node ? require('../lib/zip.js') : root.SecchioneZip,
++    node ? require('./answerMatcher.js') : root.SecchioneAnswerMatcher);
+   if (node) module.exports = api;
+   if (root) root.SecchionePackStudio = api;
+-})(typeof self !== 'undefined' ? self : this, function (PE, PL, Z) {
++})(typeof self !== 'undefined' ? self : this, function (PE, PL, Z, AM) {
+   'use strict';
+ 
+   var GAME_TYPES = PE.GAME_TYPES;
+@@ -296,11 +297,52 @@
+       return q;
+     });
+     var games = {};
+-    GAME_TYPES.forEach(function (t) { if ((d.games[t] || []).length) games[t] = clone(d.games[t]); });
++    GAME_TYPES.forEach(function (t) { if ((d.games[t] || []).length) games[t] = clone(d.games[t]).map(function (g) { return cleanGameAccepted(t, g); }); });
+     full.games = { games: games };
+     return full;
+   }
+ 
++  /* ---------------- risposte alternative accettate (acceptedAnswers) ---------------- */
++  var ACCEPTED_MAIN = { photopuzzle: 'answer', indovina: 'subject', ghigliottina: 'answer' };
++  function normAnswer(s) {
++    if (AM && typeof AM.normalize === 'function') return AM.normalize(s);
++    return String(s == null ? '' : s).trim().toLowerCase();
++  }
++  /** Niente vuoti, niente doppioni dopo la normalizzazione dell'answerMatcher, niente copie della risposta principale. */
++  function cleanAccepted(main, list) {
++    var seen = {};
++    var m = normAnswer(main);
++    if (m) seen[m] = true;
++    return (Array.isArray(list) ? list : []).map(function (v) { return String(v == null ? '' : v).trim(); }).filter(function (v) {
++      var k = normAnswer(v);
++      if (!v || !k || seen[k]) return false;
++      seen[k] = true;
++      return true;
++    });
++  }
++  function cleanGameAccepted(type, g) {
++    if (!g || typeof g !== 'object') return g;
++    if (type === 'chain') {
++      (g.links || []).forEach(function (l) {
++        if (!l || l.acceptedAnswers == null) return;
++        var c = cleanAccepted(l.to, l.acceptedAnswers);
++        if (c.length) l.acceptedAnswers = c; else delete l.acceptedAnswers;
++      });
++      return g;
++    }
++    if (g.acceptedAnswers != null) {
++      var list = cleanAccepted(ACCEPTED_MAIN[type] ? g[ACCEPTED_MAIN[type]] : '', g.acceptedAnswers);
++      if (list.length) g.acceptedAnswers = list; else delete g.acceptedAnswers;
++    }
++    return g;
++  }
++  /** Quante alternative scritte verrebbero ignorate (vuote o doppioni): per l'avviso nel Controllo. */
++  function ignoredAccepted(type, g) {
++    if (!g) return 0;
++    if (type === 'chain') return (g.links || []).reduce(function (n, l) { return n + (l && Array.isArray(l.acceptedAnswers) ? l.acceptedAnswers.length - cleanAccepted(l.to, l.acceptedAnswers).length : 0); }, 0);
++    return Array.isArray(g.acceptedAnswers) ? g.acceptedAnswers.length - cleanAccepted(ACCEPTED_MAIN[type] ? g[ACCEPTED_MAIN[type]] : '', g.acceptedAnswers).length : 0;
++  }
++
+   function where(kind, index, type) { var w = { kind: kind }; if (index != null) w.index = index; if (type) w.type = type; return w; }
+ 
+   /**
+@@ -340,7 +382,9 @@
+     // manche speciali
+     GAME_TYPES.forEach(function (t) {
+       (d.games[t] || []).forEach(function (g, i) {
+-        try { PE.validateGame(t, g); } catch (e) { err(where('game', i, t), e.message); }
++        try { PE.validateGame(t, cleanGameAccepted(t, clone(g))); } catch (e) { err(where('game', i, t), e.message); }
++        var ign = ignoredAccepted(t, g);
++        if (ign > 0) warn(where('game', i, t), ign === 1 ? '1 risposta alternativa vuota o doppia verrà ignorata' : ign + ' risposte alternative vuote o doppie verranno ignorate');
+         if (t === 'photopuzzle' && g.image && !d.images[g.image]) err(where('game', i, t), 'immagine "' + g.image + '" non presente nel pacchetto');
+         if (t === 'abbinamenti') (g.cards || []).forEach(function (c, k) { if (c && c.img && !d.images[c.img]) err(where('game', i, t), 'immagine ' + (k + 1) + ' ("' + c.img + '") non presente nel pacchetto'); });
+       });
+@@ -417,6 +461,7 @@
+     nextQuestionId: nextQuestionId, blankQuestion: blankQuestion, addQuestion: addQuestion, duplicateQuestion: duplicateQuestion,
+     deleteQuestion: deleteQuestion, moveQuestion: moveQuestion, parseTags: parseTags,
+     blankGame: blankGame, addGame: addGame, duplicateGame: duplicateGame, deleteGame: deleteGame, moveGame: moveGame, parseChainText: parseChainText,
++    cleanAccepted: cleanAccepted, ACCEPTED_MAIN: ACCEPTED_MAIN,
+     toFull: toFull, validate: validate, toZip: toZip, bumpVersion: bumpVersion, contentKey: contentKey, summary: summary,
+     serialize: serialize, deserialize: deserialize
+   };
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/js/engine/roundControl.js b/js/engine/roundControl.js
+--- a/js/engine/roundControl.js	1970-01-01 01:00:00.000000000 +0100
++++ b/js/engine/roundControl.js	2026-10-05 01:02:15.000000000 +0200
+@@ -0,0 +1,201 @@
++/*
++ * Il Secchione · roundControl.js — controllo della regia durante la lezione (v3.6.0).
++ * Funzioni pure sullo stato della regia (stessi campi di js/app.js): modifica della domanda corrente senza perdere
++ * il contesto, round aperto immutabile, annulla e ripeti domanda, stato delle pulsantiere, progresso, ricerca nell'Archivio.
++ * Nessun DOM, nessuna rete, nessun punteggio: browser (window.SecchioneRoundControl) e Node (test).
++ */
++(function (root, factory) {
++  var api = factory();
++  if (typeof module !== 'undefined' && module.exports) module.exports = api;
++  if (root) root.SecchioneRoundControl = api;
++})(typeof self !== 'undefined' ? self : this, function () {
++  'use strict';
++
++  var LETTERS = ['A', 'B', 'C', 'D'];
++  function clone(x) { return x == null ? x : JSON.parse(JSON.stringify(x)); }
++  function correctIndex(q) { return LETTERS.indexOf(String((q && q.correct) || 'A').toUpperCase()); }
++
++  /** Stessa disposizione delle alternative (stesso mescolamento) con i testi e la risposta corretta della domanda aggiornata. */
++  function rebuildRound(qRound, question) {
++    var order = qRound && Array.isArray(qRound.order) && qRound.order.length === 4 ? qRound.order.slice()
++      : qRound && Array.isArray(qRound.displayed) && qRound.displayed.length === 4 ? qRound.displayed.map(function (o) { return o.sourceIndex; })
++      : [0, 1, 2, 3];
++    var opts = (question && question.options) || [];
++    return {
++      order: order,
++      displayed: order.map(function (src, i) { return { letter: LETTERS[i], text: opts[src], sourceIndex: src }; }),
++      correctDisplayLetter: LETTERS[order.indexOf(correctIndex(question))]
++    };
++  }
++
++  /** Round aperto (timer partito, risposte possibili) o già concluso: la domanda giocata non si tocca. */
++  function isLocked(state) {
++    return state.screen === 'question' && (state.phase !== 'preview' || !!state.questionScored);
++  }
++  function roundOpen(state) {
++    return state.screen === 'question' && !!state.round && !state.questionScored && (state.phase === 'running' || state.phase === 'scoring');
++  }
++
++  function clearEntries(state) {
++    state.pending = {}; state.pendingOrder = []; state.correctOrder = []; state.pendingHistory = []; state.entryMeta = {}; state.entrySeq = 0; state.cursor = 0;
++  }
++
++  /** Applica le modifiche rimandate (salvate durante un round aperto) a tutte le domande o a una sola. */
++  function applyDeferred(state, idx) {
++    var d = state.deferredEdits || {};
++    var applied = [];
++    (state.bank || []).forEach(function (q, i) {
++      if (idx != null && i !== idx) return;
++      if (q && d[q.id]) { state.bank[i] = d[q.id]; delete d[q.id]; applied.push(i); }
++    });
++    state.deferredEdits = d;
++    if (state.screen === 'question' && applied.indexOf(state.qIndex) >= 0 && state.phase === 'preview' && !state.questionScored) {
++      state.qRound = rebuildRound(state.qRound, state.bank[state.qIndex]);
++    }
++    return applied;
++  }
++
++  /** Torna all'anteprima della stessa domanda: risposte del round eliminate, nessun punto, squadre e punteggi intatti. */
++  function toPreview(state) {
++    var cancelled = state.round ? state.round.roundInstanceId : null;
++    clearEntries(state);
++    state.round = null;
++    state.phase = 'preview';
++    state.answerVisible = false;
++    state.questionScored = false;
++    applyDeferred(state, state.qIndex);
++    state.qRound = rebuildRound(state.qRound, state.bank[state.qIndex]);
++    return cancelled;
++  }
++
++  /**
++   * Salvataggio di una domanda modificata (già normalizzata).
++   * mode: 'auto' (anteprima o altra domanda: applicata subito), 'later' (round aperto: resta la versione giocata),
++   * 'restart' (round aperto: annullato e domanda ricostruita in anteprima).
++   * Restituisce { applied, deferred, restarted, cancelledRoundId }.
++   */
++  function applyEdit(state, idx, question, mode) {
++    var current = state.screen === 'question' && idx === state.qIndex;
++    if (!current || !isLocked(state)) {
++      state.bank[idx] = question;
++      if (state.deferredEdits) delete state.deferredEdits[question.id];
++      if (current) state.qRound = rebuildRound(state.qRound, question);
++      return { applied: true, deferred: false, restarted: false, cancelledRoundId: null };
++    }
++    if (mode === 'restart' && roundOpen(state)) {
++      state.bank[idx] = question;
++      if (state.deferredEdits) delete state.deferredEdits[question.id];
++      var rid = toPreview(state);
++      return { applied: true, deferred: false, restarted: true, cancelledRoundId: rid };
++    }
++    state.deferredEdits = state.deferredEdits || {};
++    state.deferredEdits[question.id] = question;
++    return { applied: false, deferred: true, restarted: false, cancelledRoundId: null };
++  }
++
++  /** ANNULLA DOMANDA: solo per un round aperto e non ancora confermato. */
++  function cancelRound(state) {
++    if (!roundOpen(state)) return { ok: false, reason: 'nessun round da annullare' };
++    return { ok: true, cancelledRoundId: toPreview(state) };
++  }
++
++  /**
++   * RIPETI DOMANDA: dopo la fine del tempo/soluzione. Se i punti erano confermati restano (nuovo round marcato come ripetizione);
++   * se non lo erano, il round viene scartato come con ANNULLA.
++   */
++  function prepareRepeat(state) {
++    if (state.screen !== 'question' || !(state.questionScored || (state.phase === 'scoring' && state.round))) return { ok: false, reason: 'la domanda non è ancora stata giocata' };
++    var q = state.bank[state.qIndex];
++    var saved = state.completedRounds && q ? state.completedRounds[q.id] : null;
++    var previous = state.questionScored ? (saved && saved.roundInstanceId) || null : null;
++    var cancelled = toPreview(state);
++    state.repeatOf = previous;
++    return { ok: true, repeatOf: previous, cancelledRoundId: previous ? null : cancelled, scoresKept: !!previous };
++  }
++
++  /** Stato delle pulsantiere per le squadre che ne hanno una assegnata. teamDevices: {participantId: {connected, lastSeen}}. */
++  function deviceSummary(teams, teamDevices, nowMs) {
++    var devs = teamDevices || {};
++    var now = nowMs == null ? Date.now() : nowMs;
++    var bound = (teams || []).filter(function (t) { return devs[t.id]; });
++    var off = bound.filter(function (t) { return !devs[t.id].connected; }).map(function (t) {
++      var seen = Date.parse(devs[t.id].lastSeen || '');
++      return { id: t.id, name: t.name, lastSeen: devs[t.id].lastSeen || null, agoSec: isNaN(seen) ? null : Math.max(0, Math.round((now - seen) / 1000)) };
++    });
++    return { total: bound.length, connected: bound.length - off.length, disconnected: off, manual: (teams || []).length - bound.length };
++  }
++
++  /** Dove si trova il docente: domanda corrente, totale, giocate (punti confermati) e da giocare. */
++  function progress(bank, completedRounds, qIndex) {
++    var done = completedRounds || {};
++    var played = (bank || []).filter(function (q) { return q && done[q.id]; }).length;
++    var total = (bank || []).length;
++    return { current: total ? Math.min(total, (qIndex || 0) + 1) : 0, total: total, played: played, toPlay: total - played };
++  }
++
++  function fold(s) {
++    var x = String(s == null ? '' : s).toLowerCase();
++    if (x.normalize) x = x.normalize('NFD').replace(new RegExp('[' + String.fromCharCode(0x300) + '-' + String.fromCharCode(0x36f) + ']', 'g'), '');
++    return x.replace(/\s+/g, ' ').trim();
++  }
++
++  /** Ricerca client-side nell'Archivio: testo, alternative, spiegazione, argomento, categoria, tag; filtri semplici. Restituisce gli indici. */
++  function searchBank(bank, query) {
++    var o = query || {};
++    var words = fold(o.text).split(' ').filter(Boolean);
++    var topic = o.topic ? fold(o.topic) : '';
++    var diff = o.difficulty != null && o.difficulty !== '' ? Number(o.difficulty) : null;
++    var type = o.type || '';
++    var out = [];
++    (bank || []).forEach(function (q, i) {
++      if (!q) return;
++      if (topic && fold(q.topic || q.category) !== topic) return;
++      if (diff != null && Number(q.difficulty || 1) !== diff) return;
++      if (type && (q.type || 'mcq') !== type) return;
++      if (words.length) {
++        var hay = fold([q.question, (q.options || []).join(' '), q.explanation, q.topic, q.category, (Array.isArray(q.tags) ? q.tags : []).join(' ')].join(' '));
++        if (!words.every(function (w) { return hay.indexOf(w) >= 0; })) return;
++      }
++      out.push(i);
++    });
++    return out;
++  }
++
++  /** Valori disponibili per i filtri (solo quelli presenti nei dati). */
++  function bankFacets(bank) {
++    var topics = {};
++    var diffs = {};
++    var types = {};
++    (bank || []).forEach(function (q) {
++      if (!q) return;
++      var t = q.topic || q.category;
++      if (t) topics[t] = true;
++      diffs[Number(q.difficulty || 1)] = true;
++      types[q.type || 'mcq'] = true;
++    });
++    return { topics: Object.keys(topics).sort(function (a, b) { return a.localeCompare(b, 'it'); }), difficulties: Object.keys(diffs).map(Number).sort(), types: Object.keys(types).sort() };
++  }
++
++  /**
++   * Risposte alternative accettate: niente vuoti, niente duplicati dopo la normalizzazione dell'answerMatcher,
++   * niente doppioni della risposta principale. normalize = SecchioneAnswerMatcher.normalize.
++   */
++  function cleanAccepted(main, list, normalize) {
++    var norm = typeof normalize === 'function' ? normalize : function (s) { return fold(s); };
++    var seen = {};
++    var m = norm(main == null ? '' : main);
++    if (m) seen[m] = true;
++    return (Array.isArray(list) ? list : []).map(function (v) { return String(v == null ? '' : v).trim(); }).filter(function (v) {
++      var k = norm(v);
++      if (!v || !k || seen[k]) return false;
++      seen[k] = true;
++      return true;
++    });
++  }
++
++  return {
++    LETTERS: LETTERS, rebuildRound: rebuildRound, isLocked: isLocked, roundOpen: roundOpen, applyDeferred: applyDeferred,
++    applyEdit: applyEdit, cancelRound: cancelRound, prepareRepeat: prepareRepeat, deviceSummary: deviceSummary,
++    progress: progress, searchBank: searchBank, bankFacets: bankFacets, cleanAccepted: cleanAccepted, clone: clone
++  };
++});
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/js/host/net.js b/js/host/net.js
+--- a/js/host/net.js	2026-10-04 16:12:12.000000000 +0200
++++ b/js/host/net.js	2026-10-05 01:06:18.000000000 +0200
+@@ -152,6 +152,7 @@
+         var m = map[d.participantId] || (map[d.participantId] = { connected: false, rttMs: null, count: 0 });
+         m.count++;
+         if (d.connected) { m.connected = true; if (d.rttMs != null && (m.rttMs == null || d.rttMs < m.rttMs)) m.rttMs = d.rttMs; }
++        if (d.lastSeen && (!m.lastSeen || d.lastSeen > m.lastSeen)) m.lastSeen = d.lastSeen;
+       });
+       return map;
+     },
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/js/studio/studio.js b/js/studio/studio.js
+--- a/js/studio/studio.js	2026-10-04 16:12:12.000000000 +0200
++++ b/js/studio/studio.js	2026-10-05 01:07:31.000000000 +0200
+@@ -706,6 +706,27 @@
+     }
+     return '<div class="stThree">' + list + gameEditorHTML(S.g.type, g) + previewPane() + '</div>';
+   }
++  /** Risposte alternative accettate (acceptedAnswers): le valuta l'answerMatcher esistente; vuoti e doppioni vengono ignorati al salvataggio. */
++  function acceptedBlock(path, list, max, compact) {
++    var arr = Array.isArray(list) ? list : [];
++    return '<div class="stField stAccepted' + (compact ? ' compact' : '') + '"><span>' + (compact ? 'Alternative accettate per questo collegamento' : 'Risposte alternative accettate') +
++      ' <small>— nomi completi, grafie o titoli alternativi. Maiuscole, accenti, articolo iniziale e piccoli errori di battitura sono già tollerati.</small></span>' +
++      arr.map(function (v, k) {
++        return '<div class="stOpt">' + input(path + '.' + k, v, max, 'Alternativa accettata') +
++          '<button class="btn ghost tiny" type="button" data-act="acc-up" data-path="' + path + '" data-k="' + k + '"' + (k ? '' : ' disabled') + ' title="Sposta su" aria-label="Sposta su">↑</button>' +
++          '<button class="btn ghost tiny" type="button" data-act="acc-del" data-path="' + path + '" data-k="' + k + '" title="Togli" aria-label="Togli alternativa">✕</button></div>';
++      }).join('') +
++      '<button class="btn ghost tiny" type="button" data-act="acc-add" data-path="' + path + '"' + (arr.length >= 10 ? ' disabled' : '') + '>＋ AGGIUNGI RISPOSTA ALTERNATIVA</button></div>';
++  }
++  function acceptedAction(act, path, k) {
++    var list = getPath(path);
++    if (!Array.isArray(list)) { list = []; setPath(path, list); }
++    if (act === 'acc-add') list.push('');
++    else if (act === 'acc-del') list.splice(k, 1);
++    else if (act === 'acc-up' && k > 0) { var x = list[k]; list[k] = list[k - 1]; list[k - 1] = x; }
++    structural();
++    if (act === 'acc-add') { var inp = $('[data-bind="' + path + '.' + (list.length - 1) + '"]'); if (inp) inp.focus(); }
++  }
+   function rowBtn(act, arr, k, disabled, label) {
+     return '<button class="btn ghost tiny" type="button" data-act="' + act + '" data-arr="' + arr + '"' + (k != null ? ' data-k="' + k + '"' : '') + (disabled ? ' disabled' : '') + (k != null ? ' title="Togli" aria-label="Togli"' : '') + '>' + label + '</button>';
+   }
+@@ -721,7 +742,8 @@
+       field('Tema', input('g.theme', g.theme, 70, 'es. Geografia fisica'), 'Se resta vuoto si usa il titolo.') +
+       field('Secondi', '<input class="control" type="number" min="10" max="300" data-bind="g.seconds:int" value="' + esc(g.seconds == null ? 30 : g.seconds) + '">', 'Da 10 a 300.') + '</div>';
+     if (t === 'photopuzzle') {
+-      html += field('Immagine da riconoscere', imagePicker('g.image', g.image || '')) + field('Soluzione', input('g.answer', g.answer, 80, 'es. Etna'));
++      html += field('Immagine da riconoscere', imagePicker('g.image', g.image || '')) + field('Risposta principale (soluzione)', input('g.answer', g.answer, 80, 'es. Etna')) +
++        acceptedBlock('g.acceptedAnswers', g.acceptedAnswers, 80);
+     } else if (t === 'indovina') {
+       var cands = g.candidates || [];
+       var sol = String(g.subject || '').trim().toLowerCase();
+@@ -730,6 +752,7 @@
+         return '<div class="stOpt' + (on ? ' isCorrect' : '') + '"><label class="stOptRadio" title="È la soluzione"><input type="radio" name="stSol" data-act="ind-sol" data-k="' + k + '"' + (on ? ' checked' : '') + ' aria-label="Alternativa ' + (k + 1) + ' è la soluzione"><b>' + (k + 1) + '</b></label>' +
+           input('g.candidates.' + k, c, 60, 'Alternativa ' + (k + 1)) + (on ? '<span class="stOk">✓ soluzione</span>' : '') + rowBtn('arr-del', 'candidates', k, cands.length <= 2, '✕') + '</div>';
+       }).join('') + '</div>' + rowBtn('arr-add', 'candidates', null, cands.length >= 8, '＋ ALTERNATIVA') + '</div>';
++      html += acceptedBlock('g.acceptedAnswers', g.acceptedAnswers, 80);
+       var clues = g.clues || [];
+       html += '<div class="stField"><span>Indizi <small>— da 1 a 5; compaiono uno alla volta, conviene andare dal più difficile al più facile</small></span>' + clues.map(function (c, k) {
+         return '<div class="stOpt"><b class="stNum">' + (k + 1) + '</b>' + textarea('g.clues.' + k, c, 180, 2, 'Indizio ' + (k + 1)) + rowBtn('arr-del', 'clues', k, clues.length <= 1, '✕') + '</div>';
+@@ -742,7 +765,7 @@
+           field('Didascalia <small>(facoltativa)</small>', input('g.cards.' + k + '.title', c.title, 60, 'Immagine ' + (k + 1))) + '</div>';
+       }).join('') + '</div></div>';
+     } else if (t === 'ghigliottina') {
+-      html += field('Parola finale (la soluzione)', input('g.answer', g.answer, 40, 'es. FIUME')) +
++      html += field('Risposta principale (parola finale)', input('g.answer', g.answer, 40, 'es. FIUME')) + acceptedBlock('g.acceptedAnswers', g.acceptedAnswers, 80) +
+         '<div class="stField"><span>Cinque coppie <small>— a sinistra la parola collegata alla soluzione, a destra quella che non c\'entra (in gara la posizione viene mescolata)</small></span>' +
+         '<div class="stPairs"><div class="stPair stPairHead"><span></span><small class="good">✓ collegata</small><small class="bad">✗ non c\'entra</small></div>' + [0, 1, 2, 3, 4].map(function (k) {
+           var p = (g.pairs || [])[k] || ['', ''];
+@@ -752,7 +775,8 @@
+       var links = g.links || [];
+       html += '<div class="stField"><span>Collegamenti <small>— da 1 a 20; ogni riga collega una parola a quella successiva</small></span>' + links.map(function (l, k) {
+         return '<div class="stPair"><b class="stNum">' + (k + 1) + '</b>' + input('g.links.' + k + '.from', l.from, 40, 'parola') + '<span class="stArrow">→</span>' +
+-          input('g.links.' + k + '.to', l.to, 40, 'parola collegata') + rowBtn('arr-del', 'links', k, links.length <= 1, '✕') + '</div>';
++          input('g.links.' + k + '.to', l.to, 40, 'parola collegata') + rowBtn('arr-del', 'links', k, links.length <= 1, '✕') + '</div>' +
++          acceptedBlock('g.links.' + k + '.acceptedAnswers', l.acceptedAnswers, 40, true);
+       }).join('') + rowBtn('arr-add', 'links', null, links.length >= 20, '＋ COLLEGAMENTO') + '</div>' +
+         '<details class="stDetails"><summary>Scrivi tutta la catena in una riga</summary><p class="help">Esempio: <code>NEVE | SORGENTE | FIUME | MARE</code> crea 3 collegamenti.</p>' +
+         '<textarea class="control" rows="2" id="stChainText" placeholder="PAROLA | PAROLA | PAROLA"></textarea><button class="btn primary tiny top8" data-act="chain-paste">USA QUESTA CATENA</button></details>';
+@@ -1207,6 +1231,7 @@
+     }
+     if (act === 'ind-sol') { var gg = curGame(); gg.subject = String((gg.candidates || [])[Number(b.getAttribute('data-k'))] || '').trim(); structural(); return; }
+     if (act === 'arr-add' || act === 'arr-del') { arrayAction(act, b.getAttribute('data-arr'), Number(b.getAttribute('data-k'))); return; }
++    if (act === 'acc-add' || act === 'acc-del' || act === 'acc-up') { acceptedAction(act, b.getAttribute('data-path'), Number(b.getAttribute('data-k'))); return; }
+     if (act === 'chain-paste') {
+       var links = PS.parseChainText(($('#stChainText') || {}).value);
+       if (!links.length) { setMsg('err', 'Scrivi almeno due parole separate da | (barra verticale).'); return; }
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/server/server.js b/server/server.js
+--- a/server/server.js	2026-10-04 16:12:12.000000000 +0200
++++ b/server/server.js	2026-10-05 01:21:52.000000000 +0200
+@@ -24,7 +24,7 @@
+ var packDisk = require('./packstore-disk.js');
+ var netinfo = require('./netinfo.js');
+ 
+-var VERSION = '3.5.4_MASCOT_ANIMATED';
++var VERSION = '3.6.0';
+ var ROOT = path.join(__dirname, '..');
+ var DEFAULT_PORT = 8765;
+ 
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/studio.html b/studio.html
+--- a/studio.html	2026-10-04 16:12:12.000000000 +0200
++++ b/studio.html	2026-10-05 01:08:27.000000000 +0200
+@@ -17,6 +17,7 @@
+ <script src="js/engine/packs.js"></script>
+ <script src="js/lib/zip.js"></script>
+ <script src="js/engine/packlib.js"></script>
++<script src="js/engine/answerMatcher.js"></script>
+ <script src="js/engine/packstudio.js"></script>
+ <script src="packs/packs.bundle.js"></script>
+ <script src="js/host/packs-client.js"></script>
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.4_answer_matcher.patch' a/tests/classroom_control.test.js b/tests/classroom_control.test.js
+--- a/tests/classroom_control.test.js	1970-01-01 01:00:00.000000000 +0100
++++ b/tests/classroom_control.test.js	2026-10-05 01:13:59.000000000 +0200
+@@ -0,0 +1,448 @@
++'use strict';
++/* v3.6.0 CLASSROOM CONTROL: modifica della domanda corrente, round aperto immutabile, annulla/ripeti, stato pulsantiere,
++   progresso, ricerca nell'Archivio, acceptedAnswers in Pack Studio, Ghigliottina A/B sui tablet, recovery. */
++var assert = require('assert');
++var fs = require('fs');
++var path = require('path');
++var vm = require('vm');
++var zlib = require('zlib');
++var test = require('./harness.js').test;
++var H = require('./helpers.js');
++var RC = require('../js/engine/roundControl.js');
++var AM = require('../js/engine/answerMatcher.js');
++var PE = require('../js/engine/packs.js');
++var PL = require('../js/engine/packlib.js');
++var PS = require('../js/engine/packstudio.js');
++var SS = require('../js/engine/session.js');
++var disk = require('../server/packstore-disk.js');
++var Room = require('../server/room.js').Room;
++
++var ROOT = path.join(__dirname, '..');
++function inflate(b) { return new Uint8Array(zlib.inflateRawSync(Buffer.from(b))); }
++
++function q(id, correct, extra) {
++  return Object.assign({ id: id, type: 'mcq', question: 'Domanda ' + id + '?', options: ['Uno', 'Due', 'Tre', 'Quattro'], correct: correct || 'B', explanation: 'Perché sì.', category: 'Arte', topic: 'Barocco', difficulty: 2, seconds: 30 }, extra || {});
++}
++function hostState() {
++  var teams = [{ id: 't1', name: '2A', score: 300 }, { id: 't2', name: '2B', score: 0 }];
++  return {
++    screen: 'question', qIndex: 1, bank: [q('q1'), q('q2'), q('q3')], phase: 'preview', answerVisible: false, questionScored: false,
++    qRound: { order: [2, 0, 3, 1], displayed: [2, 0, 3, 1].map(function (s, i) { return { letter: 'ABCD'[i], text: ['Uno', 'Due', 'Tre', 'Quattro'][s], sourceIndex: s }; }), correctDisplayLetter: 'D' },
++    round: null, pending: {}, pendingOrder: [], correctOrder: [], pendingHistory: [], entryMeta: {}, entrySeq: 0, completedRounds: { q1: { roundInstanceId: 'r-q1' } },
++    teams: teams, session: { scoreEvents: [{ roundInstanceId: 'r-q1', participantId: 't1', points: 300 }], responses: [{ roundInstanceId: 'r-q1' }] }, deferredEdits: {}
++  };
++}
++function snapshotOf(s) { return JSON.stringify({ teams: s.teams, session: s.session, qIndex: s.qIndex }); }
++
++/* ---------------- 1. modifica della domanda corrente ---------------- */
++test('modifica domanda corrente in anteprima: stessa domanda, squadre e punteggi intatti, risposta corretta nuova', function () {
++  var s = hostState();
++  var before = snapshotOf(s);
++  var edited = q('q2', 'C', { question: 'Domanda corretta?' });
++  var r = RC.applyEdit(s, 1, edited, 'auto');
++  assert.strictEqual(r.applied, true);
++  assert.strictEqual(s.qIndex, 1);
++  assert.strictEqual(s.screen, 'question');
++  assert.strictEqual(snapshotOf(s), before, 'squadre, punteggi e sessione invariati');
++  assert.strictEqual(s.bank[1].question, 'Domanda corretta?');
++  assert.deepStrictEqual(s.qRound.order, [2, 0, 3, 1], 'stesso ordine delle alternative');
++  assert.strictEqual(s.qRound.correctDisplayLetter, 'A', 'la C originale (indice 2) è mostrata come A');
++  assert.strictEqual(s.qRound.displayed[0].text, 'Tre');
++});
++
++test('round aperto immutabile: "salva per dopo" non tocca il round, la modifica entra lasciando la domanda', function () {
++  var s = hostState();
++  s.phase = 'running'; s.round = { roundInstanceId: 'r-q2' }; s.pending = { t1: 'A' };
++  var roundBefore = JSON.stringify(s.qRound);
++  var r = RC.applyEdit(s, 1, q('q2', 'C'), 'later');
++  assert.strictEqual(r.deferred, true);
++  assert.strictEqual(s.bank[1].correct, 'B', 'il round in corso usa ancora la versione giocata');
++  assert.strictEqual(JSON.stringify(s.qRound), roundBefore);
++  assert.deepStrictEqual(s.pending, { t1: 'A' }, 'risposte del round non toccate');
++  RC.applyDeferred(s);
++  assert.strictEqual(s.bank[1].correct, 'C', 'applicata alla prossima apertura');
++  assert.deepStrictEqual(s.deferredEdits, {});
++});
++
++test('"salva e riavvia": annulla solo il round corrente, anteprima della stessa domanda aggiornata, nessun punto', function () {
++  var s = hostState();
++  s.phase = 'running'; s.round = { roundInstanceId: 'r-q2' }; s.pending = { t1: 'A', t2: 'B' }; s.entryMeta = { t1: {} };
++  var before = snapshotOf(s);
++  var r = RC.applyEdit(s, 1, q('q2', 'D'), 'restart');
++  assert.strictEqual(r.restarted, true);
++  assert.strictEqual(r.cancelledRoundId, 'r-q2');
++  assert.strictEqual(s.phase, 'preview');
++  assert.strictEqual(s.round, null);
++  assert.deepStrictEqual(s.pending, {});
++  assert.strictEqual(s.qIndex, 1);
++  assert.strictEqual(snapshotOf(s), before);
++  assert.strictEqual(s.qRound.correctDisplayLetter, 'C', 'la D (indice 3) è in terza posizione: C');
++});
++
++/* ---------------- 2. annulla e ripeti ---------------- */
++test('ANNULLA DOMANDA: risposte del round eliminate, nessun punto, sessione e squadre preservate', function () {
++  var s = hostState();
++  assert.strictEqual(RC.cancelRound(s).ok, false, 'in anteprima non c\'è nulla da annullare');
++  s.phase = 'scoring'; s.round = { roundInstanceId: 'r-q2' }; s.pending = { t1: 'C' }; s.answerVisible = true;
++  var before = snapshotOf(s);
++  var r = RC.cancelRound(s);
++  assert.strictEqual(r.ok, true);
++  assert.strictEqual(r.cancelledRoundId, 'r-q2');
++  assert.deepStrictEqual(s.pending, {});
++  assert.strictEqual(s.answerVisible, false);
++  assert.strictEqual(s.phase, 'preview');
++  assert.strictEqual(snapshotOf(s), before);
++  assert.strictEqual(s.bank.length, 3, 'la domanda resta nel pacchetto');
++});
++
++test('RIPETI DOMANDA: nuovo round pulito, punti del primo tentativo invariati, marcato come ripetizione', function () {
++  var s = hostState();
++  s.qIndex = 0; s.questionScored = true; s.phase = 'scored'; s.answerVisible = true;
++  s.pending = { t1: 'B' }; s.pendingOrder = ['t1']; s.correctOrder = ['t1']; s.entryMeta = { t1: { responseTimeMs: 1200 } };
++  var before = snapshotOf(s);
++  var r = RC.prepareRepeat(s);
++  assert.strictEqual(r.ok, true);
++  assert.strictEqual(r.scoresKept, true);
++  assert.strictEqual(s.repeatOf, 'r-q1');
++  assert.strictEqual(s.phase, 'preview');
++  assert.strictEqual(s.questionScored, false);
++  assert.deepStrictEqual([s.pending, s.pendingOrder, s.correctOrder, s.entryMeta], [{}, [], [], {}], 'niente risposte, tempi o ordine precedenti');
++  assert.strictEqual(snapshotOf(s), before, 'punteggi e sessione invariati');
++  var s2 = hostState();
++  assert.strictEqual(RC.prepareRepeat(s2).ok, false, 'una domanda mai giocata non si ripete');
++});
++
++/* ---------------- 3. pulsantiere, progresso, ricerca ---------------- */
++test('stato pulsantiere: disconnessione e riconnessione aggiornano l\'indicatore senza eliminare squadre', function () {
++  var teams = [{ id: 'a', name: '2A' }, { id: 'b', name: '2B' }, { id: 'c', name: '2C' }];
++  var now = Date.parse('2026-10-05T10:00:30Z');
++  var devs = { a: { connected: true }, b: { connected: true }, c: { connected: true } };
++  assert.deepStrictEqual(RC.deviceSummary(teams, devs, now), { total: 3, connected: 3, disconnected: [], manual: 0 });
++  devs.b = { connected: false, lastSeen: '2026-10-05T10:00:18Z' };
++  var off = RC.deviceSummary(teams, devs, now);
++  assert.strictEqual(off.connected, 2);
++  assert.deepStrictEqual(off.disconnected, [{ id: 'b', name: '2B', lastSeen: '2026-10-05T10:00:18Z', agoSec: 12 }]);
++  assert.strictEqual(teams.length, 3, 'la squadra non viene eliminata');
++  devs.b.connected = true;
++  assert.strictEqual(RC.deviceSummary(teams, devs, now).connected, 3);
++  assert.strictEqual(RC.deviceSummary(teams.concat([{ id: 'd', name: 'Manuale' }]), devs, now).manual, 1, 'squadre senza tablet contate a parte');
++});
++
++test('progresso della sessione: domanda corrente, giocate e da giocare', function () {
++  var bank = [q('a'), q('b'), q('c'), q('d')];
++  assert.deepStrictEqual(RC.progress(bank, { a: {}, c: {} }, 2), { current: 3, total: 4, played: 2, toPlay: 2 });
++  assert.deepStrictEqual(RC.progress([], {}, 0), { current: 0, total: 0, played: 0, toPlay: 0 });
++});
++
++test('ricerca nell\'Archivio: testo (accenti ignorati), spiegazione, argomento, difficoltà', function () {
++  var bank = [
++    q('a', 'A', { question: 'Chi dipinse la Vocazione di san Matteo?', options: ['Caravàggio', 'Bernini', 'Borromini', 'Raffaello'], topic: 'Pittura', difficulty: 3 }),
++    q('b', 'A', { question: 'Chi progettò il baldacchino?', explanation: 'Gian Lorenzo Bernini lavorò anche con Caravaggio in mente.', topic: 'Scultura', difficulty: 2 }),
++    q('c', 'A', { question: 'Che cos\'è la volta a botte?', topic: 'Architettura', difficulty: 1, tags: ['romani'] })
++  ];
++  assert.deepStrictEqual(RC.searchBank(bank, { text: 'caravaggio' }), [0, 1], 'testo, alternative e spiegazione');
++  assert.deepStrictEqual(RC.searchBank(bank, { text: 'caravaggio', topic: 'Pittura' }), [0]);
++  assert.deepStrictEqual(RC.searchBank(bank, { difficulty: '1' }), [2]);
++  assert.deepStrictEqual(RC.searchBank(bank, { text: 'ROMANI' }), [2], 'tag');
++  assert.deepStrictEqual(RC.searchBank(bank, {}), [0, 1, 2]);
++  assert.deepStrictEqual(RC.bankFacets(bank).topics, ['Architettura', 'Pittura', 'Scultura']);
++});
++
++/* ---------------- 4. acceptedAnswers in Pack Studio ---------------- */
++function studioDraft() {
++  var d = PS.newDraft({ title: 'Barocco prova', subject: 'Arte', grade: 8 });
++  var i = PS.addQuestion(d);
++  Object.assign(d.questions[i], { question: 'Chi dipinse la Vocazione di san Matteo?', options: ['Caravaggio', 'Bernini', 'Borromini', 'Raffaello'], correct: 'A', explanation: 'Caravaggio.' });
++  PS.addGame(d, 'ghigliottina');
++  d.games.ghigliottina[0] = { label: 'Parola', theme: 'Barocco', seconds: 30, answer: 'Caravaggio', pairs: [['Luce', 'Neve'], ['Ombra', 'Sabbia'], ['Matteo', 'Marco'], ['Bacco', 'Giove'], ['Medusa', 'Venere']] };
++  PS.addGame(d, 'chain');
++  d.games.chain[0] = { label: 'Catena', theme: 'Barocco', seconds: 30, links: [{ from: 'Pittore', to: 'Caravaggio' }] };
++  return d;
++}
++
++test('acceptedAnswers: crea, modifica, elimina; vuoti e doppioni (dopo normalizzazione) ignorati; principale distinta', function () {
++  var d = studioDraft();
++  var g = d.games.ghigliottina[0];
++  g.acceptedAnswers = ['Michelangelo Merisi', '', 'caravàggio', 'Il Caravaggio', 'michelangelo merisi', 'Merisi'];
++  var v = PS.validate(d);
++  assert.strictEqual(v.ok, true, JSON.stringify(v.errors));
++  assert.ok(v.warnings.some(function (w) { return /alternative vuote o doppie/.test(w.message); }), 'avviso nel Controllo');
++  var full = PS.toFull(d);
++  assert.deepStrictEqual(full.games.games.ghigliottina[0].acceptedAnswers, ['Michelangelo Merisi', 'Merisi'], 'vuoti, doppioni e copie della principale rimossi');
++  g.acceptedAnswers[5] = 'M. Merisi';
++  assert.deepStrictEqual(PS.toFull(d).games.games.ghigliottina[0].acceptedAnswers, ['Michelangelo Merisi', 'M. Merisi'], 'modifica');
++  g.acceptedAnswers = ['', '  '];
++  assert.ok(!('acceptedAnswers' in PS.toFull(d).games.games.ghigliottina[0]), 'elenco vuoto: campo omesso');
++  d.games.chain[0].links[0].acceptedAnswers = ['Merisi', 'CARAVAGGIO'];
++  assert.deepStrictEqual(PS.toFull(d).games.games.chain[0].links[0].acceptedAnswers, ['Merisi'], 'per singolo collegamento della Staffetta');
++  assert.deepStrictEqual(RC.cleanAccepted('Caravaggio', ['caravaggio', 'Merisi', 'merisi', ''], AM.normalize), ['Merisi']);
++});
++
++test('acceptedAnswers sopravvivono a salva → riavvio → export ZIP → elimina → reimporta, e l\'answerMatcher le accetta', async function () {
++  var dir = H.tempDir();
++  var packsDir = path.join(dir, 'packs');
++  fs.mkdirSync(packsDir);
++  try {
++    var d = studioDraft();
++    d.games.ghigliottina[0].acceptedAnswers = ['Michelangelo Merisi'];
++    d.games.chain[0].links[0].acceptedAnswers = ['Merisi'];
++    var lib = disk.diskLibrary({ packsDir: packsDir, trashDir: path.join(dir, 'cestino') });
++    assert.strictEqual((await lib.save('x.zip', PS.toZip(d).bytes, { mode: 'new', inflate: disk.inflate })).ok, true);
++    var other = PS.newDraft({ title: 'Altro pacchetto' }); var oi = PS.addQuestion(other); Object.assign(other.questions[oi], { question: 'Altra?', options: ['a', 'b', 'c', 'd'], correct: 'A' });
++    assert.strictEqual((await lib.save('o.zip', PS.toZip(other).bytes, { mode: 'new', inflate: disk.inflate })).ok, true);
++    var lib2 = disk.diskLibrary({ packsDir: packsDir, trashDir: path.join(dir, 'cestino') }); // "riavvio"
++    var ex = await lib2.exportZip(d.manifest.id);
++    var raw = PL.readImport(ex.filename, ex.bytes, { inflate: inflate });
++    var back = PL.validateImport(raw).pack;
++    assert.deepStrictEqual(back.games.ghigliottina[0].acceptedAnswers, ['Michelangelo Merisi']);
++    assert.deepStrictEqual(back.games.chain[0].links[0].acceptedAnswers, ['Merisi']);
++    assert.strictEqual((await lib2.remove(d.manifest.id)).ok, true);
++    var re = await lib2.importFile(ex.filename, ex.bytes, { inflate: disk.inflate });
++    assert.strictEqual(re.ok, true, JSON.stringify(re.errors));
++    var again = (await lib2.list()).filter(function (p) { return p.id === d.manifest.id; })[0].pack;
++    assert.deepStrictEqual(again.games.ghigliottina[0].acceptedAnswers, ['Michelangelo Merisi'], 'dopo reimportazione');
++    var gh = PE.validateGame('ghigliottina', again.games.ghigliottina[0]);
++    var m = AM.answerMatcher('michelangelo merisi', { answer: gh.answer, acceptedAnswers: gh.acceptedAnswers });
++    assert.strictEqual(m.isCorrect, true);
++    assert.strictEqual(m.status, 'accepted_variant');
++    // riapertura in Pack Studio: le alternative ci sono e restano modificabili
++    var d2 = PS.draftFromImport(raw);
++    assert.deepStrictEqual(d2.games.ghigliottina[0].acceptedAnswers, ['Michelangelo Merisi']);
++  } finally { H.rmrf(dir); }
++});
++
++/* ---------------- 5. codice della regia (js/app.js) in sandbox ---------------- */
++function extract(names) {
++  var source = fs.readFileSync(path.join(ROOT, 'js/app.js'), 'utf8');
++  return names.map(function (name) {
++    var start = source.indexOf('function ' + name + '(');
++    assert.ok(start >= 0, 'funzione della regia: ' + name);
++    var rest = source.slice(start);
++    var next = /^function \w+\(/m.exec(rest.slice(rest.indexOf('\n') + 1));
++    return next ? rest.slice(0, rest.indexOf('\n') + 1 + next.index) : rest;
++  }).join('\n');
++}
++
++function runtimeBank(packDir) {
++  var full = require('../tools/build_packs.js').loadPackFolder(packDir);
++  var rt = PE.toRuntime(PE.validatePack(full).pack, { origin: 'installed' });
++  return PL.composeBank([{ pack: rt, questions: rt.questions }]);
++}
++
++test('regia: MODIFICA DOMANDA salva nel pacchetto installato (non in un override); dopo riavvio ed export la modifica c\'è', async function () {
++  var dir = H.tempDir();
++  var packsDir = path.join(dir, 'packs');
++  fs.mkdirSync(packsDir);
++  try {
++    // copia di lavoro del pack del programma
++    (function copy(src, dst) { fs.mkdirSync(dst, { recursive: true }); fs.readdirSync(src).forEach(function (f) { var p = path.join(src, f); if (fs.statSync(p).isDirectory()) copy(p, path.join(dst, f)); else fs.copyFileSync(p, path.join(dst, f)); }); })(path.join(ROOT, 'packs/arte_romana'), path.join(packsDir, 'arte_romana'));
++    var lib = disk.diskLibrary({ packsDir: packsDir, trashDir: path.join(dir, 'cestino') });
++    await lib.list();
++    var bank = runtimeBank(path.join(packsDir, 'arte_romana'));
++    var ctx = {
++      PS: PS, PL: PL, state: { bank: bank, packKey: 'arte_romana' }, bankOverrides: {}, prefsSaved: 0,
++      savePrefs: function () { ctx.prefsSaved++; }, refreshLibrary: function () { return Promise.resolve(true); },
++      PKC: {
++        openBytes: function (id) { return lib.exportZip(id).then(function (r) { return r.ok ? { ok: true, bytes: r.bytes, filename: r.filename } : r; }); },
++        save: function (id, bytes, mode) { return lib.save(id + '.zip', bytes, { mode: mode, expectedId: id, inflate: disk.inflate }); }
++      },
++      Promise: Promise, Object: Object
++    };
++    vm.runInNewContext(extract(['editableFields', 'packQuestionsFromBank', 'savePackQuestions']), ctx);
++    var x = JSON.parse(JSON.stringify(bank[16]));
++    x.correct = x.correct === 'A' ? 'B' : 'A';
++    x.question = 'Domanda 17 corretta in classe?';
++    var r = await ctx.savePackQuestions('arte_romana', { question: ctx.editableFields(x) });
++    assert.strictEqual(r.ok, true);
++    assert.strictEqual(r.where, 'pack', JSON.stringify(r));
++    assert.deepStrictEqual(ctx.bankOverrides, {}, 'nessun override parallelo nel browser');
++    var lib2 = disk.diskLibrary({ packsDir: packsDir, trashDir: path.join(dir, 'cestino') }); // chiusura e riapertura
++    var ex = await lib2.exportZip('arte_romana');
++    var pack = PL.validateImport(PL.readImport(ex.filename, ex.bytes, { inflate: inflate })).pack;
++    var saved = pack.questions.filter(function (qq) { return qq.id === x.source.questionId; })[0];
++    assert.strictEqual(saved.question, 'Domanda 17 corretta in classe?');
++    assert.strictEqual(saved.correct, x.correct);
++    assert.strictEqual(saved.sourcePage, bank[16].sourcePage, 'campi del pack conservati');
++    assert.strictEqual(pack.questions.length, 72);
++    assert.strictEqual(pack.version, PS.bumpVersion('3.5.0'), 'versione aumentata');
++    assert.ok(fs.readdirSync(path.join(dir, 'cestino')).some(function (n) { return /^arte_romana_.*_prima-della-modifica$/.test(n); }), 'copia di sicurezza');
++    // pacchetto in sola lettura: resta la copia di questo browser, con avviso
++    ctx.PKC.openBytes = function () { return Promise.resolve({ ok: false }); };
++    var ro = await ctx.savePackQuestions('arte_romana', { question: ctx.editableFields(x) });
++    assert.strictEqual(ro.where, 'browser');
++    assert.strictEqual(ctx.bankOverrides.arte_romana.filter(function (qq) { return qq.question === 'Domanda 17 corretta in classe?'; }).length, 1);
++  } finally { H.rmrf(dir); }
++});
++
++function controlCtx() {
++  var s = hostState();
++  var ctx = {
++    RC: RC, state: s, sent: [], logs: [], toasts: [], confirmAnswer: true, timers: 0,
++    NET: { closeRound: function (id) { ctx.sent.push(['close', id]); }, openRound: function (r) { ctx.sent.push(['open', r]); }, teamDevices: function () { return ctx.devices || {}; } },
++    confirm: function () { return ctx.confirmAnswer; }, toast: function (m, k) { ctx.toasts.push([m, k]); }, logEvent: function (e) { ctx.logs.push(e); },
++    stopTimer: function () { ctx.timers++; }, resetTimer: function () {}, renderAll: function () {}, autosave: function () {}, q: function () { return s.bank[s.qIndex]; },
++    TM: { secondsFor: function () { return 30; } }, SS: SS, cloneAudio: function () {}, setTimeout: function () {}, arcadeEpoch: 0, commitQuestionScores: function () {}, fillMissingAbstain: function () {}, closeQuestionTime: function () {}
++  };
++  vm.runInNewContext(extract(['cancelRoundCore', 'cancelQuestion', 'repeatQuestion', 'leaveQuestionGuard']), ctx);
++  return ctx;
++}
++
++test('regia: ANNULLA chiude il round anche sui tablet; RIPETI dopo i punti non chiude nulla e marca il nuovo round', function () {
++  var c = controlCtx();
++  c.state.phase = 'running'; c.state.round = { roundInstanceId: 'r-live' }; c.state.pending = { t1: 'A' };
++  c.confirmAnswer = false;
++  c.cancelQuestion();
++  assert.strictEqual(c.state.phase, 'running', 'senza conferma non succede nulla');
++  c.confirmAnswer = true;
++  c.cancelQuestion();
++  assert.deepStrictEqual(c.sent, [['close', 'r-live']]);
++  assert.strictEqual(c.state.phase, 'preview');
++  assert.ok(c.logs.some(function (e) { return e.event === 'round.cancel' && e.roundInstanceId === 'r-live'; }));
++  assert.ok(/annullato/.test(c.toasts.pop()[0]));
++  // ripetizione dopo i punti confermati
++  var d = controlCtx();
++  d.state.qIndex = 0; d.state.questionScored = true; d.state.phase = 'scored'; d.state.round = { roundInstanceId: 'r-q1', committed: true };
++  d.repeatQuestion();
++  assert.deepStrictEqual(d.sent, [], 'round già chiuso e confermato sul server');
++  assert.strictEqual(d.state.repeatOf, 'r-q1');
++  assert.strictEqual(d.state.session.scoreEvents.length, 1, 'punti del primo tentativo invariati');
++});
++
++test('regia: uscire da una domanda avviata senza risposte non lascia un round fantasma sui tablet', function () {
++  var c = controlCtx();
++  c.state.phase = 'running'; c.state.round = { roundInstanceId: 'r-ghost' };
++  c.confirmAnswer = false;
++  assert.strictEqual(c.leaveQuestionGuard(), false, 'navigazione bloccata senza conferma');
++  assert.deepStrictEqual(c.sent, []);
++  c.confirmAnswer = true;
++  assert.strictEqual(c.leaveQuestionGuard(), true);
++  assert.deepStrictEqual(c.sent, [['close', 'r-ghost']]);
++  assert.strictEqual(c.state.round, null);
++});
++
++test('Ghigliottina su tablet: per ogni coppia un round A/B; voti contati; la maggioranza delle pulsantiere collegate sceglie', function () {
++  var c = controlCtx();
++  var a = { type: 'ghigliottina', started: true, final: false, step: 0, jackpot: 3200, pairs: [{ correct: 'Luce', wrong: 'Neve', a: 'Luce', b: 'Neve', correctSide: 'A', selected: null, resolved: false }, { correct: 'Ombra', wrong: 'Sabbia', a: 'Sabbia', b: 'Ombra', correctSide: 'B', selected: null, resolved: false }] };
++  c.state.screen = 'arcade'; c.state.arcade = a; c.state.round = { roundInstanceId: 'r-gh', kind: 'arcade' };
++  c.gameName = function () { return 'Parola Segreta'; };
++  c.devices = { t1: { connected: true }, t2: { connected: true } };
++  vm.runInNewContext(extract(['ghOpenPairRound', 'ghClosePairRound', 'ghVoteLabel', 'ghVote', 'chooseGh', 'applyTabletResponse']), c);
++  c.ghOpenPairRound();
++  var open = c.sent.filter(function (x) { return x[0] === 'open'; })[0][1];
++  assert.strictEqual(open.layout, 'mcq');
++  assert.strictEqual(JSON.stringify(open.letters), '["A","B"]');
++  assert.strictEqual(open.correct, null, 'nessun esito comunicato al tablet: la scelta non dà punti');
++  assert.strictEqual(open.kind, 'arcade');
++  var rid = a.pairRoundId;
++  c.applyTabletResponse({ roundInstanceId: rid, participantId: 't1', selectedAnswer: 'B', deviceId: 'd1' });
++  assert.strictEqual(JSON.stringify(a.votes), '{"t1":"B"}');
++  assert.strictEqual(a.pairs[0].selected, null, 'manca ancora una squadra');
++  assert.strictEqual(c.ghVoteLabel(a, 'B'), ' · 1 voto');
++  assert.deepStrictEqual(c.state.pending, {}, 'il voto non è una risposta da punteggio');
++  c.applyTabletResponse({ roundInstanceId: rid, participantId: 't2', selectedAnswer: 'B', deviceId: 'd2' });
++  assert.strictEqual(a.pairs[0].selected, 'B', 'maggioranza B');
++  assert.deepStrictEqual(c.sent.filter(function (x) { return x[0] === 'close'; }).map(function (x) { return x[1]; }), [rid], 'voto chiuso sui tablet');
++  assert.strictEqual(a.pairRoundId, null);
++  // parità: decide il docente
++  a.step = 1; c.ghOpenPairRound();
++  var rid2 = a.pairRoundId;
++  c.applyTabletResponse({ roundInstanceId: rid2, participantId: 't1', selectedAnswer: 'A' });
++  c.applyTabletResponse({ roundInstanceId: rid2, participantId: 't2', selectedAnswer: 'B' });
++  assert.strictEqual(a.pairs[1].selected, null);
++  assert.ok(/Parità/.test(c.toasts.pop()[0]));
++  c.chooseGh('B');
++  assert.strictEqual(a.pairs[1].selected, 'B', 'il docente sceglie sempre');
++});
++
++/* ---------------- 6. server reale: annulla, A/B, connessioni, SHOW ---------------- */
++test('server: dopo ANNULLA le risposte tardive sono rifiutate; il round rilanciato è pulito; voto A/B accettato senza esito', async function () {
++  var app = await H.startServer();
++  try {
++    var c = await H.classroom(app, 2);
++    var host = c.host;
++    var p = c.players;
++    host.sendJSON({ type: 'round.open', roundInstanceId: 'rnd-cancel-0001', questionId: 'q17', layout: 'mcq', letters: ['A', 'B', 'C', 'D'], correct: 'B', durationMs: 30000 });
++    await p[0].waitFor(function (m) { return m.type === 'round' && m.round && m.round.roundInstanceId === 'rnd-cancel-0001'; }, 3000, true);
++    p[0].sendJSON({ type: 'answer', roundInstanceId: 'rnd-cancel-0001', answer: 'B', deviceToken: p[0].deviceToken });
++    await host.waitFor(function (m) { return m.type === 'response' && m.record.roundInstanceId === 'rnd-cancel-0001'; }, 3000, true);
++    host.sendJSON({ type: 'round.close', roundInstanceId: 'rnd-cancel-0001' }); // ANNULLA DOMANDA
++    await p[1].waitFor(function (m) { return m.type === 'round' && m.round && m.round.status === 'closed'; }, 3000, true);
++    p[1].sendJSON({ type: 'answer', roundInstanceId: 'rnd-cancel-0001', answer: 'A', deviceToken: p[1].deviceToken });
++    var late = await p[1].waitFor(function (m) { return m.type === 'ack'; }, 3000, true);
++    assert.strictEqual(late.accepted, false);
++    assert.strictEqual(late.reason, 'round_closed');
++    // stessa domanda rilanciata: nuovo round, nessuna risposta precedente
++    host.sendJSON({ type: 'round.open', roundInstanceId: 'rnd-cancel-0002', questionId: 'q17', layout: 'mcq', letters: ['A', 'B', 'C', 'D'], correct: 'C', durationMs: 30000 });
++    var r2 = await p[0].waitFor(function (m) { return m.type === 'round' && m.round && m.round.roundInstanceId === 'rnd-cancel-0002'; }, 3000, true);
++    assert.ok(!r2.round.myAnswer, 'nessuna risposta riportata dal round annullato');
++    assert.strictEqual(app.room.round.responses ? Object.keys(app.room.round.responses).length : 0, 0);
++    p[0].sendJSON({ type: 'answer', roundInstanceId: 'rnd-cancel-0002', answer: 'C', deviceToken: p[0].deviceToken });
++    var resp = await host.waitFor(function (m) { return m.type === 'response' && m.record.roundInstanceId === 'rnd-cancel-0002'; }, 3000, true);
++    assert.strictEqual(resp.record.outcome, 'correct', 'vale la risposta corretta aggiornata');
++    // Ghigliottina: voto A/B sul tablet (stesso protocollo, nessun esito)
++    host.sendJSON({ type: 'round.open', roundInstanceId: 'rnd-gh-pair-01', kind: 'arcade', gameType: 'ghigliottina', questionId: null, layout: 'mcq', letters: ['A', 'B'], correct: null, durationMs: 300000 });
++    var gr = await p[1].waitFor(function (m) { return m.type === 'round' && m.round && m.round.roundInstanceId === 'rnd-gh-pair-01'; }, 3000, true);
++    assert.deepStrictEqual(gr.round.letters, ['A', 'B'], 'il tablet mostra i tasti A e B');
++    p[1].sendJSON({ type: 'answer', roundInstanceId: 'rnd-gh-pair-01', answer: 'B', deviceToken: p[1].deviceToken });
++    var vote = await host.waitFor(function (m) { return m.type === 'response' && m.record.roundInstanceId === 'rnd-gh-pair-01'; }, 3000, true);
++    assert.strictEqual(vote.record.selectedAnswer, 'B');
++    assert.strictEqual(vote.record.outcome, 'omitted', 'nessun esito: la scelta della coppia non assegna punti');
++    c.players.forEach(function (x) { x.close(); });
++    host.close();
++  } finally { await H.stopServer(app); }
++});
++
++test('server: pulsantiera disconnessa e riconnessa resta assegnata alla stessa squadra; lastSeen disponibile alla regia', async function () {
++  var app = await H.startServer();
++  try {
++    var c = await H.classroom(app, 2);
++    var token = c.players[1].deviceToken;
++    c.players[1].destroy();
++    var off = await c.host.waitFor(function (m) { return m.type === 'devices' && m.devices.some(function (d) { return d.participantId === 'team-1' && !d.connected; }); }, 4000);
++    var d1 = off.devices.filter(function (d) { return d.participantId === 'team-1'; })[0];
++    assert.ok(d1.lastSeen, 'ultimo contatto');
++    assert.strictEqual(d1.status, 'assigned', 'la squadra non viene eliminata né liberata');
++    var again = await H.ws.open(app.wsUrl);
++    again.sendJSON({ type: 'hello', role: 'player', deviceToken: token });
++    var w = await again.waitFor(function (m) { return m.type === 'welcome'; }, 3000, true);
++    assert.strictEqual(w.reconnected, true);
++    assert.strictEqual(w.participant.name, 'S2');
++    await c.host.waitFor(function (m) { return m.type === 'devices' && m.devices.filter(function (d) { return d.participantId === 'team-1'; }).every(function (d) { return d.connected; }); }, 4000);
++    // la vista per squadra usata dall'indicatore della regia (js/host/net.js)
++    var net = fs.readFileSync(path.join(ROOT, 'js/host/net.js'), 'utf8');
++    assert.ok(/m\.lastSeen = d\.lastSeen/.test(net), 'teamDevices espone lastSeen');
++    again.close(); c.players[0].close(); c.host.close();
++  } finally { await H.stopServer(app); }
++});
++
++test('recovery: lo SHOW che si ricollega riceve subito palco e timer correnti; la regia ritrova la partita salvata sul server', async function () {
++  var dataDir = H.tempDir();
++  var app = await H.startServer({ dataDir: dataDir });
++  try {
++    var c = await H.classroom(app, 1);
++    c.host.sendJSON({ type: 'show.stage', html: '<div class="questionShow">DOMANDA 17</div>', meta: { title: 'Prova' } });
++    c.host.sendJSON({ type: 'show.timer', timer: { running: false, remaining: 12, duration: 30, status: 'IN PAUSA', mood: 'welcome' } });
++    await H.wait(100);
++    var show = await H.ws.open(app.wsUrl);
++    show.sendJSON({ type: 'hello', role: 'show' });
++    var st = await show.waitFor(function (m) { return m.type === 'stage'; }, 3000, true);
++    assert.ok(/DOMANDA 17/.test(st.html));
++    var tm = await show.waitFor(function (m) { return m.type === 'timer'; }, 3000, true);
++    assert.strictEqual(tm.timer.remaining, 12);
++    // refresh della regia: istantanea salvata sul server e riletta (squadre, punteggi, domanda corrente)
++    var snap = { format: 'secchione-snapshot', version: 1, app: '3.6.0', savedAt: new Date().toISOString(), session: SS.createSession({}), ui: { screen: 'question', qIndex: 16, phase: 'running', deferredEdits: {}, lockedQuestion: { id: 'arte_romana/rom017' } } };
++    snap.session.participants = [{ id: 'team-0', name: 'S1', type: 'team' }];
++    var hdr = { 'X-Secchione-Host': app.hostKey, 'Content-Type': 'application/json' };
++    var http = require('http');
++    await new Promise(function (resolve, reject) {
++      var body = JSON.stringify(snap);
++      var req = http.request({ host: '127.0.0.1', port: app.port, path: '/api/host/snapshot', method: 'POST', headers: Object.assign({ 'Content-Length': Buffer.byteLength(body) }, hdr) }, function (res) { res.resume(); res.on('end', resolve); });
++      req.on('error', reject); req.end(body);
++    });
++    var got = await H.get(app.base + '/api/host/snapshot', { headers: hdr });
++    var back = JSON.parse(got.body);
++    assert.strictEqual(back.ui.qIndex, 16);
++    assert.strictEqual(back.ui.lockedQuestion.id, 'arte_romana/rom017', 'la versione giocata del round aperto è nell\'istantanea');
++    show.close(); c.players[0].close(); c.host.close();
++  } finally { await H.stopServer(app); H.rmrf(dataDir); }
++});

@@ -1,0 +1,349 @@
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/documentazione_tecnica/CHANGELOG_1.0_RC2A1_HOTFIX.md Il_Secchione_1.0_RC2A1_HOTFIX/documentazione_tecnica/CHANGELOG_1.0_RC2A1_HOTFIX.md
+--- Il_Secchione_1.0_RC2A_POST_PILOT/documentazione_tecnica/CHANGELOG_1.0_RC2A1_HOTFIX.md	1970-01-01 01:00:00.000000000 +0100
++++ Il_Secchione_1.0_RC2A1_HOTFIX/documentazione_tecnica/CHANGELOG_1.0_RC2A1_HOTFIX.md	2026-10-06 18:44:56.509446000 +0200
+@@ -0,0 +1,59 @@
++# Il Secchione · 1.0 RC2-A.1 HOTFIX — 6 ottobre 2026
++
++Hotfix della 1.0 RC2-A, senza nuove funzioni. Punteggio, timer e layout restano quelli della RC2-A; la Fase B (CONTENUTI) non è iniziata.
++
++- **Base**: `Il_Secchione_1.0_RC2A_POST_PILOT_PORTABLE.zip`, SHA-256 `779802ebf333ee1f77f631d1758cd09d437eab587d5c8eabc47c0db38ca9e18c`, letta da `Desktop\casa`. Prima di modificarla: 264/264 checksum e 274 test verdi.
++
++## 1. Tempo disponibile nei giochi (bloccante)
++- **Difetto**:
++  - nella RC2-A i record dei giochi non avevano `availableMs`;
++  - la regia calcolava quindi in locale **200** per una risposta corretta e veloce da tablet;
++  - il server, che conosceva il tempo disponibile, correggeva subito dopo.
++- **Log reale della RC2-A** (Photopuzzle, 2 100 ms su 45 000 ms): `score … delta 200` → `score.server_override` → 295 (`QA/v1.0-rc2a1/log_photopuzzle_RC2A_prima.json`).
++- **Correzione**:
++  - `arcadeRecords()` crea i record di tutti i giochi con lo **stesso `availableMs` del round**: quello inviato al server all'apertura, più i secondi aggiunti;
++  - `finalizeRound()` usa quel valore anche come riserva del calcolo locale, lo salva nel round e lo invia al server nel commit;
++  - così regia e server calcolano lo stesso punteggio al primo colpo.
++- **Ricalcolo**: `recomputeAllRounds()` (regia) e `recomputeTotals()` (motore) usano `rd.availableMs` del round come riserva per i record storici che non lo hanno.
++- **Log reale della RC2-A.1**:
++  - Photopuzzle 2 049 ms su 45 000 → `score … delta 295` → `score.verified`;
++  - Indovina 4 353 ms su 45 000 → `delta 290` → `score.verified`.
++
++## 2. Checklist «Pronto per la lezione», riga Pulsantiere
++- Al posto di «2 / 2 collegate» compare «**2 tablet collegati · 4 squadre manuali**».
++- Se un tablet è scollegato: «1 di 2 tablet collegati · 4 squadre manuali».
++- Se tutte le squadre hanno il tablet: «2 tablet collegati».
++
++## 3. Rettifica al report QA della RC2-A
++Il report RC2-A dichiarava che il Photopuzzle +296 aveva prodotto `score.verified` senza correzione. **Era sbagliato**:
++- il `score.verified` trovato apparteneva a un altro round;
++- la prova ripetuta sulla RC2-A consegnata mostra `delta 200` seguito da `score.server_override`;
++- il totale finale era giusto solo grazie alla correzione del server.
++
++Dettagli e log in `QA/TEST_RESULTS_1.0_RC2A1.md`.
++
++## Pacchetti Barocco e Preistoria 1.2.0 (contenuti, non software)
++Prodotti a parte su richiesta, non sono nello ZIP del programma: `SECCHIONE_BAROCCO_3MEDIA_v1.2.0.zip` e `SECCHIONE_PREISTORIA_1MEDIA_v1.2.0.zip` in `Desktop\casa`.
++- **Rispetto alla 1.1.0** sono tolti solo i campi `seconds`, quindi valgono 15 s per le domande e 45 s per le manche. Valori tolti:
++
++  | Pack | Domande | Manche |
++  |---|---|---|
++  | Barocco | 5 a 30 s, 25 a 40 s | 30–35 s |
++  | Preistoria | 22 a 30 s, 8 a 40 s | 30–35 s |
++
++- **Tutto il resto è identico** (verificato campo per campo, immagini comprese).
++- **Aggiornamento in classe**: PACCHETTI → ELIMINA la 1.1.0 (finisce nel cestino dei pacchetti), poi IMPORTA CONTENUTI con la 1.2.0. Il codice del pacchetto resta lo stesso, quindi le scalette continuano a funzionare.
++  - Importando la 1.2.0 senza eliminare la 1.1.0, il programma conserva la vecchia e installa la nuova con un altro codice («… (2)»). È il comportamento già esistente.
++
++## Test
++- **Nuovi**: `tests/rc2a1_hotfix.test.js` (8 test):
++  - Photopuzzle 2 s / 45 s = 296 nel calcolo locale;
++  - Indovina 9 s / 45 s = 280;
++  - Staffetta 15 s / 45 s = 267 (55 s dopo +10 s = 273);
++  - corretta manuale = 200 e regola D1 nei giochi;
++  - commit sul server senza correzioni (`score.verified`, `corrected = 0`);
++  - ricalcolo, anche con record storici senza `availableMs`;
++  - salvataggio e ripresa;
++  - checklist.
++- **Aggiornati**: la regex del commit in `rc2a_post_pilot.test.js`, l'estrazione della checklist in `training_rc1.test.js`, la versione in `session_planner_370.test.js`.
++- **Totale**: **282 superati, 0 falliti**.
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/documentazione_tecnica/README.md Il_Secchione_1.0_RC2A1_HOTFIX/documentazione_tecnica/README.md
+--- Il_Secchione_1.0_RC2A_POST_PILOT/documentazione_tecnica/README.md	2026-10-06 18:05:38.830431100 +0200
++++ Il_Secchione_1.0_RC2A1_HOTFIX/documentazione_tecnica/README.md	2026-10-06 18:45:20.440836200 +0200
+@@ -1,4 +1,13 @@
+-# Il Secchione · 1.0 RC2-A POST-PILOT (base 1.0 RC1)
++# Il Secchione · 1.0 RC2-A.1 HOTFIX (base 1.0 RC2-A)
++
++> **1.0 RC2-A.1** (6 ottobre 2026), hotfix senza nuove funzioni:
++> - nei giochi la regia calcola già il bonus velocità con il tempo disponibile del round, come il server: nessuna correzione successiva;
++> - il ricalcolo usa il tempo disponibile del round per i record storici;
++> - nella checklist la riga Pulsantiere dice «N tablet collegati · M squadre manuali».
++>
++> Contiene anche la rettifica del report QA della RC2-A. Vedi [CHANGELOG_1.0_RC2A1_HOTFIX.md](CHANGELOG_1.0_RC2A1_HOTFIX.md) e [QA/TEST_RESULTS_1.0_RC2A1.md](QA/TEST_RESULTS_1.0_RC2A1.md).
++
++## 1.0 RC2-A POST-PILOT (base 1.0 RC1)
+ 
+ > **1.0 RC2-A POST-PILOT** (6 ottobre 2026). Patch di gioco dopo tre sessioni reali in classe:
+ > - punteggio 200–300 (200 per la correttezza + bonus velocità misurato dai tablet);
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/js/app.js Il_Secchione_1.0_RC2A1_HOTFIX/js/app.js
+--- Il_Secchione_1.0_RC2A_POST_PILOT/js/app.js	2026-10-06 18:02:19.730845600 +0200
++++ Il_Secchione_1.0_RC2A1_HOTFIX/js/app.js	2026-10-06 18:36:00.041276000 +0200
+@@ -14,7 +14,7 @@
+ const SP=window.SecchioneSessionPlan,PLAN_UI=window.SecchionePlannerUI;
+ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+ const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+-const VERSION='1.0.0-rc2a';
++const VERSION='1.0.0-rc2a.1';
+ const FREE_OMISSIONS=SC.DEFAULT_FREE_OMISSIONS||3;
+ const BRAND_LOGO='assets/logo_clean.svg';
+ const SOUND={
+@@ -562,6 +562,10 @@
+ /* Photopuzzle: punto focale validato dal motore (PE.photoFocus); l'immagine riempie la cornice e resta inquadrato questo punto. */
+ function puzzleFocus(v){return PE.photoFocus(v)||'50% 50%'}
+ /* Checklist "PRONTO PER LA LEZIONE" nella Home della regia: solo dati che la regia ha già. */
++/* RC2-A.1: "2 tablet collegati · 4 squadre manuali" invece di "2 / 2 collegate" quando non tutte le squadre hanno un tablet. */
++function tabletSummary(bound,on){const manual=state.teams.filter(t=>!bound.some(d=>d.participantId===t.id)).length,n=on.length;
++ const tabs=on.length===bound.length?`${n} ${n===1?'tablet collegato':'tablet collegati'}`:`${n} di ${bound.length} tablet collegati`;
++ return manual?`${tabs} · ${manual} ${manual===1?'squadra manuale':'squadre manuali'}`:tabs}
+ function readinessItems(){
+  const st=NET.status(),room=NET.room?NET.room():{},main=(room.urls||[])[0],bound=NET.devices().filter(d=>d.participantId),on=bound.filter(d=>d.connected);
+  const showOpen=!!(publicWindow&&!publicWindow.closed)||(st.showClients||0)>0,live=planLive(),net=st.available&&st.connected;
+@@ -569,7 +573,7 @@
+   {state:!st.available?'opt':st.connected?'ok':'bad',label:'Programma',detail:!st.available?'aperto senza server: niente tablet, le risposte le registri tu':st.connected?(main?'pronto · tablet su '+main.player.replace(/^https?:\/\//,''):'pronto · nessuna rete per i tablet'):'non raggiungibile: chiudi e riapri AVVIA_IL_SECCHIONE'},
+   {state:state.teams.length>=2?'ok':'todo',label:'Squadre',detail:state.teams.length>=2?state.teams.length+' squadre':'aggiungine almeno 2 (colonna a sinistra)',act:state.teams.length>=2?'':'addTeams',actLabel:'AGGIUNGI'},
+   {state:showOpen?'ok':'todo',label:'Proiettore',detail:showOpen?'schermo del proiettore aperto':'apri lo schermo e portalo sul proiettore',act:showOpen?'':'openShow',actLabel:'APRI'},
+-  {state:!net?'opt':bound.length?(on.length===bound.length?'ok':'warn'):'opt',label:'Pulsantiere',detail:!net?'facoltative':bound.length?`${on.length} / ${bound.length} collegate`:'facoltative',act:net?'connectTablets':'',actLabel:state.showJoin?'NASCONDI QR':'QR SUL PROIETTORE'},
++  {state:!net?'opt':bound.length?(on.length===bound.length?'ok':'warn'):'opt',label:'Pulsantiere',detail:!net?'facoltative':bound.length?tabletSummary(bound,on):'facoltative',act:net?'connectTablets':'',actLabel:state.showJoin?'NASCONDI QR':'QR SUL PROIETTORE'},
+   {state:'ok',label:'Contenuti',detail:live?`scaletta «${live.name}»`:(state.mixed?'più pacchetti':pack().title),act:'chooseContent',actLabel:'CAMBIA'}
+  ];
+ }
+@@ -692,13 +696,14 @@
+ }
+ function finalizeRound(records,meta){
+  const r=state.round,pid=profileId(),s=state.session;
+- const events=SS.scoreEventsFor(records,pid,r.roundInstanceId,scoreOptions(r.roundInstanceId));
++ const av=r.availableMs||(records.find(x=>x.availableMs>0)||{}).availableMs||null;
++ const events=SS.scoreEventsFor(records,pid,r.roundInstanceId,Object.assign(scoreOptions(r.roundInstanceId),av?{availableMs:av}:{}));
+  s.responses.push(...records);s.scoreEvents.push(...events);
+- const rec=Object.assign({roundInstanceId:r.roundInstanceId,kind:r.kind,committed:true,committedAt:SS.nowISO(),profileId:pid,openedAt:r.openedAt,availableMs:r.availableMs||null,closedAt:r.closedAt||SS.nowISO(),revealedAt:r.revealedAt,inputModes:countModes(records),orderOverridden:!!r.orderOverridden},meta);
++ const rec=Object.assign({roundInstanceId:r.roundInstanceId,kind:r.kind,committed:true,committedAt:SS.nowISO(),profileId:pid,openedAt:r.openedAt,availableMs:av,closedAt:r.closedAt||SS.nowISO(),revealedAt:r.revealedAt,inputModes:countModes(records),orderOverridden:!!r.orderOverridden},meta);
+  const pi=planItemFor(r);if(pi)rec.planItem=pi;
+  s.rounds=s.rounds.filter(x=>x.roundInstanceId!==r.roundInstanceId);s.rounds.push(rec);r.committed=true;
+  events.forEach(e=>logEvent({event:'score',roundInstanceId:r.roundInstanceId,participantId:e.participantId,scoreDelta:e.points}));
+- if(s.afterEnd)delete s.afterEnd;SS.renumberOmissions(s,FREE_OMISSIONS);recomputeScores();NET.commitRound({roundInstanceId:r.roundInstanceId,records,profileId:pid,kind:r.kind,openedAt:r.openedAt||null,availableMs:r.availableMs||null});
++ if(s.afterEnd)delete s.afterEnd;SS.renumberOmissions(s,FREE_OMISSIONS);recomputeScores();NET.commitRound({roundInstanceId:r.roundInstanceId,records,profileId:pid,kind:r.kind,openedAt:r.openedAt||null,availableMs:av});
+  return events;
+ }
+ function commitQuestionScores(auto){
+@@ -832,7 +837,10 @@
+ function chainNext(){const a=state.arcade;a.played=false;if(a.index<a.links.length-1)a.index++;else a.index=0;prepareChainRound();a.scoreCommitted=false;state.round=null;clearPending();renderAll()}
+ function arcadeScoreKey(){const a=state.arcade;if(!a)return'';return `Soluzione privata: <b>${esc(arcadeSolution(a))}</b>`}
+ function arcadeScoreCards(){const pts=state.arcade.scoreCommitted?committedPoints(state.round&&state.round.roundInstanceId):previewPoints();return state.teams.map(t=>{const v=state.pending[t.id],p=pts[t.id],m=state.entryMeta[t.id]||{},typed=m.inputMode==='tablet'&&m.selectedAnswer!=null?`<div class="help" style="margin:6px 0 0">Pulsantiera: <b>${esc(m.selectedAnswer)}</b>${m.responseTimeMs!=null?` · ${(m.responseTimeMs/1000).toFixed(1)} s`:''}</div>`:'';return `<div class="scoreTeam"><div class="scoreTeamTop"><b>${esc(t.name)}</b><span class="scorePreview ${p>0?'good':p<0?'bad':''}">${v?SC.signed(p||0)+' pt':`${t.score} pt totali`}</span></div>${typed}<div class="scoreButtons outcomes"><button class="scoreBtn ${v==='correct'?'selected':''}" data-ascore="${t.id}|correct">✓ GIUSTA</button><button class="scoreBtn ${v==='wrong'?'selected':''}" data-ascore="${t.id}|wrong">✗ ERRATA</button><button class="scoreBtn ${v==='abstain'?'selected':''}" data-ascore="${t.id}|abstain">Ø OMESSA</button></div></div>`}).join('')}
+-function commitArcadeScores(){const a=state.arcade;if(!a||a.scoreCommitted)return;if(!state.teams.length)return toast('Aggiungi almeno due squadre.');if(a.started){stopTimer();a.started=false;closeArcadeTabletRound(true)}if(state.teams.some(t=>!(t.id in state.pending)))fillMissingAbstain();if(state.teams.some(t=>!(t.id in state.pending)))return toast('Impossibile completare automaticamente le risposte mancanti.','err');ensureArcadeRound();const solution=arcadeSolution(a);const records=state.teams.map(t=>{const m=state.entryMeta[t.id]||{};return Object.assign(SS.makeResponse({responseId:m.responseId,sessionId:state.session.sessionId,roundInstanceId:state.round.roundInstanceId,kind:'arcade',gameType:a.type,participantId:t.id,participantType:t.type||'team',selectedAnswer:m.selectedAnswer==null?null:m.selectedAnswer,correctAnswer:solution||null,outcome:state.pending[t.id],responseTimeMs:m.responseTimeMs,inputMode:m.inputMode||'manual',auto:!!m.auto,order:entryOrder(t.id),deviceId:m.deviceId,receivedAt:m.receivedAt}),arcadeProvenance())});finalizeRound(records,Object.assign(arcadeProvenance(),{gameType:a.type,label:a.label,presetIndex:a.presetIndex,chainIndex:a.type==='chain'?a.index:null,seconds:a.seconds,solution}));a.scoreCommitted=true;closeArcadeTabletRound(true);renderAll();cloneAudio('correct',.5);toast('✓ Punteggi del gioco registrati.','ok');autosave('commit',0)}
++/* RC2-A.1: un record per squadra con lo STESSO availableMs del round (quello inviato al server all'apertura, + secondi aggiunti),
++   così il primo calcolo della regia coincide con quello del server, senza correzioni successive. */
++function arcadeRecords(a,solution){const av=roundAvailableMs();return state.teams.map(t=>{const m=state.entryMeta[t.id]||{};return Object.assign(SS.makeResponse({responseId:m.responseId,sessionId:state.session.sessionId,roundInstanceId:state.round.roundInstanceId,kind:'arcade',gameType:a.type,participantId:t.id,participantType:t.type||'team',selectedAnswer:m.selectedAnswer==null?null:m.selectedAnswer,correctAnswer:solution||null,outcome:state.pending[t.id],responseTimeMs:m.responseTimeMs,availableMs:av,inputMode:m.inputMode||'manual',auto:!!m.auto,order:entryOrder(t.id),deviceId:m.deviceId,receivedAt:m.receivedAt}),arcadeProvenance())})}
++function commitArcadeScores(){const a=state.arcade;if(!a||a.scoreCommitted)return;if(!state.teams.length)return toast('Aggiungi almeno due squadre.');if(a.started){stopTimer();a.started=false;closeArcadeTabletRound(true)}if(state.teams.some(t=>!(t.id in state.pending)))fillMissingAbstain();if(state.teams.some(t=>!(t.id in state.pending)))return toast('Impossibile completare automaticamente le risposte mancanti.','err');ensureArcadeRound();const solution=arcadeSolution(a);const records=arcadeRecords(a,solution);finalizeRound(records,Object.assign(arcadeProvenance(),{gameType:a.type,label:a.label,presetIndex:a.presetIndex,chainIndex:a.type==='chain'?a.index:null,seconds:a.seconds,solution}));a.scoreCommitted=true;closeArcadeTabletRound(true);renderAll();cloneAudio('correct',.5);toast('✓ Punteggi del gioco registrati.','ok');autosave('commit',0)}
+ function arcadeProvenance(){const a=state.arcade||{},rt=P[a._packId]||P[state.packKey]||{};return {packId:rt.id||null,packVersion:(rt.meta||{}).version||'',subject:(rt.meta||{}).subject||'',topic:a.theme||rt.title||'',sourceQuestionId:null}}
+ function commitScores(){if(state.screen==='question')commitQuestionScores();else if(state.screen==='arcade')commitArcadeScores()}
+ function gameControlsHTML(){const a=state.arcade,sets=pack().arcadeSets[a.type]||[];let h=`<div class="panel gamePanel"><div class="panelHead"><h3>${esc(gameName(a.type))}</h3><span class="badge">${a.presetIndex+1}/${sets.length} · ${a.seconds} s</span></div><div class="presetNav"><button class="btn ghost" data-preset-delta="-1">←</button><select id="presetSelect" class="control">${sets.map((x,i)=>`<option value="${i}" ${i===a.presetIndex?'selected':''}>${esc((state.mixed&&x._packTitle?'['+x._packTitle+'] ':'')+x.label)}</option>`).join('')}</select><button class="btn ghost" data-preset-delta="1">→</button></div>`;
+@@ -1017,7 +1025,7 @@
+ function saveSettings(ev){ev.preventDefault();const s=state.session,prof=(document.querySelector('input[name="profile"]:checked')||{}).value;const prevProfile=s.scoringProfile;s.meta.mode=SS.MODES.includes($('#setMode').value)?$('#setMode').value:'lesson';s.meta.classLabel=SS.cleanText($('#setClass').value,40);s.meta.schoolYear=SS.cleanText($('#setYear').value,9)||SS.schoolYearFor();s.meta.gradeLevel=$('#setGrade').value?Number($('#setGrade').value)||null:null;s.meta.institution=SS.cleanText($('#setInstitution').value,120);
+  if(SC.hasProfile(prof)&&prof!==prevProfile){s.scoringProfile=prof;prefs.scoringProfile=prof;logEvent({event:'profile.change',reason:`${prevProfile} → ${prof}`});if($('#setRecompute').checked)recomputeAllRounds(prof)}
+  $('#settingsDialog').close();savePrefs();recomputeScores();renderAll();autosave('settings',0);toast('Impostazioni salvate.')}
+-function recomputeAllRounds(prof){const s=state.session,byRound={},prior={};s.responses.forEach(r=>{if(!r.voided)(byRound[r.roundInstanceId]=byRound[r.roundInstanceId]||[]).push(r)});s.scoreEvents=[];s.rounds.forEach(rd=>{const rows=byRound[rd.roundInstanceId];if(!rd.committed||!rows)return;s.scoreEvents.push(...SS.scoreEventsFor(rows,prof,rd.roundInstanceId,{priorOmissions:prior,freeOmissions:FREE_OMISSIONS}));rows.forEach(r=>{if(SC.normalizeOutcome(r.outcome)==='omitted')prior[r.participantId]=(prior[r.participantId]||0)+1});rd.profileId=prof});SS.renumberOmissions(s,FREE_OMISSIONS);logEvent({event:'score.recompute',reason:prof})}
++function recomputeAllRounds(prof){const s=state.session,byRound={},prior={};s.responses.forEach(r=>{if(!r.voided)(byRound[r.roundInstanceId]=byRound[r.roundInstanceId]||[]).push(r)});s.scoreEvents=[];s.rounds.forEach(rd=>{const rows=byRound[rd.roundInstanceId];if(!rd.committed||!rows)return;s.scoreEvents.push(...SS.scoreEventsFor(rows,prof,rd.roundInstanceId,Object.assign({priorOmissions:prior,freeOmissions:FREE_OMISSIONS},rd.availableMs>0?{availableMs:rd.availableMs}:{})));rows.forEach(r=>{if(SC.normalizeOutcome(r.outcome)==='omitted')prior[r.participantId]=(prior[r.participantId]||0)+1});rd.profileId=prof});SS.renumberOmissions(s,FREE_OMISSIONS);logEvent({event:'score.recompute',reason:prof})}
+ function startNewGame(){if(!confirm('Iniziare una nuova partita? Punti e risposte attuali vengono archiviati; le squadre restano.'))return;STORE.archiveSnapshot(buildSnapshot('new.game'));logEvent({event:'session.close'});newSession(true);state.completedRounds={};state.planRun=null;state.round=null;recomputeScores();showHome();toast('Nuova partita pronta.')}
+ 
+ /* ---------------- TASTIERA ---------------- */
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/session.js Il_Secchione_1.0_RC2A1_HOTFIX/js/engine/session.js
+--- Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/session.js	2026-10-06 17:33:19.848563700 +0200
++++ Il_Secchione_1.0_RC2A1_HOTFIX/js/engine/session.js	2026-10-06 18:36:00.041276000 +0200
+@@ -229,7 +229,7 @@
+     var prior = {};
+     (session.rounds || []).forEach(function (rd) {
+       if (!rd || !rd.committed || !byRound[rd.roundInstanceId]) return;
+-      var rows = Scoring.scoreRound(byRound[rd.roundInstanceId], profileId, { priorOmissions: prior, freeOmissions: Scoring.DEFAULT_FREE_OMISSIONS });
++      var rows = Scoring.scoreRound(byRound[rd.roundInstanceId], profileId, { priorOmissions: prior, freeOmissions: Scoring.DEFAULT_FREE_OMISSIONS, availableMs: rd.availableMs > 0 ? rd.availableMs : undefined }); // RC2-A.1
+       events = events.concat(rows);
+       byRound[rd.roundInstanceId].forEach(function (r) {
+         if (Scoring.normalizeOutcome(r.outcome) === 'omitted') prior[r.participantId] = (prior[r.participantId] || 0) + 1;
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/server/server.js Il_Secchione_1.0_RC2A1_HOTFIX/server/server.js
+--- Il_Secchione_1.0_RC2A_POST_PILOT/server/server.js	2026-10-06 18:02:19.768623100 +0200
++++ Il_Secchione_1.0_RC2A1_HOTFIX/server/server.js	2026-10-06 18:36:00.049329800 +0200
+@@ -24,7 +24,7 @@
+ var packDisk = require('./packstore-disk.js');
+ var netinfo = require('./netinfo.js');
+ 
+-var VERSION = '1.0.0-rc2a';
++var VERSION = '1.0.0-rc2a.1';
+ var ROOT = path.join(__dirname, '..');
+ var DEFAULT_PORT = 8765;
+ 
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/tests/rc2a1_hotfix.test.js Il_Secchione_1.0_RC2A1_HOTFIX/tests/rc2a1_hotfix.test.js
+--- Il_Secchione_1.0_RC2A_POST_PILOT/tests/rc2a1_hotfix.test.js	1970-01-01 01:00:00.000000000 +0100
++++ Il_Secchione_1.0_RC2A1_HOTFIX/tests/rc2a1_hotfix.test.js	2026-10-06 18:37:51.072054500 +0200
+@@ -0,0 +1,133 @@
++'use strict';
++/* RC2-A.1 HOTFIX — nei giochi il primo calcolo della regia deve già usare il tempo disponibile del round:
++   regia, server, ricalcolo e ripresa producono gli stessi punti, senza correzioni del server. Più la riga "Pulsantiere" della checklist. */
++var assert = require('assert');
++var fs = require('fs');
++var path = require('path');
++var vm = require('vm');
++var test = require('./harness.js').test;
++var SC = require('../js/engine/scoring.js');
++var SS = require('../js/engine/session.js');
++var Room = require('../server/room.js').Room;
++
++var APP = fs.readFileSync(path.join(__dirname, '..', 'js', 'app.js'), 'utf8');
++function extract(names) {
++  return names.map(function (name) {
++    var start = APP.indexOf('function ' + name + '(');
++    assert.ok(start >= 0, 'funzione della regia: ' + name);
++    var rest = APP.slice(start);
++    var next = /^(async )?function \w+\(/m.exec(rest.slice(rest.indexOf('\n') + 1));
++    return next ? rest.slice(0, rest.indexOf('\n') + 1 + next.index) : rest;
++  }).join('\n');
++}
++function same(a, b, msg) { assert.strictEqual(JSON.stringify(a), JSON.stringify(b), msg); }
++function pts(list) { var o = {}; list.forEach(function (e) { o[e.participantId] = e.points; }); return o; }
++
++/* Regia in miniatura: stato di un gioco con il round arcade aperto come in arcadeStartRound (availableMs dal tempo del gioco). */
++function gameCtx(type, seconds, entries) {
++  var teams = [{ id: 'a', name: 'Blu' }, { id: 'b', name: 'Rossi' }, { id: 'c', name: 'Verdi' }];
++  var commits = [], logs = [];
++  var ctx = {
++    SS: SS, SC: SC, FREE_OMISSIONS: 3, commits: commits, logs: logs,
++    state: { teams: teams, pending: {}, entryMeta: {}, correctOrder: [], pendingOrder: [], arcade: { type: type },
++      round: { roundInstanceId: 'game-' + type + '-0001', kind: 'arcade', openedAt: '2027-01-15T09:00:00.000Z', availableMs: seconds * 1000, committed: false },
++      timer: { duration: seconds }, session: SS.createSession({ scoringProfile: 'show_speed' }), teamsScore: null },
++    profileId: function () { return 'show_speed'; }, arcadeProvenance: function () { return { packId: 'qa' }; },
++    entryOrder: function (id) { var i = ctx.state.correctOrder.indexOf(id); return i >= 0 ? i + 1 : 1000; },
++    planItemFor: function () { return null; }, logEvent: function (e) { logs.push(e.event); }, recomputeScores: function () {},
++    NET: { commitRound: function (x) { commits.push(JSON.parse(JSON.stringify(x))); } }
++  };
++  entries.forEach(function (e) {
++    ctx.state.pending[e.id] = e.outcome;
++    ctx.state.entryMeta[e.id] = { inputMode: e.mode, responseTimeMs: e.ms, selectedAnswer: e.answer || null };
++    if (e.outcome === 'correct') ctx.state.correctOrder.push(e.id);
++  });
++  teams.forEach(function (t) { if (!(t.id in ctx.state.pending)) { ctx.state.pending[t.id] = 'omitted'; ctx.state.entryMeta[t.id] = { inputMode: 'manual', auto: true }; } }); // come fillMissingAbstain()
++  vm.runInNewContext(extract(['roundAvailableMs', 'arcadeRecords', 'priorOmissions', 'scoreOptions', 'countModes', 'finalizeRound', 'committedPoints', 'recomputeAllRounds', 'serverCommitted']), ctx);
++  return ctx;
++}
++function commitLocal(ctx) {
++  var records = ctx.arcadeRecords(ctx.state.arcade, 'SOLUZIONE');
++  ctx.finalizeRound(records, { gameType: ctx.state.arcade.type });
++  return pts(ctx.state.session.scoreEvents);
++}
++
++test('RC2-A.1 Photopuzzle tablet: 2 s su 45 s → 296 già nel calcolo locale della regia (nessuna attesa del server)', function () {
++  var ctx = gameCtx('photopuzzle', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 2000, answer: 'VIA APPIA' }, { id: 'b', outcome: 'wrong', mode: 'tablet', ms: 9000 }, { id: 'c', outcome: 'omitted', mode: 'manual' }]);
++  var records = ctx.arcadeRecords(ctx.state.arcade, 'VIA APPIA ANTICA');
++  assert.ok(records.every(function (r) { return r.availableMs === 45000; }), 'ogni record del gioco ha il tempo disponibile del round');
++  same(commitLocal(ctx), { a: 296, b: -100, c: 0 });
++  assert.strictEqual(ctx.commits[0].availableMs, 45000, 'al server va lo stesso tempo disponibile');
++  assert.strictEqual(ctx.state.session.rounds[0].availableMs, 45000, 'salvato nel round');
++});
++test('RC2-A.1 Indovina tablet: tempo misurato → bonus corretto (9 s su 45 s = 280)', function () {
++  same(commitLocal(gameCtx('indovina', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 9000 }, { id: 'b', outcome: 'correct', mode: 'tablet', ms: 30000 }])), { a: 280, b: 233, c: 0 });
++});
++test('RC2-A.1 Staffetta: bonus corretto per il collegamento (15 s su 45 s = 267; dopo +10 s il tempo disponibile è 55 s)', function () {
++  same(commitLocal(gameCtx('chain', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 15000 }])), { a: 267, b: 0, c: 0 });
++  var ext = gameCtx('chain', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 15000 }]);
++  ext.state.round.availableMs = 55000; // come addSeconds(10) sul round e sul server
++  same(commitLocal(ext), { a: 273, b: 0, c: 0 });
++});
++test('RC2-A.1 corretta manuale in un gioco → 200; una corretta manuale nel round → tutte le corrette 200 (D1)', function () {
++  same(commitLocal(gameCtx('photopuzzle', 45, [{ id: 'c', outcome: 'correct', mode: 'manual' }])), { a: 0, b: 0, c: 200 });
++  same(commitLocal(gameCtx('photopuzzle', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 2000 }, { id: 'c', outcome: 'correct', mode: 'manual' }])), { a: 200, b: 0, c: 200 });
++  same(commitLocal(gameCtx('photopuzzle', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 2000 }, { id: 'c', outcome: 'wrong', mode: 'manual' }])), { a: 296, b: 0, c: -100 }, 'un\'errata a mano non toglie il bonus');
++});
++test('RC2-A.1 server: commit del gioco → stessi punti della regia, nessuna correzione (score.verified)', function () {
++  var t = { now: 9000000 };
++  var room = new Room({ clock: function () { return t.now; }, pin: '4821', graceMs: 500 });
++  room.setSession('s-hotfix');
++  room.syncParticipants([{ id: 'a', name: 'Blu' }, { id: 'b', name: 'Rossi' }, { id: 'c', name: 'Verdi' }]);
++  var j = room.join({ pin: '4821' }), d = room.assign(j.device.deviceId, 'a');
++  assert.ok(room.openRound({ roundInstanceId: 'game-photopuzzle-0001', kind: 'arcade', gameType: 'photopuzzle', layout: 'text', correct: 'Via Appia antica', maxLength: 60, durationMs: 45000 }).ok);
++  t.now += 1973;
++  var ans = room.answer(d.deviceId, { roundInstanceId: 'game-photopuzzle-0001', answer: 'VIA APPIA ANTICA', deviceToken: d.deviceToken });
++  assert.ok(ans.accepted);
++  var ctx = gameCtx('photopuzzle', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: ans.record.responseTimeMs, answer: 'VIA APPIA ANTICA' }, { id: 'c', outcome: 'wrong', mode: 'manual' }]);
++  ctx.state.entryMeta.a.responseId = ans.record.responseId;
++  var local = commitLocal(ctx);
++  same(local, { a: 296, b: 0, c: -100 }, '1 973 ms su 45 000');
++  var sent = ctx.commits[0];
++  var srv = room.commit({ roundInstanceId: sent.roundInstanceId, records: sent.records, profileId: sent.profileId, kind: sent.kind, openedAt: sent.openedAt, availableMs: sent.availableMs });
++  assert.ok(srv.ok);
++  same(pts(srv.scoreEvents), local, 'server = regia al primo calcolo');
++  assert.strictEqual(srv.corrected, 0, 'nessun record riallineato');
++  ctx.serverCommitted({ roundInstanceId: sent.roundInstanceId, scoreEvents: srv.scoreEvents });
++  assert.ok(ctx.logs.indexOf('score.verified') >= 0 && ctx.logs.indexOf('score.server_override') < 0, 'la regia registra score.verified, non score.server_override');
++});
++test('RC2-A.1 recomputeAllRounds: i punti dei giochi restano identici (anche con record storici senza availableMs)', function () {
++  var ctx = gameCtx('indovina', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 9000 }, { id: 'b', outcome: 'correct', mode: 'tablet', ms: 4500 }]);
++  var before = commitLocal(ctx);
++  ctx.recomputeAllRounds('show_speed');
++  same(pts(ctx.state.session.scoreEvents), before);
++  ctx.state.session.responses.forEach(function (r) { delete r.availableMs; }); // record salvati prima della correzione
++  ctx.recomputeAllRounds('show_speed');
++  same(pts(ctx.state.session.scoreEvents), before, 'riserva: rd.availableMs del round');
++  same(SS.recomputeTotals(ctx.state.session, 'show_speed'), before, 'anche il ricalcolo del motore usa la riserva');
++});
++test('RC2-A.1 salvataggio e ripresa: dopo un giro JSON i punti dei giochi restano identici', function () {
++  var ctx = gameCtx('photopuzzle', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 2000 }, { id: 'b', outcome: 'correct', mode: 'tablet', ms: 20000 }]);
++  var before = commitLocal(ctx);
++  same(before, { a: 296, b: 256, c: 0 });
++  ctx.state.session = JSON.parse(JSON.stringify(ctx.state.session)); // autosave → ripresa
++  same(SS.totals(ctx.state.session), before);
++  ctx.recomputeAllRounds('show_speed');
++  same(pts(ctx.state.session.scoreEvents), before);
++  assert.ok(/state\.round=ui\.round\|\|null;/.test(APP), 'un gioco in corso riprende con il suo round (e il suo availableMs)');
++});
++test('RC2-A.1 checklist: "2 tablet collegati · 4 squadre manuali" invece di "2 / 2 collegate"', function () {
++  function items(teams, devices) {
++    var ctx = { esc: String, publicWindow: null, state: { teams: teams, mixed: false, showJoin: false, planRun: null },
++      NET: { status: function () { return { available: true, connected: true, showClients: 1 }; }, room: function () { return {}; }, devices: function () { return devices; } },
++      pack: function () { return { title: 'Arte' }; }, planLive: function () { return null; } };
++    vm.runInNewContext('var publicWindow=null;\n' + extract(['tabletSummary', 'readinessItems']), ctx);
++    return ctx.readinessItems().filter(function (i) { return i.label === 'Pulsantiere'; })[0];
++  }
++  var six = ['a', 'b', 'c', 'd', 'e', 'f'].map(function (id) { return { id: id }; });
++  assert.strictEqual(items(six, [{ participantId: 'a', connected: true }, { participantId: 'b', connected: true }]).detail, '2 tablet collegati · 4 squadre manuali');
++  var warn = items(six, [{ participantId: 'a', connected: true }, { participantId: 'b', connected: false }]);
++  assert.strictEqual(warn.detail, '1 di 2 tablet collegati · 4 squadre manuali'); assert.strictEqual(warn.state, 'warn');
++  assert.strictEqual(items(six.slice(0, 2), [{ participantId: 'a', connected: true }, { participantId: 'b', connected: true }]).detail, '2 tablet collegati');
++  assert.strictEqual(items(six.slice(0, 2), [{ participantId: 'a', connected: true }]).detail, '1 tablet collegato · 1 squadra manuale');
++});
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/tests/rc2a_post_pilot.test.js Il_Secchione_1.0_RC2A1_HOTFIX/tests/rc2a_post_pilot.test.js
+--- Il_Secchione_1.0_RC2A_POST_PILOT/tests/rc2a_post_pilot.test.js	2026-10-06 18:02:08.370106000 +0200
++++ Il_Secchione_1.0_RC2A1_HOTFIX/tests/rc2a_post_pilot.test.js	2026-10-06 18:36:25.024556500 +0200
+@@ -147,7 +147,7 @@
+   assert.ok(/r\.openedAt=SS\.nowISO\(\);r\.availableMs=Math\.round\(state\.timer\.duration\*1000\);/.test(APP), 'avvio domanda');
+   assert.ok(/if\(state\.round\)state\.round\.availableMs=Math\.round\(state\.timer\.duration\*1000\);/.test(APP), '+10 s');
+   assert.ok(/availableMs:roundAvailableMs\(\),inputMode:m\.inputMode/.test(APP), 'record della domanda');
+-  assert.ok(/NET\.commitRound\(\{[^}]*availableMs:r\.availableMs\|\|null\}\)/.test(APP), 'conferma al server');
++  assert.ok(/NET\.commitRound\(\{[^}]*availableMs:av\}\)/.test(APP), 'conferma al server (RC2-A.1: stesso valore del calcolo locale)');
+   assert.ok(/availableMs:saved\.availableMs\|\|/.test(APP), 'riapertura dei punti');
+   assert.ok(/availableMs:Math\.round\(TM\.secondsFor\(a\.seconds,a\.type\)\*1000\)\}\);/.test(APP), 'giochi');
+   assert.ok(/availableMs:lr\.availableMs\|\|Math\.round\(state\.timer\.duration\*1000\)/.test(APP), 'riapertura del round dopo riavvio del server');
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/tests/session_planner_370.test.js Il_Secchione_1.0_RC2A1_HOTFIX/tests/session_planner_370.test.js
+--- Il_Secchione_1.0_RC2A_POST_PILOT/tests/session_planner_370.test.js	2026-10-06 18:02:31.706051700 +0200
++++ Il_Secchione_1.0_RC2A1_HOTFIX/tests/session_planner_370.test.js	2026-10-06 18:36:00.049329800 +0200
+@@ -424,7 +424,7 @@
+   assert.ok(nq.indexOf('if(planLive())return planNext();') > 0 && nq.indexOf('if(planLive())return planNext();') > nq.indexOf('revealNextPlace()'), 'AVANTI = nextQuestion (RC2-A: prima la proclamazione in corso)');
+   assert.ok(/function goQuestion\(i\)\{RC\.applyDeferred\(state\);state\.repeatOf=null;/.test(app), 'repeatOf non sopravvive a un cambio di domanda');
+   assert.strictEqual((app.match(/newSession\(true\);state\.completedRounds=\{\};state\.planRun=null;/g) || []).length, 2);
+-  assert.ok(/const VERSION='1\.0\.0-rc2a';/.test(app)); // RC2-A
++  assert.ok(/const VERSION='1\.0\.0-rc2a\.1';/.test(app)); // RC2-A.1
+ });
+ 
+ test('Persistenza: le scalette salvate nelle preferenze tornano dal server (GET /api/host/prefs, solo regia)', async function () {
+diff -ruN '--exclude=QA' '--exclude=SHA256SUMS.txt' '--exclude=runtime' '--exclude=RELEASE.json' '--exclude=legacy_v3' Il_Secchione_1.0_RC2A_POST_PILOT/tests/training_rc1.test.js Il_Secchione_1.0_RC2A1_HOTFIX/tests/training_rc1.test.js
+--- Il_Secchione_1.0_RC2A_POST_PILOT/tests/training_rc1.test.js	2026-10-06 17:46:52.700722900 +0200
++++ Il_Secchione_1.0_RC2A1_HOTFIX/tests/training_rc1.test.js	2026-10-06 18:36:17.370329600 +0200
+@@ -271,7 +271,7 @@
+     state: { teams: o.teams || [], mixed: false, showJoin: !!o.showJoin, planRun: null }, pack: function () { return { title: 'Arte romana' }; }, planLive: function () { return null; },
+     BRAND_LOGO: 'logo.svg', window: { SecchioneQR: require('../js/lib/qr.js') }
+   };
+-  vm.runInNewContext('var publicWindow=this.publicWindow;\n' + extract(['readinessItems', 'readinessHTML', 'joinHTML']), ctx);
++  vm.runInNewContext('var publicWindow=this.publicWindow;\n' + extract(['tabletSummary', 'readinessItems', 'readinessHTML', 'joinHTML']), ctx);
+   return ctx;
+ }
+ test('RC1 checklist "Pronto per la lezione": programma, squadre, proiettore, pulsantiere, contenuti con l\'azione giusta', function () {

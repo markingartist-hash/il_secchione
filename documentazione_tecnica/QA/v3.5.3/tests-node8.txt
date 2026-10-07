@@ -1,0 +1,9 @@
+Solo informativo: runtime supportato = Node 24 portable incluso.
+Node v8.16.0
+  ✗ P1: Host estraneo e Origin cross-site rifiutati, locale consentito
+    TypeError: "listener" argument must be a function
+  ✗ P1: errore stream statico interrompe solo la richiesta
+    TypeError [ERR_INVALID_ARG_TYPE]: The "block" argument must be of type Function. Received type object
+128 superati, 2 falliti
+
+Baseline v3.5.2 con lo stesso Node 8.16: stessi 2 test falliti (104 superati, 2 falliti).

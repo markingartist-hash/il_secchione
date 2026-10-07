@@ -1,0 +1,855 @@
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/ASSET_AUDIT.md b/ASSET_AUDIT.md
+--- a/ASSET_AUDIT.md	2026-10-04 10:48:28.000000000 +0200
++++ b/ASSET_AUDIT.md	2026-10-04 16:11:00.000000000 +0200
+@@ -93,3 +93,17 @@
+ | PACK_ESEMPI/vulcani/images/etna.png | `f6800699aa40515d…` | 10 KB | no | no | Disegni schematici generati per il pacchetto di esempio (v3.5) | CC0 | OK |
+ | PACK_ESEMPI/vulcani/images/stromboli.png | `a9af00c27a9438b3…` | 10 KB | no | no | Disegni schematici generati per il pacchetto di esempio (v3.5) | CC0 | OK |
+ | PACK_ESEMPI/vulcani/images/vesuvio.png | `5895d6b161e52d48…` | 10 KB | no | no | Disegni schematici generati per il pacchetto di esempio (v3.5) | CC0 | OK |
++
++## Mascotte animata (v3.5.4)
++
++Fornite dal committente in `SECCHIONE_MASCOT_ANIMATED_ASSETS_FOR_CLAUDE.zip` (SHA-256 `5635662259368b30…`) e usate senza modifiche. Licenza e autore: da documentare a cura del committente, come per la mascotte originale.
++
++| File | SHA-256 | Dimensioni | Uso |
++|---|---|---|---|
++| assets/mascot/mascot_present.webp | `dee2612aadf44880…` | 768×1024, 129 KB | runtime (welcome, reveal, point, host…) |
++| assets/mascot/mascot_think.webp | `1538c4b138d532a0…` | 768×1024, 113 KB | runtime (think, explorer) |
++| assets/mascot/mascot_celebrate.webp | `1c3d681c4fa170a6…` | 768×1024, 143 KB | runtime (celebrate, champion) |
++| assets/mascot/mascot_panic.webp | `416d7f8017ae389d…` | 768×1024, 148 KB | runtime (panic: tempo scaduto) |
++| assets/sorgenti_grafiche/mascotte_animata/*.png | — | 4 PNG master, 4,0 MB | solo sorgenti, non pubblicati in rete |
++
++`assets/mascot/secchione_a.png` e `secchione_b.png` restano per l'anteprima di Pack Studio (non modificata in questa patch).
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/CHANGELOG_v3.5.4_MASCOT_ANIMATED.md b/CHANGELOG_v3.5.4_MASCOT_ANIMATED.md
+--- a/CHANGELOG_v3.5.4_MASCOT_ANIMATED.md	1970-01-01 01:00:00.000000000 +0100
++++ b/CHANGELOG_v3.5.4_MASCOT_ANIMATED.md	2026-10-04 16:10:27.000000000 +0200
+@@ -0,0 +1,64 @@
++# v3.5.4_MASCOT_ANIMATED — 4 ottobre 2026
++
++Patch visuale isolata sulla release validata **v3.5.3_PACK_STUDIO**, che resta invariata (ZIP SHA-256 `dc76961d82e416a741d2cbc5959bb83c4e085f1394f7e69c8df018cfb3abe047`).
++Asset da `SECCHIONE_MASCOT_ANIMATED_ASSETS_FOR_CLAUDE.zip`, SHA-256 `5635662259368b3021d32a1fa77b65f84205629c9e9f666140317007f86d46f8`; specifica `CLAUDE_MASCOT_INTEGRATION_PROMPT.md`.
++
++## Cosa cambia
++- **Quattro pose reali** al posto delle vecchie "pose", che riciclavano 2 soli PNG:
++  - `present`, `think`, `celebrate`, `panic`;
++  - sono i WebP di `assets_optimized/`, copiati byte per byte in `assets/mascot/`, senza ridisegni;
++  - i PNG master e il manifest sono in `assets/sorgenti_grafiche/mascotte_animata/`, fuori dal percorso di runtime e non pubblicati in rete.
++- **Stesso sistema di prima, nessun sistema parallelo**: `MASCOT_POSES`, `MOOD_SRC`, `currentMood()`, `mascotMarkup()` e `animateMascots()` sono gli stessi, con le nuove immagini.
++  - Umori: `welcome` e `reveal` → present, `think` → think, `celebrate` → celebrate, `panic` → panic.
++  - Le vecchie pose sono alias delle quattro reali: `point`, `host`, `artist` e `thumb` → present, `explorer` → think, `champion` → celebrate.
++- **Panic** solo allo scadere del tempo, cioè lo stesso evento globale del suono `timeup`, mai per l'esito di una squadra.
++  - La regola esistente "a tempo scaduto si svela la soluzione" resta: la mascotte va nel panico per 1,4 s, poi passa alla soluzione con present.
++  - Pausa e chiusura anticipata del docente non provocano panico.
++  - Se i punti vengono confermati subito (pulsantiere), `celebrate` resta prioritario come prima.
++- **Animazioni** solo CSS (`transform` e `opacity`), in unità del palco; su 1920×1080 corrispondono ai valori della specifica:
++  - present: ingresso di 420 ms (opacità 0→1, +10 px, scala 0,97→1), poi float di 5 px ogni 2,8 s;
++  - think: respiro di 2,6 s (scala 1→1,012, ±0,4°), anche negli ultimi 10 s;
++  - celebrate: salto one-shot di 700 ms (−18 px, scala 1,04, ±1,2°), poi fermo;
++  - panic: scossa one-shot di 500 ms (±6 px, ±1,6°), poi ferma.
++- **Riproduzione delle animazioni one-shot** (classe `mascotPlay`):
++  - partono solo per un evento nuovo, o quando il palco viene ridisegnato entro 150 ms dall'inizio dell'evento;
++  - i normali ridisegni del palco (risposte registrate, clic) non ripetono salti, scosse o ingressi;
++  - due `celebrate` di seguito ripartono (chiave d'evento `data-cue`).
++- **Cambio posa**: breve dissolvenza di 140 ms. Le quattro immagini vengono precaricate in regia e nello SHOW.
++- **Movimento ridotto**: con `prefers-reduced-motion: reduce`, o con il pulsante esistente "Mascotte: ferma", le pose cambiano senza movimento.
++- La mascotte non riceve clic né selezioni (`pointer-events: none`, `user-select: none`); `will-change: transform` vale solo per l'immagine della mascotte.
++- **SHOW remoto** (`js/show-client.js`): stesse pose, precaricamento e regole di riproduzione. Il campo `mood` già presente nei messaggi del timer porta anche `panic`: nessun cambio a protocollo o server.
++- Le transizioni tra domande (`index.html`, `show.html`) partono con la nuova posa present.
++
++## File
++- **Aggiunti**:
++  - `assets/mascot/mascot_{present,think,celebrate,panic}.webp`
++  - `assets/sorgenti_grafiche/mascotte_animata/*.png` e `mascot_manifest.json`
++  - `tests/mascot.test.js`
++  - `CHANGELOG_v3.5.4_MASCOT_ANIMATED.md`, `QA/v3.5.4/*`
++- **Modificati**:
++  - `js/app.js`: costanti della mascotte, `currentMood`, `mascotMarkup`, `animateMascots`, `VERSION`;
++  - `js/show-client.js`: pose dello SHOW;
++  - `css/show.css`: blocco "Mascotte animata v3.5.4" in coda;
++  - `index.html`, `show.html`: immagine iniziale della transizione;
++  - `server/server.js`: solo la stringa `VERSION`;
++  - documentazione, `RELEASE.json`, `SHA256SUMS.txt`.
++- **Invariati**, byte per byte:
++  - Player (`player.html`, `js/player.js`, `css/player.css`);
++  - rete (`js/host/net.js`, `server/room.js`, `server/ws.js`);
++  - punteggio, timer, sessione, report e CSV;
++  - Pack Studio (`js/engine/packstudio.js`, `js/studio/*`, `studio.html`);
++  - persistenza (`js/host/store.js`);
++  - pacchetti e giochi.
++- I vecchi `assets/mascot/secchione_a.png` e `secchione_b.png` restano: li usa ancora l'anteprima di Pack Studio, che per vincolo non è stata modificata.
++
++## Test
++- `node tests/run.js`: **136 superati, 0 falliti** con il Node 24 portable incluso. Sono i 130 della v3.5.3, invariati, più 6 della mascotte.
++  - asset identici a quelli forniti;
++  - mappatura identica in regia e SHOW;
++  - panic solo a tempo scaduto;
++  - animazioni solo `transform`/`opacity` con le durate richieste;
++  - Player senza mascotte;
++  - pose servite anche in rete, senza 404.
++- `node tools/simulate_players.js`: 2/6/15/30 pulsantiere, nessuna risposta persa o duplicata.
++- Collaudo manuale in regia e SHOW: vedi [QA/v3.5.4/COLLAUDO.md](QA/v3.5.4/COLLAUDO.md).
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/LEGGIMI.txt b/LEGGIMI.txt
+--- a/LEGGIMI.txt	2026-10-04 13:41:56.000000000 +0200
++++ b/LEGGIMI.txt	2026-10-04 16:11:00.000000000 +0200
+@@ -1,9 +1,10 @@
+-IL SECCHIONE · v3.5.3_PACK_STUDIO
++IL SECCHIONE · v3.5.4_MASCOT_ANIMATED
+ 
+ ESTRAI TUTTO LO ZIP, poi doppio clic su AVVIA_IL_SECCHIONE.bat.
+ Node Windows x64 incluso in runtime: nessuna installazione necessaria.
+ Conserva tutte le sottocartelle accanto al BAT.
+-Novità: CHANGELOG_v3.5.3_PACK_STUDIO.md (Pack Studio, CSV protetti)
++Novità: CHANGELOG_v3.5.4_MASCOT_ANIMATED.md (mascotte animata)
++        CHANGELOG_v3.5.3_PACK_STUDIO.md (Pack Studio, CSV protetti)
+ Audit della base: AUDIT_v3.5.2_PILOT.md — modifiche della base: CHANGELOG_v3.5.2_PILOT.md
+ 
+ AVVIO
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/QA/v3.5.4/COLLAUDO.md b/QA/v3.5.4/COLLAUDO.md
+--- a/QA/v3.5.4/COLLAUDO.md	1970-01-01 01:00:00.000000000 +0100
++++ b/QA/v3.5.4/COLLAUDO.md	2026-10-04 16:11:40.000000000 +0200
+@@ -0,0 +1,51 @@
++# Collaudo v3.5.4_MASCOT_ANIMATED — 4 ottobre 2026
++
++Base: release validata `Il_Secchione_v3.5.3_PACK_STUDIO.zip`, SHA-256 `dc76961d…80ed`, verificata prima della patch con 186 checksum su 186 corrispondenti.
++Asset: `SECCHIONE_MASCOT_ANIMATED_ASSETS_FOR_CLAUDE.zip`, SHA-256 `5635662259368b30…46f8`.
++
++## Test automatici (runtime Node 24.19 incluso)
++| Esecuzione | Risultato | Log |
++|---|---|---|
++| `node tests/run.js` | **136 superati, 0 falliti**: i 130 della v3.5.3, invariati, più 6 di `tests/mascot.test.js` | `tests-unit-integration.txt` |
++| `node tools/simulate_players.js` | 2/6/15/30 pulsantiere, nessuna risposta persa né duplicata | `simulation.txt` |
++
++## Collaudo manuale (regia + SHOW remoto, server su copia temporanea)
++Il pannello del browser usato per il collaudo era nascosto: il browser non avanzava le animazioni (timeline ferma, 1 fotogramma ogni 400 ms). Per questo:
++
++- **logica** (posa, immagine, `mascotPlay`, animazione attiva): letta con `getAnimations()`;
++- **ampiezze**: misurate portando ogni animazione all'istante di picco (`currentTime`) e leggendo la trasformazione calcolata.
++
++| Verifica | Esito |
++|---|---|
++| present (home, anteprima domanda) | ✓ `mascot_present.webp`, ingresso 420 ms + float 2,8 s |
++| think (domanda e gioco in corso) | ✓ `mascot_think.webp`, respiro 2,6 s |
++| panic (tempo scaduto, domanda e Indovina) | ✓ `mascot_panic.webp` con scossa one-shot; dopo 1,4 s la soluzione con present |
++| nessun panico per pausa o chiusura anticipata del docente | ✓ |
++| celebrate (punti confermati) | ✓ `mascot_celebrate.webp`, salto one-shot, poi fermo |
++| due celebrate di seguito (punti → classifica) | ✓ il salto riparte sulla classifica |
++| ridisegni del palco (risposte registrate, omesse) | ✓ nessun ingresso, salto o scossa ripetuti |
++| cambio rapido (100 ms tra un passo e l'altro) | ✓ think → present → present (soluzione) → celebrate, stato finale stabile |
++| SHOW: refresh a partita in corso | ✓ posa corrente, ingresso una sola volta |
++| SHOW: riconnessione dopo il riavvio del server | ✓ si ricollega da solo e segue la regia (domanda 3, think) |
++| ripresa della partita dopo il riavvio | ✓ nessun panico "fantasma" |
++| 1920×1080 (SHOW) | ✓ ingresso +10 px, float −5 px, salto −18,4 px (scala 1,04, −1,2°), scossa ±5,8 px (±1,6°); ritorno a 0 a fine one-shot |
++| 1366×768 (SHOW) | ✓ stessi movimenti in proporzione al palco (salto −13 px, scossa ±4 px) |
++| sovrapposizioni con timer, domanda, risposte e contatore al picco | ✓ nessuna, a entrambe le risoluzioni |
++| movimento ridotto (`prefers-reduced-motion`) | ✓ animazioni assenti per tutte le pose, che però cambiano |
++| pulsante "Mascotte: ferma" della regia | ✓ animazioni spente, pose aggiornate |
++| rete | ✓ solo richieste a `127.0.0.1`, nessun 404; le 4 pose precaricate all'avvio di regia e SHOW |
++| console | ✓ nessun errore |
++| Player | ✓ `player.html`, `js/player.js` e `css/player.css` identici alla v3.5.3 |
++
++Note:
++- Il movimento ridotto è stato verificato applicando in pagina le regole del blocco `@media (prefers-reduced-motion: reduce)`: il pannello non permette di emulare l'impostazione del sistema.
++- Non sono state prodotte schermate o GIF come file.
++
++## Integrità
++- Rispetto alla v3.5.3 sono identici byte per byte:
++  - `js/host/net.js`, `server/room.js`, `server/ws.js`, `js/host/store.js`;
++  - `js/engine/{scoring,timer,session,report,packstudio}.js`, `js/studio/*`, `studio.html`;
++  - Player, pacchetti.
++- `server/server.js` cambia solo nella stringa `VERSION`.
++- I WebP in `assets/mascot/` sono identici a `assets_optimized/` del pacchetto fornito; i PNG master sono identici ad `assets/`.
++- Diff completo dei file di testo: `diff_vs_v3.5.3.patch`.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/QA/v3.5.4/simulation.txt b/QA/v3.5.4/simulation.txt
+--- a/QA/v3.5.4/simulation.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/QA/v3.5.4/simulation.txt	2026-10-04 16:11:52.000000000 +0200
+@@ -0,0 +1,6 @@
++✓  2 pulsantiere · 5 domande · 10 risposte · ack mediana 3 ms, 95° perc. 7 ms, max 7 ms · 598 ms totali
++✓  6 pulsantiere · 5 domande · 30 risposte · ack mediana 2 ms, 95° perc. 7 ms, max 8 ms · 694 ms totali
++✓ 15 pulsantiere · 5 domande · 75 risposte · ack mediana 2 ms, 95° perc. 8 ms, max 9 ms · 776 ms totali
++✓ 30 pulsantiere · 5 domande · 150 risposte · ack mediana 2 ms, 95° perc. 4 ms, max 5 ms · 983 ms totali
++
++SIMULAZIONE OK: nessuna risposta persa, nessun duplicato.
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/QA/v3.5.4/tests-unit-integration.txt b/QA/v3.5.4/tests-unit-integration.txt
+--- a/QA/v3.5.4/tests-unit-integration.txt	1970-01-01 01:00:00.000000000 +0100
++++ b/QA/v3.5.4/tests-unit-integration.txt	2026-10-04 16:11:49.000000000 +0200
+@@ -0,0 +1,164 @@
++
++browser_store.test.js
++  ✓ salva, chiudi, riapri: lo snapshot è ritrovato (2 ms)
++  ✓ una partita non conclusa NON viene sovrascritta da una nuova finché il docente non sceglie (0 ms)
++  ✓ riprendi: salvare la stessa sessione è sempre consentito (0 ms)
++  ✓ l'archivio conserva al massimo 3 partite (0 ms)
++
++csv_safety.test.js
++  ✓ CSV v2: regola di neutralizzazione cella per cella (1 ms)
++  ✓ CSV risposte: testi ostili di squadre, pack e studenti neutralizzati; punti negativi restano numeri (2 ms)
++  ✓ CSV dati grezzi ({raw:true}): celle esattamente come registrate, stesso formato (0 ms)
++  ✓ log tecnico CSV: risposte e motivi neutralizzati, latenze e delta punti numerici; grezzo su richiesta (8 ms)
++  ✓ report HTML: i testi ostili restano testo (nessun markup eseguibile) (2 ms)
++
++mascot.test.js
++  ✓ mascotte: i 4 WebP sono quelli forniti (non ridisegnati), validi e leggeri; i PNG master stanno fuori dal runtime (3 ms)
++  ✓ mascotte: mappatura umore → posa identica in regia (app.js) e SHOW (show-client.js), come da specifica (4 ms)
++  ✓ mascotte: panic solo a tempo scaduto (evento globale), mai per l'esito di una squadra (0 ms)
++  ✓ mascotte: animazioni solo transform/opacity, durate della specifica, one-shot ripetibili, movimento ridotto (1 ms)
++  ✓ mascotte: il Player (pulsantiera) non ha mascotte né animazioni nuove (0 ms)
++  ✓ mascotte: le 4 pose sono servite dal server anche ai dispositivi in rete (SHOW), senza 404 (144 ms)
++
++pack.test.js
++  ✓ pack installato arte_romana valido: 72 domande, 33 manche (14/8/3/4/4) (3 ms)
++  ✓ ogni immagine citata dal pack esiste davvero su disco (3 ms)
++  ✓ import v3: domande_romana.json valido, prefissi immagine tolti, id conservati (2 ms)
++  ✓ import v3: giochi_romana.json valido (Indovina, Ghigliottina, Catena) (1 ms)
++  ✓ PACK_TEMPLATE valido; le bozze non entrano in gara (1 ms)
++  ✓ pack non valido rifiutato con messaggi comprensibili (6 ms)
++  ✓ archivio domande non valido (v3) rifiutato per intero (2 ms)
++  ✓ durata: i secondi della domanda sono conservati (5–600) e 30 di default (0 ms)
++  ✓ il bundle generato contiene il pack ed è aggiornato (3 ms)
++
++packmanager.test.js
++  ✓ zip: CRC-32 di riferimento e andata/ritorno con nomi UTF-8 (1 ms)
++  ✓ zip: la decompressione JavaScript (usata nel browser) coincide con zlib (30 ms)
++  ✓ zip: legge uno .zip creato con "Comprimi" di Windows (Compress-Archive) (1 ms)
++  ✓ zip: file non zip, troncato o danneggiato → errore chiaro (1 ms)
++  ✓ importazione: un solo file .zip porta domande, giochi e immagini (libreria del browser) (4 ms)
++  ✓ importazione su disco: cartella packs/<id> completa, install.json, bundle aggiornato (13 ms)
++  ✓ comando unico: node tools/pack_manager.js import <file.zip> (anche più file) (126 ms)
++  ✓ importazione di un pack in file singolo .json con immagini incorporate (2 ms)
++  ✓ migrazione automatica: uno .zip di un'edizione v3 viene convertito al volo (1 ms)
++  ✓ migrazione automatica su disco: i pack già presenti (es. Arte romana) vengono registrati (36 ms)
++  ✓ pacchetti non validi rifiutati senza scrivere nulla (9 ms)
++  ✓ collisione di id: un pack diverso con lo stesso id riceve un nuovo id, l'originale non cambia (28 ms)
++  ✓ stesso contenuto importato due volte: "già installato", nessuna copia (2 ms)
++  ✓ collisione degli id delle domande tra pack diversi: nella sessione mista restano distinti (3 ms)
++  ✓ attivazione: la sessione registra pack, versione, materia e argomenti (2 ms)
++  ✓ cambio pack nella stessa sessione: squadre e storico restano, i pack usati si accumulano (2 ms)
++  ✓ multi-pack: sessione mista con domande e giochi di più pack e provenienza per risposta (3 ms)
++  ✓ duplicazione: copia indipendente con nuovo id e titolo; seconda copia con id diverso (40 ms)
++  ✓ esportazione: .zip conforme, reimportabile identico (andata e ritorno) (13 ms)
++  ✓ esportazione del pack Arte romana completo (72 domande, 33 manche, 24 immagini) (31 ms)
++  ✓ eliminazione: spostamento nel cestino, non più in elenco; l'ultimo pack non si elimina (22 ms)
++  ✓ libreria del browser: i pack del programma sono in sola lettura, la copia usa le loro immagini (4 ms)
++  ✓ server: elenco, importazione, duplicazione, esportazione ed eliminazione via /api/host/packs (77 ms)
++
++packstudio.test.js
++  ✓ nuovo pacchetto: valori iniziali, codice dal titolo, validazione che chiede almeno una domanda (0 ms)
++  ✓ domande: crea, duplica, sposta, elimina con codici unici (1 ms)
++  ✓ validazione: indica quale domanda correggere e perché (1 ms)
++  ✓ argomento, categoria e tag: conservati nel pacchetto e validati (0 ms)
++  ✓ bozze escluse dalla gara: avviso, e errore se nessuna domanda è approvata (1 ms)
++  ✓ immagini: nome sicuro e senza cartelle, estensione dai byte reali, nomi unici (0 ms)
++  ✓ immagini: associazione, uso, rinomina con aggiornamento dei riferimenti, eliminazione protetta (0 ms)
++  ✓ immagine citata ma assente: errore sulla domanda giusta (1 ms)
++  ✓ riapertura di un pacchetto con immagini in sottocartelle: spostate direttamente in images/ (1 ms)
++  ✓ manche speciali: tutte e cinque si creano vuote (non valide) e diventano valide una volta compilate (3 ms)
++  ✓ manche: duplica, sposta, elimina; la Parola Segreta richiede esattamente 5 coppie (0 ms)
++  ✓ esportazione ZIP: conforme al formato, immagini piatte, reimportabile e riapribile nello Studio (0 ms)
++  ✓ un pacchetto con errori non si esporta (0 ms)
++  ✓ riapertura del pacchetto Arte romana completo: modifica e nuovo ZIP valido (72 domande, 33 manche, 24 immagini) (47 ms)
++  ✓ versione: incremento automatico e impronta che cambia solo se cambia il contenuto (1 ms)
++  ✓ salvataggio in libreria (browser): nuovo, conflitto senza conferma, sostituzione esplicita (1 ms)
++  ✓ salvataggio: rifiutate immagini in sottocartelle e sostituzione di un pacchetto del programma in sola lettura (2 ms)
++  ✓ salvataggio su disco: sostituzione atomica con copia di sicurezza nel cestino e bundle aggiornato (15 ms)
++  ✓ server: PUT /api/host/packs/<id> (nuovo, conflitto, sostituzione) e pagina /studio solo per la regia (46 ms)
++
++pilot_hotfix.test.js
++  ✓ P0: token Unicode non termina join o answer (0 ms)
++  ✓ P0: token Unicode via WebSocket rifiutato, server ancora operativo (27 ms)
++  ✓ P1: limite DEFLATE durante decompressione (browser e Node) (9 ms)
++  ✓ P1: ZIP con dimensione contraffatta bloccato prima del CRC (4 ms)
++  ✓ P1: INVIA si riattiva al secondo round mcq anche con ACK vecchio (2 ms)
++  ✓ P1: INVIA si riattiva al secondo round text anche con ACK vecchio (2 ms)
++  ✓ P1: retry del round corrente conservato; reset senza round pulisce invio (1 ms)
++  ✓ P1: Host estraneo e Origin cross-site rifiutati, locale consentito (34 ms)
++  ✓ P1: hello SHOW ripetuto non duplica schermi o cambia ruolo (198 ms)
++  ✓ P1: errore stream statico interrompe solo la richiesta (14 ms)
++  ✓ P1: hello Player falliti non azzerano il limite di frequenza (23 ms)
++  ✓ P1: migrazione conserva le sorgenti che non riesce a importare (1 ms)
++  ✓ Player: nessun correct/explanation/domanda MCQ prima o dopo reveal (0 ms)
++
++qr.test.js
++  ✓ format bits conformi alla tabella ISO (livelli M e L, maschere 0–7) (3 ms)
++  ✓ version bits della versione 7 = 0x07C94 (5 ms)
++  ✓ Reed-Solomon: ogni blocco ha sindromi nulle sulle radici α^0..α^(n-1) (16 ms)
++  ✓ dimensione e pattern di posizionamento corretti (1 ms)
++  ✓ toSVG produce un SVG con sfondo bianco (0 ms)
++
++report.test.js
++  ✓ CSV: BOM, separatore ;, una riga per risposta, testo risposta dal mescolamento (1 ms)
++  ✓ statistiche: classifica, % corrette, categorie, domande difficili, tempi solo se misurati (0 ms)
++  ✓ report HTML autonomo, con le sezioni richieste e la nota formativa (0 ms)
++  ✓ risposte annullate (punti riaperti) escluse dalle statistiche ma presenti nel CSV (1 ms)
++  ✓ log tecnico: regia e server uniti in ordine di tempo (0 ms)
++
++room.test.js
++  ✓ round chiuso: risposta rifiutata (0 ms)
++  ✓ round aperto: risposta accettata con timestamp e tempo del SERVER (1 ms)
++  ✓ prima risposta definitiva: seconda diversa rifiutata, seconda uguale idempotente (0 ms)
++  ✓ due tablet della stessa squadra: vale il primo (0 ms)
++  ✓ roundInstanceId vecchio o sconosciuto rifiutato (0 ms)
++  ✓ token non valido, dispositivo espulso o non assegnato: rifiutati (1 ms)
++  ✓ risposta non valida per il layout rifiutata (0 ms)
++  ✓ pausa: risposte rifiutate; ripresa: il tempo in pausa non conta (0 ms)
++  ✓ scadenza: tolleranza di rete, poi chiusura automatica (0 ms)
++  ✓ +10 s sposta la scadenza (0 ms)
++  ✓ sblocco del docente: la squadra può rispondere di nuovo (1 ms)
++  ✓ la vista del dispositivo non contiene MAI la soluzione prima del reveal (0 ms)
++  ✓ ingressi: PIN errato e ingressi chiusi rifiutati; rientro con token anche a ingressi chiusi (0 ms)
++  ✓ riassegnazione: nuovo token, il vecchio non vale più (0 ms)
++  ✓ commit: i dati dei tablet vengono dal server, il punteggio è ricalcolato (1 ms)
++  ✓ persistenza: dopo un riavvio il round aperto torna in pausa e i token restano validi (0 ms)
++  ✓ squadra rimossa: il dispositivo torna in attesa (0 ms)
++  ✓ arcade testuale: la pulsantiera accetta la parola, il server valuta e conserva kind/gameType (0 ms)
++  ✓ arcade testuale: accenti e maiuscole non cambiano l’esito (0 ms)
++
++scoring.test.js
++  ✓ legacy_v3: corrette 300/275/250, errata −100, astensione −100 (0 ms)
++  ✓ show_standard: omessa vale 0, errata −100 (0 ms)
++  ✓ learning: corretta 1, errata 0, omessa 0, il tempo non conta (0 ms)
++  ✓ ordine delle corrette: decide il campo order, non la posizione nell'array (0 ms)
++  ✓ errori e omesse non occupano posizioni tra le corrette (0 ms)
++  ✓ minimo per una corretta: 0 punti (13ª corretta e oltre) (0 ms)
++  ✓ record duplicati: vale il primo per ordine; i record annullati sono ignorati (0 ms)
++  ✓ esito non valido rifiutato (0 ms)
++  ✓ profilo sconosciuto → profilo predefinito show_standard (0 ms)
++  ✓ totals somma eventi e rettifiche, ignora gli annullati (0 ms)
++  ✓ rulesSummary leggibile per ogni profilo (0 ms)
++  ✓ punteggio derivato dai dati grezzi: lo storico si ricalcola con un altro profilo (0 ms)
++  ✓ record manuale: responseTimeMs sempre null, inputMode manual (1 ms)
++  ✓ outcomeForAnswer: lettera, omessa, maiuscole (0 ms)
++
++server.test.js
++  ✓ HTTP: pagine pubbliche, regia solo dal PC, cartelle riservate vietate (44 ms)
++  ✓ HTTP da un altro dispositivo: niente regia, niente domande né soluzioni (44 ms)
++  ✓ flusso completo: join, assegnazione, round, risposte, reveal, commit (36 ms)
++  ✓ riconnessione: refresh del tablet → "riconnesso come", nessuna squadra duplicata; ingressi chiusi (149 ms)
++  ✓ persistenza server: salva, chiudi, riapri, riprendi (stesso PIN, stessi token) (305 ms)
++  ✓ snapshot della regia su disco: POST, GET, archivio (27 ms)
++  ✓ limite di frequenza: un client che inonda il server viene frenato (23 ms)
++
++timer.test.js
++  ✓ secondsFor usa il campo seconds della domanda (15, 60) e 30 come predefinito (0 ms)
++  ✓ countdown: start e scorrere del tempo (0 ms)
++  ✓ pausa e ripresa: il tempo in pausa non viene consumato (0 ms)
++  ✓ +10 secondi in corsa e da fermo; la durata cresce con il tempo aggiunto (0 ms)
++  ✓ fine: start su timer esaurito non riparte (0 ms)
++  ✓ snapshot per autosave: sempre fermo, conserva il residuo (0 ms)
++  ✓ percentuale residua (0 ms)
++
++136 superati, 0 falliti
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/README.md b/README.md
+--- a/README.md	2026-10-04 13:58:52.000000000 +0200
++++ b/README.md	2026-10-04 16:11:00.000000000 +0200
+@@ -1,6 +1,8 @@
+-# Il Secchione v3.5.3_PACK_STUDIO
++# Il Secchione v3.5.4_MASCOT_ANIMATED
+ 
+-Basata sulla release conservativa v3.5.2_PILOT (correzioni QA invariate) con in più **Pack Studio**, l'editor grafico dei pacchetti, e i **CSV protetti per i fogli di calcolo**. **Node portable incluso: estrai tutto lo ZIP e fai doppio clic su AVVIA_IL_SECCHIONE.bat.** Non occorrono installazioni o npm. Vedi [modifiche v3.5.3](CHANGELOG_v3.5.3_PACK_STUDIO.md), [audit v3.5.2](AUDIT_v3.5.2_PILOT.md) e [modifiche v3.5.2](CHANGELOG_v3.5.2_PILOT.md).
++**v3.5.4**: la v3.5.3_PACK_STUDIO con la **mascotte animata** (quattro pose reali che presentano, pensano, esultano e vanno nel panico), patch solo visuale: vedi [modifiche v3.5.4](CHANGELOG_v3.5.4_MASCOT_ANIMATED.md).
++
++La v3.5.3 è basata sulla release conservativa v3.5.2_PILOT (correzioni QA invariate) con in più **Pack Studio**, l'editor grafico dei pacchetti, e i **CSV protetti per i fogli di calcolo**. **Node portable incluso: estrai tutto lo ZIP e fai doppio clic su AVVIA_IL_SECCHIONE.bat.** Non occorrono installazioni o npm. Vedi [modifiche v3.5.3](CHANGELOG_v3.5.3_PACK_STUDIO.md), [audit v3.5.2](AUDIT_v3.5.2_PILOT.md) e [modifiche v3.5.2](CHANGELOG_v3.5.2_PILOT.md).
+ 
+ Game show didattico per la classe, con **squadre**, **timer**, **classifica**, **5 giochi arcade** e **doppio schermo**.
+ La v3.5 elimina il collo di bottiglia emerso in classe: registrare le risposte delle squadre.
+@@ -113,9 +115,9 @@
+ node tools/simulate_players.js
+ ```
+ 
+-Il primo esegue 130 test su scoring, timer, risposte, persistenza, pack, Gestore Pacchetti, Pack Studio, zip, report e CSV, QR e server. Il secondo simula 2, 6, 15 e 30 pulsantiere.
++Il primo esegue 136 test su scoring, timer, risposte, persistenza, pack, Gestore Pacchetti, Pack Studio, zip, report e CSV, QR, server e mascotte. Il secondo simula 2, 6, 15 e 30 pulsantiere.
+ 
+-Runtime supportato: il **Node 24 portable incluso** in `runtime/`; con questo (e con Node 24.21) passano tutti i 130 test. Solo per informazione: con Node 8.16 ne passano 128; i 2 di `pilot_hotfix.test.js` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2.
++Runtime supportato: il **Node 24 portable incluso** in `runtime/`; con questo passano tutti i 136 test. Solo per informazione: con Node 8.16 ne passano 128; i 2 di `pilot_hotfix.test.js` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2.
+ 
+ ## Requisiti
+ - **Regia**: Chrome o Edge recenti su Windows (Firefox e Safari recenti dovrebbero funzionare, ma non sono stati provati).
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/RELEASE.json b/RELEASE.json
+--- a/RELEASE.json	2026-10-04 13:59:21.000000000 +0200
++++ b/RELEASE.json	2026-10-04 16:11:22.000000000 +0200
+@@ -1,35 +1,34 @@
+ {
+-  "version": "3.5.3_PACK_STUDIO",
++  "version": "3.5.4_MASCOT_ANIMATED",
+   "date": "2026-10-04",
+-  "source": "Il_Secchione_v3.5.2_PILOT_PORTABLE.zip",
+-  "sourceSHA256": "f56ddf2994e0ea9fbfe64fd17f7e6f40be0326d09960bd440a86c9a7738180ed",
++  "source": "Il_Secchione_v3.5.3_PACK_STUDIO.zip",
++  "sourceSHA256": "dc76961d82e416a741d2cbc5959bb83c4e085f1394f7e69c8df018cfb3abe047",
++  "mascotAssets": "SECCHIONE_MASCOT_ANIMATED_ASSETS_FOR_CLAUDE.zip",
++  "mascotAssetsSHA256": "5635662259368b3021d32a1fa77b65f84205629c9e9f666140317007f86d46f8",
+   "node": "v24.19.0",
+   "nodePlatform": "win32-x64",
+   "nodeSHA256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
+   "supportedRuntime": "bundled portable Node 24 (runtime/node.exe)",
+   "unitAndIntegration": {
+-    "passed": 130,
++    "passed": 136,
+     "failed": 0,
+-    "baselineV352": 106,
+-    "packStudio": 19,
+-    "csvSafety": 5,
+-    "informationalNode8": "128 passed, 2 failed in pilot_hotfix.test.js (test APIs require Node >= 10; identical on v3.5.2); not a release blocker"
++    "baselineV353": 130,
++    "mascot": 6
+   },
+   "simulatePlayers": "2/6/15/30 devices, no lost or duplicated responses",
+-  "realPacks": {
+-    "source": "PACCHETTI_SECCHIONE_TRIENNIO_v1.1.0.zip",
+-    "sourceSHA256": "a3bf429110384b5469eae839c17f833fd4e7aab512e822f13f4b68738f5607f3",
+-    "fullCycle": "SECCHIONE_PREISTORIA_1MEDIA_v1.1.0: import, Studio edit (question, game, new and replaced image), save, play, server restart, export, delete, reimport: all preserved",
+-    "editAndSave": ["SECCHIONE_ARTE_ROMANA_2MEDIA_v1.1.0", "SECCHIONE_BAROCCO_3MEDIA_v1.1.0"]
++  "manualQA": "HOST + SHOW: present, think, panic at time-up, celebrate, double celebrate retrigger, rapid think-present-celebrate, re-renders without replays, SHOW refresh and reconnect after server restart, 1366x768 and 1920x1080 (amplitudes, no overlap), reduced motion, no 404, no Internet requests, Player unchanged. See QA/v3.5.4/COLLAUDO.md",
++  "scope": "visual patch only: networking, scoring, Pack Studio, Player, persistence, reports/CSV and game logic unchanged",
++  "previousRelease": {
++    "version": "3.5.3_PACK_STUDIO",
++    "realPacks": "PACCHETTI_SECCHIONE_TRIENNIO_v1.1.0.zip (full cycle on SECCHIONE_PREISTORIA_1MEDIA_v1.1.0)",
++    "resolvedP1": "CSV formula neutralization: contract v2, see EXPORT_CSV.md"
+   },
+   "e2e": {
+-    "note": "Playwright suite not re-run for 3.5.3; values below refer to 3.5.2_PILOT",
++    "note": "Playwright suite not re-run for 3.5.3/3.5.4; values below refer to 3.5.2_PILOT",
+     "chrome": "153.0.8010.53",
+     "edge": "154.0.4258.53",
+     "checksPerBrowser": 11,
+     "playerContexts": 6
+   },
+-  "features": ["Pack Studio (studio.html)", "CSV contract v2: spreadsheet-safe by default, raw only on explicit request"],
+-  "resolvedP1": "CSV formula neutralization: contract v2, see EXPORT_CSV.md",
+   "knownPendingP1": null
+ }
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/TEST_CHECKLIST.md b/TEST_CHECKLIST.md
+--- a/TEST_CHECKLIST.md	2026-10-04 13:58:52.000000000 +0200
++++ b/TEST_CHECKLIST.md	2026-10-04 16:11:00.000000000 +0200
+@@ -26,9 +26,10 @@
+ | pilot_hotfix (v3.5.2) | regressioni delle correzioni QA della v3.5.2: token UTF-8, limiti ZIP, Host/Origin, errori di stream, saluti SHOW/Player, socket | ✅ 13 test |
+ | Pack Studio (v3.5.3) | bozza, domande (crea/duplica/sposta/elimina), validazione con indicazione del punto da correggere, tag, bozze escluse, immagini piatte (nomi sicuri, estensione reale, rinomina, eliminazione, appiattimento), 5 tipi di manche, ZIP con andata e ritorno, Arte romana completo, versione, salvataggio nuovo/sostituzione su browser e disco con copia di sicurezza, rifiuto di sottocartelle e sola lettura, API `PUT` e pagina `/studio` solo in locale | ✅ 19 test |
+ | CSV sicuri (v3.5.3) | neutralizzazione `= + - @` e affini, numeri negativi conservati, testi ostili di squadre, pack e studenti, modalità grezza, log tecnico, report HTML | ✅ 5 test |
++| mascotte (v3.5.4) | WebP identici a quelli forniti, mappatura umore → posa uguale in regia e SHOW, panic solo a tempo scaduto, animazioni solo transform/opacity con durate della specifica, movimento ridotto, Player senza mascotte, pose servite anche in rete | ✅ 6 test |
+ | multiplayer | 2 / 6 / 15 / 30 pulsantiere simulate: join, assegnazione, chiusura ingressi, risposte quasi contemporanee con doppi tocchi, reveal, commit, disconnessione e riconnessione, intruso a ingressi chiusi | ✅ nessuna risposta persa né duplicata (30 tablet × 20 domande: 600 risposte, ack massimo 10 ms) |
+ 
+-Totale: **130 test superati** con il runtime supportato, il Node 24 portable incluso (24.19), e con Node 24.21. Solo per informazione, con Node 8.16 ne passano 128: i 2 test di `pilot_hotfix` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2. Non sono un blocco.
++Totale: **136 test superati** con il runtime supportato, il Node 24 portable incluso (24.19). La v3.5.3 ne aveva 130, verificati anche con Node 24.21. Solo per informazione, con Node 8.16 ne passano 128: i 2 test di `pilot_hotfix` usano API di Node 10 o successivo e falliscono allo stesso modo sulla v3.5.2. Non sono un blocco.
+ 
+ > La simulazione gira sullo stesso PC (loopback): misura la correttezza del server, **non** la qualità del Wi-Fi della scuola. Per quella servono i test B2, B3 e B7.
+ 
+Binary files a/assets/mascot/mascot_celebrate.webp and b/assets/mascot/mascot_celebrate.webp differ
+Binary files a/assets/mascot/mascot_panic.webp and b/assets/mascot/mascot_panic.webp differ
+Binary files a/assets/mascot/mascot_present.webp and b/assets/mascot/mascot_present.webp differ
+Binary files a/assets/mascot/mascot_think.webp and b/assets/mascot/mascot_think.webp differ
+Binary files a/assets/sorgenti_grafiche/mascotte_animata/mascot_celebrate.png and b/assets/sorgenti_grafiche/mascotte_animata/mascot_celebrate.png differ
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/assets/sorgenti_grafiche/mascotte_animata/mascot_manifest.json b/assets/sorgenti_grafiche/mascotte_animata/mascot_manifest.json
+--- a/assets/sorgenti_grafiche/mascotte_animata/mascot_manifest.json	1970-01-01 01:00:00.000000000 +0100
++++ b/assets/sorgenti_grafiche/mascotte_animata/mascot_manifest.json	2026-10-04 15:54:59.000000000 +0200
+@@ -0,0 +1,56 @@
++{
++  "version": "1.0.0",
++  "runtimeRecommendation": "Use assets_optimized/*.webp at runtime; retain PNG masters as source assets.",
++  "states": {
++    "present": {
++      "asset": "mascot_present.webp",
++      "aliases": [
++        "welcome",
++        "present",
++        "reveal",
++        "point",
++        "idle-neutral"
++      ]
++    },
++    "think": {
++      "asset": "mascot_think.webp",
++      "aliases": [
++        "think",
++        "question-open",
++        "waiting-answer"
++      ]
++    },
++    "celebrate": {
++      "asset": "mascot_celebrate.webp",
++      "aliases": [
++        "celebrate",
++        "correct",
++        "champion",
++        "victory"
++      ]
++    },
++    "panic": {
++      "asset": "mascot_panic.webp",
++      "aliases": [
++        "panic",
++        "wrong",
++        "time-up",
++        "timeout"
++      ]
++    }
++  },
++  "animation": {
++    "present": "intro 420ms once; then subtle float 2.8s",
++    "think": "subtle breathing/tilt 2.6s, low amplitude",
++    "celebrate": "jump-pop 650-750ms once, then static",
++    "panic": "shake 450-550ms once, then static"
++  },
++  "constraints": [
++    "No animation on PLAYER.",
++    "Do not derive mascot mood from a single team result when multiple teams answer; preserve existing mood semantics.",
++    "Respect prefers-reduced-motion.",
++    "Preload all four assets to avoid flicker.",
++    "Animate transforms/opacity only.",
++    "Do not change scoring, networking, Pack Studio, or game logic."
++  ]
++}
+\ No newline at end of file
+Binary files a/assets/sorgenti_grafiche/mascotte_animata/mascot_panic.png and b/assets/sorgenti_grafiche/mascotte_animata/mascot_panic.png differ
+Binary files a/assets/sorgenti_grafiche/mascotte_animata/mascot_present.png and b/assets/sorgenti_grafiche/mascotte_animata/mascot_present.png differ
+Binary files a/assets/sorgenti_grafiche/mascotte_animata/mascot_think.png and b/assets/sorgenti_grafiche/mascotte_animata/mascot_think.png differ
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/css/show.css b/css/show.css
+--- a/css/show.css	2026-10-04 10:48:28.000000000 +0200
++++ b/css/show.css	2026-10-04 15:58:33.000000000 +0200
+@@ -27,3 +27,34 @@
+ .gameEditor{width:min(820px,94vw);max-height:92vh;overflow:auto;color:#eaf4ff;background:#0b2446;border:1px solid #71b5e7;border-radius:18px;padding:24px}.gameEditor::backdrop{background:#020c20d9}.gameEditor label{display:block;margin:14px 0 6px;font-weight:700}.gameEditor .control{width:100%;margin-top:5px}.gameEditor textarea{min-height:120px;resize:vertical;font:inherit}.gameEditor .dialogFoot{position:sticky;bottom:-24px;padding:18px 0;background:#0b2446;display:flex;gap:12px;justify-content:flex-end}.gameEditor .fieldHint{font-size:13px;color:#b2cde3;margin:5px 0 10px}.gameEditor [hidden]{display:none!important}.editorError{color:#ffc9c5;min-height:22px;font-weight:700}.arcadeHeader{flex-wrap:wrap;gap:4px}.arcadeLabel{max-width:100%;overflow-wrap:anywhere}.posterEditionHQ{font-size:clamp(16px,1.8vw,28px)}.homeCopy h1{font-size:8.7cqh}.candidate{overflow-wrap:anywhere}.clueHistory{max-height:14cqh;overflow:auto}
+ 
+ .homeCopy h1{font-size:7.5cqh}.posterEditionHQ{font-size:clamp(14px,1.5vw,24px)}
++
++/* ===== Mascotte animata v3.5.4 =====
++   4 pose reali (assets/mascot/mascot_*.webp). Si anima solo transform/opacity.
++   Unità cqh/cqw del palco: su 1920×1080 corrispondono ai px della specifica (float 5 px, salto 18 px, scossa ±6 px).
++   .mascotPlay = evento nuovo: l'animazione d'ingresso/one-shot va eseguita; senza, la posa resta ferma (o solo il moto continuo),
++   così un ridisegno del palco non ripete salti o scosse. */
++.mascotStage{pointer-events:none;user-select:none;-webkit-user-select:none}
++.publicHostMascot{pointer-events:none;user-select:none;-webkit-user-drag:none;will-change:transform}
++.mascotShadow{animation:none}
++.mascotSpark,.mood-celebrate .mascotSpark,.mood-reveal .mascotSpark{animation:none}
++/* PRESENT (welcome, reveal): ingresso 420 ms una volta, poi leggero float */
++.mood-welcome .publicHostMascot,.mood-reveal .publicHostMascot{animation:mascotFloat 2.8s ease-in-out infinite}
++.mascotPlay.mood-welcome .publicHostMascot,.mascotPlay.mood-reveal .publicHostMascot{animation:mascotIntro .42s cubic-bezier(.2,.8,.3,1) both,mascotFloat 2.8s ease-in-out .42s infinite}
++.mood-welcome .mascotShadow,.mood-reveal .mascotShadow{animation:mascotShadowFloat 2.8s ease-in-out infinite}
++/* THINK: respiro discreto, nessun scatto; anche negli ultimi 10 secondi (niente agitazione aggiuntiva) */
++.mood-think .publicHostMascot,.urgentMascot .publicHostMascot{animation:mascotThinkSoft 2.6s ease-in-out infinite}
++/* CELEBRATE: salto one-shot ~700 ms, poi posa ferma */
++.mood-celebrate .publicHostMascot{animation:none}
++.mascotPlay.mood-celebrate .publicHostMascot{animation:mascotJump .7s cubic-bezier(.25,.8,.35,1) both}
++.mascotPlay.mood-celebrate .mascotSpark{animation:sparkFlash .9s ease-out 1}
++/* PANIC (tempo scaduto): scossa one-shot ~500 ms, poi posa ferma */
++.mood-panic .publicHostMascot{animation:none}
++.mascotPlay.mood-panic .publicHostMascot{animation:mascotPanic .5s ease-in-out both}
++@keyframes mascotIntro{from{opacity:0;transform:translateY(.93cqh) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
++@keyframes mascotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-.46cqh)}}
++@keyframes mascotShadowFloat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.94);opacity:.8}}
++@keyframes mascotThinkSoft{0%,100%{transform:scale(1) rotate(-.4deg)}50%{transform:scale(1.012) rotate(.4deg)}}
++@keyframes mascotJump{0%{transform:translateY(0) scale(1) rotate(0)}35%{transform:translateY(-1.7cqh) scale(1.04) rotate(-1.2deg)}65%{transform:translateY(-.4cqh) scale(1.015) rotate(.8deg)}100%{transform:translateY(0) scale(1) rotate(0)}}
++@keyframes mascotPanic{0%,100%{transform:translateX(0) rotate(0)}15%{transform:translateX(-.3cqw) rotate(-1.6deg)}30%{transform:translateX(.3cqw) rotate(1.6deg)}45%{transform:translateX(-.26cqw) rotate(-1.2deg)}60%{transform:translateX(.22cqw) rotate(1deg)}75%{transform:translateX(-.12cqw) rotate(-.5deg)}}
++/* Movimento ridotto (sistema) o animazioni spente in regia: le pose cambiano, senza movimento */
++@media (prefers-reduced-motion:reduce){.mascotStage,.mascotStage *{animation:none!important;transition:none!important}.mascotSpark{display:none}}
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/index.html b/index.html
+--- a/index.html	2026-10-04 13:36:48.000000000 +0200
++++ b/index.html	2026-10-04 15:57:56.000000000 +0200
+@@ -20,7 +20,7 @@
+     <aside class="teamRail">
+       <div class="themePoster masterPoster composedPoster">
+         <div class="posterCaveMarks" aria-hidden="true"></div>
+-        <img class="posterMascotHQ" src="assets/mascot/secchione_a.png" alt="Mascotte Il Secchione">
++        <img class="posterMascotHQ" src="assets/mascot/mascot_present.webp" alt="Mascotte Il Secchione">
+         <div class="posterShade" aria-hidden="true"></div>
+         <img class="posterLogoHQ" src="assets/logo_clean.svg" alt="Il Secchione" width="150">
+         <div class="posterEditionHQ"><span id="posterTitle">—</span><small id="posterSub"></small></div>
+@@ -51,7 +51,7 @@
+           <div class="transitionGlow"></div><div class="transitionSweep"></div>
+           <div class="transitionNumber" id="transitionNumber">01</div>
+           <div class="transitionContent">
+-            <img id="transitionMascot" src="assets/mascot/secchione_a.png" class="transitionMascot" alt="">
++            <img id="transitionMascot" src="assets/mascot/mascot_present.webp" class="transitionMascot" alt="">
+             <img src="assets/logo_clean.svg" class="transitionLogo" alt="" width="340">
+             <div class="transitionKicker" id="transitionKicker">NUOVA SFIDA</div>
+             <div class="transitionTitle" id="transitionTitle">DOMANDA 01</div>
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/js/app.js b/js/app.js
+--- a/js/app.js	2026-10-04 13:51:51.000000000 +0200
++++ b/js/app.js	2026-10-04 16:06:04.000000000 +0200
+@@ -11,7 +11,7 @@
+ const PL=window.SecchionePackLib,PKC=window.SecchionePacksClient,PKG=window.SecchionePacksUI;
+ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+ const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+-const VERSION='3.5.3_PACK_STUDIO';
++const VERSION='3.5.4_MASCOT_ANIMATED';
+ const BRAND_LOGO='assets/logo_clean.svg';
+ const SOUND={
+  click:'assets/sounds_hq/rank_lock_hq.wav',transition:'assets/sounds_hq/transition_soft.wav',question:'assets/sounds_hq/question_in.wav',
+@@ -22,9 +22,13 @@
+  timerBed:'assets/sounds_hq/timer_bed_hq.wav',chainBed:'assets/sounds_hq/chain_bed_hq.wav',indovinaBed:'assets/sounds_hq/indovina_bed_hq.wav',ghBed:'assets/sounds_hq/gh_bed_hq.wav'
+ };
+ /* Mascotte: in v3 c'erano 12 file ma solo 2 immagini distinte (stessa figura specchiata). */
+-const MASCOT_A='assets/mascot/secchione_a.png',MASCOT_B='assets/mascot/secchione_b.png';
+-const MASCOT_POSES={present:MASCOT_A,thumb:MASCOT_B,point:MASCOT_B,explorer:MASCOT_A,think:MASCOT_B,artist:MASCOT_A,host:MASCOT_A,champion:MASCOT_B};
+-const MOOD_SRC={celebrate:MASCOT_B,think:MASCOT_B,reveal:MASCOT_A,welcome:MASCOT_A};
++/* Mascotte animata (v3.5.4): 4 pose reali in WebP; il movimento è solo CSS (show.css: transform/opacity). Stessi nomi di prima, nessun sistema parallelo. */
++const MASCOT_ASSETS={present:'assets/mascot/mascot_present.webp',think:'assets/mascot/mascot_think.webp',celebrate:'assets/mascot/mascot_celebrate.webp',panic:'assets/mascot/mascot_panic.webp'};
++const MASCOT_A=MASCOT_ASSETS.present;
++const MASCOT_POSES={present:MASCOT_ASSETS.present,thumb:MASCOT_ASSETS.present,point:MASCOT_ASSETS.present,explorer:MASCOT_ASSETS.think,think:MASCOT_ASSETS.think,artist:MASCOT_ASSETS.present,host:MASCOT_ASSETS.present,champion:MASCOT_ASSETS.celebrate};
++const MOOD_SRC={welcome:MASCOT_ASSETS.present,reveal:MASCOT_ASSETS.present,think:MASCOT_ASSETS.think,celebrate:MASCOT_ASSETS.celebrate,panic:MASCOT_ASSETS.panic};
++const MASCOT_PRELOAD=Object.values(MASCOT_ASSETS).map(s=>{const i=new Image();i.decoding='async';i.src=s;return i});/* niente sfarfallio al cambio posa */
++const MASCOT_RM=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):null;
+ const QUESTION_MASCOT_SEQUENCE=['present','explorer','thumb','artist','host','think','point','champion'];
+ const EDITABLE_GAMES=PE.EDITABLE_GAMES;
+ let arcadeEpoch=0;
+@@ -167,9 +171,21 @@
+ function mascotKey(kind='question'){if(kind==='home')return 'host';if(kind==='photo')return 'explorer';if(kind==='indovina')return 'think';if(kind==='chain')return 'artist';if(kind==='gh')return 'host';if(kind==='match')return 'point';if(kind==='leader')return 'champion';if(kind==='question')return QUESTION_MASCOT_SEQUENCE[(state.qIndex||0)%QUESTION_MASCOT_SEQUENCE.length]||'present';return state.phase==='running'?'point':'present'}
+ function transitionMascotSrc(){const t=state.arcade?.type;const kind=state.screen==='arcade'?(t==='photopuzzle'?'photo':t==='indovina'?'indovina':t==='chain'?'chain':t==='ghigliottina'?'gh':t==='abbinamenti'?'match':'question'):(state.screen==='leaderboard'?'leader':state.screen==='home'?'home':'question');return MASCOT_POSES[mascotKey(kind)]||MASCOT_A}
+ function showTransition(title,sub,number=''){if(!state.motion)return;const data={title,sub,number:number||String(state.qIndex+1).padStart(2,'0'),kicker:state.screen==='arcade'?'BONUS SHOW':'NUOVA SFIDA',mascot:transitionMascotSrc()};stageDocs().forEach(d=>{const tr=d.getElementById('transition');if(!tr)return;const ti=d.getElementById('transitionTitle'),su=d.getElementById('transitionSub'),nu=d.getElementById('transitionNumber'),ki=d.getElementById('transitionKicker');if(ti)ti.textContent=data.title;if(su)su.textContent=data.sub;if(nu)nu.textContent=data.number;if(ki)ki.textContent=data.kicker;const tm=d.getElementById('transitionMascot');if(tm)tm.src=data.mascot;tr.classList.remove('active');void tr.offsetWidth;tr.classList.add('active');setTimeout(()=>tr.classList.remove('active'),1380)});NET.showTransition(data);cloneAudio('transition',.82)}
+-function currentMood(){return state.screen==='leaderboard'||state.questionScored&&state.screen==='question'||state.arcade?.scoreCommitted?'celebrate':state.answerVisible&&state.screen==='question'||state.arcade?.revealedFinal||state.arcade?.type==='indovina'&&state.arcade.revealed?'reveal':state.timer.running?'think':'welcome'}
+-function mascotMarkup(){const mood=currentMood();return `<div class="mascotStage mood-${mood}" data-mood="${mood}"><div class="mascotAura"></div><img class="publicHostMascot" src="${MOOD_SRC[mood]}" alt="La mascotte del Secchione"><span class="mascotSpark sparkOne">✦</span><span class="mascotSpark sparkTwo">✧</span><div class="mascotShadow"></div></div>`}
+-function animateMascots(){const mood=currentMood();stageDocs().forEach(d=>{d.documentElement.classList.toggle('motionOff',!state.motion);d.querySelectorAll('.mascotStage').forEach(el=>{if(el.dataset.mood!==mood){el.className='mascotStage mood-'+mood;el.dataset.mood=mood;const im=el.querySelector('img');if(im)im.src=MOOD_SRC[mood]}el.classList.toggle('urgentMascot',state.timer.running&&state.timer.remaining<=10)})})}
++function currentMood(){return state.screen==='leaderboard'||state.questionScored&&state.screen==='question'||state.arcade?.scoreCommitted?'celebrate':mascotTimeUp()?'panic':state.answerVisible&&state.screen==='question'||state.arcade?.revealedFinal||state.arcade?.type==='indovina'&&state.arcade.revealed?'reveal':state.timer.running?'think':'welcome'}
++/* Tempo scaduto: lo stesso evento globale del suono "timeup" (il timer arriva a zero mentre corre; pausa e chiusura anticipata non contano).
++   La mascotte va nel panico per un attimo, poi riprende la regola esistente (soluzione svelata → present). Nessun esito della singola squadra. */
++let mascotWasRunning=false,mascotPanicUntil=0;
++function mascotTimeUp(){return !state.timer.running&&state.timer.remaining<=0&&performance.now()<mascotPanicUntil}
++function mascotWatchTimer(){const run=!!state.timer.running;if(mascotWasRunning&&!run&&state.timer.duration>0&&state.timer.remaining<=0){mascotPanicUntil=performance.now()+1400;setTimeout(()=>{mascotPanicUntil=0;updateTimerUI()},1450)}mascotWasRunning=run}
++/* Chiave dell'evento che ha prodotto la posa: se cambia a parità di posa (es. due celebrate di seguito) l'animazione one-shot riparte. */
++function mascotCue(mood){return [mood,state.screen,state.qIndex,state.arcade?state.arcade.type+':'+state.arcade.presetIndex:'',state.questionScored?1:0,state.arcade?.scoreCommitted?1:0].join('|')}
++/* mascotPlay = l'animazione d'ingresso/one-shot va eseguita: per un evento nuovo, oppure se il palco viene ridisegnato entro 150 ms
++   dall'inizio dell'evento (l'animazione era appena partita su un elemento poi sostituito). Ridisegni successivi: posa ferma. */
++let mascotEvent={cue:'',at:0};
++function mascotFresh(cue){const now=performance.now();if(mascotEvent.cue!==cue){mascotEvent={cue,at:now};return true}return now-mascotEvent.at<150}
++function replayMascot(el,mood){el.className='mascotStage';void el.offsetWidth;el.className='mascotStage mascotPlay mood-'+mood}
++function mascotMarkup(){const mood=currentMood(),cue=mascotCue(mood);return `<div class="mascotStage${mascotFresh(cue)?' mascotPlay':''} mood-${mood}" data-mood="${mood}" data-cue="${esc(cue)}"><div class="mascotAura"></div><img class="publicHostMascot" src="${MOOD_SRC[mood]}" alt="La mascotte del Secchione" draggable="false"><span class="mascotSpark sparkOne">✦</span><span class="mascotSpark sparkTwo">✧</span><div class="mascotShadow"></div></div>`}
++function animateMascots(){mascotWatchTimer();const mood=currentMood(),cue=mascotCue(mood),still=!state.motion||!!(MASCOT_RM&&MASCOT_RM.matches);stageDocs().forEach(d=>{d.documentElement.classList.toggle('motionOff',!state.motion);d.querySelectorAll('.mascotStage').forEach(el=>{if(el.dataset.mood!==mood||el.dataset.cue!==cue){mascotFresh(cue);replayMascot(el,mood);el.dataset.mood=mood;const im=el.querySelector('img');if(im&&im.getAttribute('src')!==MOOD_SRC[mood]){im.src=MOOD_SRC[mood];if(!still&&im.animate)im.animate([{opacity:.25},{opacity:1}],{duration:140,easing:'ease-out'})}}el.dataset.cue=cue;el.classList.toggle('urgentMascot',state.timer.running&&state.timer.remaining<=10)})})}
+ 
+ /* ---------------- RENDER GENERALE ---------------- */
+ function publicTimerHTML(status='PRONTO'){const pct=state.timer.duration?Math.max(0,Math.min(100,state.timer.remaining/state.timer.duration*100)):0,sec=Math.max(0,Math.ceil(state.timer.remaining));return `<div class="publicTimerHud"><div class="timerWords"><small>TIMER</small><strong>${esc(status)}</strong><div class="timerMiniBar"><i class="liveProgress" style="width:${pct}%"></i></div></div><div class="publicTimerRing" style="--pct:${pct}"><b class="liveSeconds">${sec}</b><em>SEC</em></div></div>`}
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/js/show-client.js b/js/show-client.js
+--- a/js/show-client.js	2026-10-04 10:48:28.000000000 +0200
++++ b/js/show-client.js	2026-10-04 16:03:54.000000000 +0200
+@@ -7,7 +7,15 @@
+   'use strict';
+   var stage = document.getElementById('publicStage');
+   var statusEl = document.getElementById('showStatus');
+-  var MOOD_SRC = { celebrate: 'assets/mascot/secchione_b.png', think: 'assets/mascot/secchione_b.png', reveal: 'assets/mascot/secchione_a.png', welcome: 'assets/mascot/secchione_a.png' };
++  // stesse pose della regia (js/app.js MOOD_SRC); le 4 immagini vengono precaricate per non sfarfallare al cambio
++  var MOOD_SRC = { welcome: 'assets/mascot/mascot_present.webp', reveal: 'assets/mascot/mascot_present.webp', think: 'assets/mascot/mascot_think.webp', celebrate: 'assets/mascot/mascot_celebrate.webp', panic: 'assets/mascot/mascot_panic.webp' };
++  var MASCOT_PRELOAD = [];
++  Object.keys(MOOD_SRC).forEach(function (k) { var i = new Image(); i.src = MOOD_SRC[k]; MASCOT_PRELOAD.push(i); });
++  // animazione d'ingresso/one-shot solo per un evento nuovo (posa o data-cue diversi), mai a ogni aggiornamento del palco;
++  // se l'HTML arriva entro 200 ms dall'inizio dell'evento, l'animazione appena partita riparte sul nuovo elemento
++  var shownMood = null;
++  var shownCue = null;
++  var shownAt = 0;
+   var ws = null;
+   var retry = 0;
+   var lastHtml = '';
+@@ -38,7 +46,20 @@
+     if (meta.accent2) root.setProperty('--accent2', meta.accent2);
+     if (meta.themeBg) root.setProperty('--theme-bg', 'url("' + meta.themeBg + '")');
+     if (meta.title) { var sub = document.getElementById('transitionSub'); if (sub) sub.textContent = meta.title; }
+-    if (m.html !== lastHtml) { lastHtml = m.html; stage.innerHTML = m.html; }
++    if (m.html !== lastHtml) {
++      lastHtml = m.html;
++      stage.innerHTML = m.html;
++      each('.mascotStage', function (el) {
++        var mood = el.getAttribute('data-mood');
++        var cue = el.getAttribute('data-cue');
++        var isNew = mood !== shownMood || (shownCue !== null && cue !== shownCue);
++        var now = Date.now();
++        if (isNew) shownAt = now;
++        el.classList.toggle('mascotPlay', isNew || now - shownAt < 200);
++        shownMood = mood;
++        shownCue = cue;
++      });
++    }
+     paintTimer();
+   }
+ 
+@@ -69,10 +90,19 @@
+     document.documentElement.classList.toggle('motionOff', timer.motion === false);
+     each('.mascotStage', function (el) {
+       if (timer.mood && el.getAttribute('data-mood') !== timer.mood) {
+-        el.className = 'mascotStage mood-' + timer.mood;
++        // nuova posa: l'animazione (anche one-shot) riparte da capo
++        el.className = 'mascotStage';
++        void el.offsetWidth;
++        el.className = 'mascotStage mascotPlay mood-' + timer.mood;
+         el.setAttribute('data-mood', timer.mood);
++        shownMood = timer.mood;
++        shownCue = null;
++        shownAt = Date.now();
+         var im = el.querySelector('img');
+-        if (im && MOOD_SRC[timer.mood]) im.src = MOOD_SRC[timer.mood];
++        if (im && MOOD_SRC[timer.mood] && im.getAttribute('src') !== MOOD_SRC[timer.mood]) {
++          im.src = MOOD_SRC[timer.mood];
++          if (im.animate && timer.motion !== false) im.animate([{ opacity: 0.25 }, { opacity: 1 }], { duration: 140, easing: 'ease-out' });
++        }
+       }
+     });
+     if (timer.running && rem > 0) raf = requestAnimationFrame(paintTimer);
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/server/server.js b/server/server.js
+--- a/server/server.js	2026-10-04 13:38:33.000000000 +0200
++++ b/server/server.js	2026-10-04 16:00:08.000000000 +0200
+@@ -24,7 +24,7 @@
+ var packDisk = require('./packstore-disk.js');
+ var netinfo = require('./netinfo.js');
+ 
+-var VERSION = '3.5.3_PACK_STUDIO';
++var VERSION = '3.5.4_MASCOT_ANIMATED';
+ var ROOT = path.join(__dirname, '..');
+ var DEFAULT_PORT = 8765;
+ 
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/show.html b/show.html
+--- a/show.html	2026-10-04 10:48:28.000000000 +0200
++++ b/show.html	2026-10-04 15:57:56.000000000 +0200
+@@ -8,7 +8,7 @@
+ </head>
+ <body class="publicBody visualMaster">
+ <section id="publicStage" class="stage"><div class="showWaiting" style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2cqh;color:#9bb0c5;font:600 3cqh 'Segoe UI',Arial,sans-serif;text-align:center"><img src="assets/logo_clean.svg" alt="Il Secchione" style="width:40cqw"><span id="showStatus">In attesa della regia…</span><small style="font-size:2cqh">Clic sullo schermo per lo schermo intero</small></div></section>
+-<div id="transition" class="transition" aria-hidden="true"><div class="transitionGlow"></div><div class="transitionSweep"></div><div class="transitionNumber" id="transitionNumber">01</div><div class="transitionContent"><img id="transitionMascot" src="assets/mascot/secchione_a.png" class="transitionMascot" alt=""><img src="assets/logo_clean.svg" class="transitionLogo" alt="" width="340"><div class="transitionKicker" id="transitionKicker">NUOVA SFIDA</div><div class="transitionTitle" id="transitionTitle">DOMANDA 01</div><div class="transitionSub" id="transitionSub"></div></div></div>
++<div id="transition" class="transition" aria-hidden="true"><div class="transitionGlow"></div><div class="transitionSweep"></div><div class="transitionNumber" id="transitionNumber">01</div><div class="transitionContent"><img id="transitionMascot" src="assets/mascot/mascot_present.webp" class="transitionMascot" alt=""><img src="assets/logo_clean.svg" class="transitionLogo" alt="" width="340"><div class="transitionKicker" id="transitionKicker">NUOVA SFIDA</div><div class="transitionTitle" id="transitionTitle">DOMANDA 01</div><div class="transitionSub" id="transitionSub"></div></div></div>
+ <script src="js/show-client.js"></script>
+ </body>
+ </html>
+diff -ruN '--exclude=SHA256SUMS.txt' '--exclude=diff_vs_v3.5.3.patch' a/tests/mascot.test.js b/tests/mascot.test.js
+--- a/tests/mascot.test.js	1970-01-01 01:00:00.000000000 +0100
++++ b/tests/mascot.test.js	2026-10-04 16:06:18.000000000 +0200
+@@ -0,0 +1,148 @@
++'use strict';
++/* Mascotte animata (v3.5.4): asset invariati, mappatura umore → posa coerente tra regia e SHOW, animazioni solo transform/opacity,
++   movimento ridotto, Player senza mascotte, immagini servite anche ai dispositivi in rete. */
++var assert = require('assert');
++var fs = require('fs');
++var path = require('path');
++var vm = require('vm');
++var crypto = require('crypto');
++var test = require('./harness.js').test;
++var H = require('./helpers.js');
++
++var ROOT = path.join(__dirname, '..');
++function read(rel) { return fs.readFileSync(path.join(ROOT, rel), 'utf8'); }
++function sha(rel) { return crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, rel))).digest('hex'); }
++
++/* WebP consegnati in SECCHIONE_MASCOT_ANIMATED_ASSETS_FOR_CLAUDE.zip (assets_optimized/): devono restare identici */
++var WEBP = {
++  'mascot_present.webp': 'dee2612aadf448803f81a2141af05749b2cf47c3254b36ec1f2a6c77b037e927',
++  'mascot_think.webp': '1538c4b138d532a03b4b19ebc72945eecfef3b566ece26ed6fdb0ecb849b34cd',
++  'mascot_celebrate.webp': '1c3d681c4fa170a6570b5894e66820c7c2abfeb9bb5ae3d44d9e31062f585924',
++  'mascot_panic.webp': '416d7f8017ae389dfef3614fb98642c560f872e7f361a8f2972b51239d75c4e4'
++};
++var POSES = { present: 'assets/mascot/mascot_present.webp', think: 'assets/mascot/mascot_think.webp', celebrate: 'assets/mascot/mascot_celebrate.webp', panic: 'assets/mascot/mascot_panic.webp' };
++var EXPECTED_MOOD = { welcome: POSES.present, reveal: POSES.present, think: POSES.think, celebrate: POSES.celebrate, panic: POSES.panic };
++
++/** Valuta in una sandbox le dichiarazioni `const NOME=...;` (una riga) di js/app.js. */
++function appConsts(names) {
++  var src = read('js/app.js');
++  var code = names.map(function (n) {
++    var m = new RegExp('^const ' + n + '=.*;$', 'm').exec(src);
++    assert.ok(m, 'dichiarazione ' + n + ' non trovata in js/app.js');
++    return m[0];
++  }).join('\n') + '\n;JSON.stringify({' + names.join(',') + '})';
++  return JSON.parse(vm.runInNewContext(code, {}));
++}
++
++test('mascotte: i 4 WebP sono quelli forniti (non ridisegnati), validi e leggeri; i PNG master stanno fuori dal runtime', function () {
++  var manifest = JSON.parse(read('assets/sorgenti_grafiche/mascotte_animata/mascot_manifest.json'));
++  Object.keys(WEBP).forEach(function (f) {
++    var b = fs.readFileSync(path.join(ROOT, 'assets/mascot', f));
++    assert.strictEqual(b.toString('ascii', 0, 4), 'RIFF', f);
++    assert.strictEqual(b.toString('ascii', 8, 12), 'WEBP', f);
++    assert.ok(b.length < 300 * 1024, f + ' oltre 300 KB');
++    var state = f.replace(/^mascot_|\.webp$/g, '');
++    assert.strictEqual(manifest.states[state].asset, f, 'manifest: ' + state);
++    assert.ok(fs.existsSync(path.join(ROOT, 'assets/sorgenti_grafiche/mascotte_animata', f.replace('.webp', '.png'))), 'PNG master di ' + f);
++    assert.ok(!fs.existsSync(path.join(ROOT, 'assets/mascot', f.replace('.webp', '.png'))), 'PNG master nel percorso runtime: ' + f);
++    assert.strictEqual(sha('assets/mascot/' + f), WEBP[f], f + ' diverso da quello fornito');
++  });
++});
++
++test('mascotte: mappatura umore → posa identica in regia (app.js) e SHOW (show-client.js), come da specifica', function () {
++  var c = appConsts(['MASCOT_ASSETS', 'MASCOT_A', 'MASCOT_POSES', 'MOOD_SRC']);
++  assert.deepStrictEqual(c.MASCOT_ASSETS, POSES);
++  assert.deepStrictEqual(c.MOOD_SRC, EXPECTED_MOOD);
++  assert.strictEqual(c.MASCOT_A, POSES.present);
++  // le vecchie "pose" sono alias delle 4 reali: nessun file riciclato fuori da queste
++  Object.keys(c.MASCOT_POSES).forEach(function (k) { assert.ok(Object.keys(POSES).some(function (p) { return POSES[p] === c.MASCOT_POSES[k]; }), 'posa ' + k); });
++  assert.strictEqual(c.MASCOT_POSES.champion, POSES.celebrate);
++  assert.strictEqual(c.MASCOT_POSES.point, POSES.present);
++  assert.strictEqual(c.MASCOT_POSES.present, POSES.present);
++  assert.strictEqual(c.MASCOT_POSES.think, POSES.think);
++  var show = read('js/show-client.js');
++  var m = /var MOOD_SRC = (\{[^}]*\});/.exec(show);
++  assert.ok(m, 'MOOD_SRC dello SHOW');
++  assert.deepStrictEqual(JSON.parse(vm.runInNewContext('JSON.stringify(' + m[1] + ')', {})), EXPECTED_MOOD, 'SHOW allineato alla regia');
++  // ogni umore che currentMood() può restituire ha la sua immagine
++  var fn = /function currentMood\(\)\{[^\n]*\}/.exec(read('js/app.js'))[0];
++  var moods = (fn.match(/'(\w+)'/g) || []).map(function (s) { return s.slice(1, -1); }).filter(function (s) { return EXPECTED_MOOD[s] || ['leaderboard', 'question', 'arcade', 'indovina'].indexOf(s) < 0; });
++  ['welcome', 'think', 'reveal', 'celebrate', 'panic'].forEach(function (k) { assert.ok(moods.indexOf(k) >= 0, 'currentMood non produce ' + k); });
++  moods.forEach(function (k) { assert.ok(EXPECTED_MOOD[k], 'umore senza immagine: ' + k); });
++  Object.keys(POSES).forEach(function (k) { assert.ok(fs.existsSync(path.join(ROOT, POSES[k])), 'manca ' + POSES[k]); });
++  // nessun riferimento rimasto ai vecchi PNG nel palco (regia, SHOW, transizioni)
++  ['js/app.js', 'js/show-client.js', 'index.html', 'show.html'].forEach(function (f) { assert.ok(!/secchione_[ab]\.png/.test(read(f)), f); });
++});
++
++test('mascotte: panic solo a tempo scaduto (evento globale), mai per l\'esito di una squadra', function () {
++  var src = read('js/app.js');
++  var fn = /function mascotTimeUp\(\)\{[^\n]*\}/.exec(src);
++  var watch = /function mascotWatchTimer\(\)\{[^\n]*\}/.exec(src);
++  assert.ok(fn && watch, 'mascotTimeUp / mascotWatchTimer');
++  assert.ok(/state\.timer\.remaining<=0/.test(fn[0]) && /!state\.timer\.running/.test(fn[0]), 'legata allo scadere del timer');
++  // evento: il timer correva ed è arrivato a zero (pausa o chiusura anticipata del docente: remaining > 0, nessun panico)
++  assert.ok(/mascotWasRunning&&!run&&state\.timer\.duration>0&&state\.timer\.remaining<=0/.test(watch[0]), 'transizione corsa → zero');
++  assert.ok(/mascotPanicUntil=performance\.now\(\)\+1400/.test(watch[0]), 'panico breve, poi la regola esistente (soluzione)');
++  [fn[0], watch[0]].forEach(function (t) { assert.ok(!/pending|outcome|correct|wrong|teams|answer/.test(t), 'nessun esito per squadra'); });
++  var mood = /function currentMood\(\)\{[^\n]*\}/.exec(src)[0];
++  assert.ok(mood.indexOf("'celebrate'") < mood.indexOf("mascotTimeUp()?'panic'"), 'i punti assegnati (celebrate) restano prioritari');
++  assert.ok(mood.indexOf("mascotTimeUp()?'panic'") < mood.indexOf("'reveal'"), 'il panico precede per un attimo la soluzione');
++  assert.ok(/^function animateMascots\(\)\{mascotWatchTimer\(\);/m.test(src), 'l\'evento si osserva dal ciclo esistente della mascotte');
++});
++
++test('mascotte: animazioni solo transform/opacity, durate della specifica, one-shot ripetibili, movimento ridotto', function () {
++  var css = read('css/show.css');
++  var block = css.slice(css.indexOf('/* ===== Mascotte animata v3.5.4'));
++  assert.ok(block.length > 200, 'blocco CSS della mascotte');
++  ['mascotIntro', 'mascotFloat', 'mascotThinkSoft', 'mascotJump', 'mascotPanic', 'mascotShadowFloat'].forEach(function (k) {
++    var m = new RegExp('@keyframes ' + k + '\\{((?:[^{}]*\\{[^{}]*\\})+)\\}').exec(block);
++    assert.ok(m, 'keyframes ' + k);
++    var props = (m[1].match(/[a-z-]+(?=:)/g) || []).filter(function (p, i, a) { return a.indexOf(p) === i; });
++    props.forEach(function (p) { assert.ok(p === 'transform' || p === 'opacity', k + ' anima ' + p); });
++  });
++  function rule(sel) { var i = block.indexOf(sel + '{'); assert.ok(i >= 0, 'regola ' + sel); return block.slice(i, block.indexOf('}', i)); }
++  assert.ok(/mascotIntro \.42s .*both,mascotFloat 2\.8s/.test(rule('.mascotPlay.mood-welcome .publicHostMascot,.mascotPlay.mood-reveal .publicHostMascot')), 'present: ingresso 420 ms + float 2,8 s');
++  assert.ok(/mascotThinkSoft 2\.6s/.test(rule('.mood-think .publicHostMascot,.urgentMascot .publicHostMascot')), 'think 2,6 s, anche negli ultimi 10 s');
++  assert.ok(/mascotJump \.7s/.test(rule('.mascotPlay.mood-celebrate .publicHostMascot')) && !/infinite/.test(rule('.mascotPlay.mood-celebrate .publicHostMascot')), 'celebrate one-shot 700 ms');
++  assert.ok(/mascotPanic \.5s/.test(rule('.mascotPlay.mood-panic .publicHostMascot')) && !/infinite/.test(rule('.mascotPlay.mood-panic .publicHostMascot')), 'panic one-shot 500 ms');
++  assert.ok(/animation:none/.test(rule('.mood-celebrate .publicHostMascot')) && /animation:none/.test(rule('.mood-panic .publicHostMascot')), 'senza evento nuovo la posa resta ferma (nessuna scossa ripetuta)');
++  assert.ok(/@media \(prefers-reduced-motion:reduce\)\{\.mascotStage,\.mascotStage \*\{animation:none!important/.test(block), 'prefers-reduced-motion');
++  assert.ok(/will-change:transform/.test(rule('.publicHostMascot')) && !/\*\{[^}]*will-change/.test(block), 'will-change solo sulla mascotte');
++  assert.ok(/pointer-events:none/.test(rule('.mascotStage')) && /user-select:none/.test(rule('.mascotStage')));
++  // retrigger: la regia toglie e rimette la classe con un reflow; lo SHOW fa lo stesso
++  assert.ok(/function replayMascot\(el,mood\)\{el\.className='mascotStage';void el\.offsetWidth;el\.className='mascotStage mascotPlay mood-'\+mood\}/.test(read('js/app.js')));
++  assert.ok(/void el\.offsetWidth;\s*el\.className = 'mascotStage mascotPlay mood-' \+ timer\.mood;/.test(read('js/show-client.js')));
++  // nessuna risorsa esterna o libreria di animazione
++  [block, read('js/show-client.js')].forEach(function (t) { assert.ok(!/https?:\/\//.test(t.replace(/\/\*[\s\S]*?\*\//g, '')), 'riferimento esterno'); });
++});
++
++test('mascotte: il Player (pulsantiera) non ha mascotte né animazioni nuove', function () {
++  ['player.html', 'js/player.js', 'css/player.css'].forEach(function (f) {
++    var t = read(f);
++    assert.ok(!/mascot/i.test(t), f + ' cita la mascotte');
++    assert.ok(!/mascotPlay|mascotIntro|mascotJump|mascotPanic/.test(t), f);
++  });
++});
++
++test('mascotte: le 4 pose sono servite dal server anche ai dispositivi in rete (SHOW), senza 404', async function () {
++  var dir = H.tempDir();
++  fs.mkdirSync(path.join(dir, 'packs'));
++  var app = await H.startServer({ packsDir: path.join(dir, 'packs') });
++  try {
++    var hosts = ['127.0.0.1'];
++    var lan = require('../server/netinfo.js').lanAddresses()[0];
++    if (lan) hosts.push(lan.address);
++    for (var h = 0; h < hosts.length; h++) {
++      for (var k in POSES) {
++        var r = await H.get('http://' + hosts[h] + ':' + app.port + '/' + POSES[k], hosts[h] === '127.0.0.1' ? {} : { localAddress: hosts[h] });
++        assert.strictEqual(r.status, 200, hosts[h] + ' ' + POSES[k]);
++      }
++    }
++    var show = await H.get(app.base + '/show');
++    assert.strictEqual(show.status, 200);
++    assert.ok(show.body.indexOf('assets/mascot/mascot_present.webp') > 0, 'transizione dello SHOW con la nuova posa');
++    var master = await H.get(app.base + '/assets/sorgenti_grafiche/mascotte_animata/mascot_present.png');
++    assert.strictEqual(master.status, 200, 'master consultabili dal PC del docente');
++    if (lan) assert.strictEqual((await H.get('http://' + lan.address + ':' + app.port + '/assets/sorgenti_grafiche/mascotte_animata/mascot_present.png', { localAddress: lan.address })).status, 403, 'i master non sono pubblicati in rete');
++  } finally { await H.stopServer(app); H.rmrf(dir); }
++});

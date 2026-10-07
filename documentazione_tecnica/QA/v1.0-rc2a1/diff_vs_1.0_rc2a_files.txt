@@ -1,0 +1,9 @@
+Only in Il_Secchione_1.0_RC2A1_HOTFIX/documentazione_tecnica: CHANGELOG_1.0_RC2A1_HOTFIX.md
+Files Il_Secchione_1.0_RC2A_POST_PILOT/documentazione_tecnica/README.md and Il_Secchione_1.0_RC2A1_HOTFIX/documentazione_tecnica/README.md differ
+Files Il_Secchione_1.0_RC2A_POST_PILOT/js/app.js and Il_Secchione_1.0_RC2A1_HOTFIX/js/app.js differ
+Files Il_Secchione_1.0_RC2A_POST_PILOT/js/engine/session.js and Il_Secchione_1.0_RC2A1_HOTFIX/js/engine/session.js differ
+Files Il_Secchione_1.0_RC2A_POST_PILOT/server/server.js and Il_Secchione_1.0_RC2A1_HOTFIX/server/server.js differ
+Only in Il_Secchione_1.0_RC2A1_HOTFIX/tests: rc2a1_hotfix.test.js
+Files Il_Secchione_1.0_RC2A_POST_PILOT/tests/rc2a_post_pilot.test.js and Il_Secchione_1.0_RC2A1_HOTFIX/tests/rc2a_post_pilot.test.js differ
+Files Il_Secchione_1.0_RC2A_POST_PILOT/tests/session_planner_370.test.js and Il_Secchione_1.0_RC2A1_HOTFIX/tests/session_planner_370.test.js differ
+Files Il_Secchione_1.0_RC2A_POST_PILOT/tests/training_rc1.test.js and Il_Secchione_1.0_RC2A1_HOTFIX/tests/training_rc1.test.js differ

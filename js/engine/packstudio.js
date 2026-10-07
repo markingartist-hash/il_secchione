@@ -248,6 +248,38 @@
     throw new Error('tipo di manche sconosciuto: ' + type);
   }
 
+  /*
+   * RC2-A.3 · Abbinamenti nello Studio: il docente scrive le voci (A, B, C, D) nell'ordine che vuole e sceglie per ogni immagine la voce giusta.
+   * Nel pacchetto resta il formato di sempre: names[i] = voce corretta dell'immagine i (in gara le lettere vengono comunque mescolate).
+   * terms e match sono solo dati della bozza: la validazione del pacchetto non li salva.
+   */
+  function matchingModel(g) {
+    var n = ((g && g.cards) || []).length || 4;
+    var names = ((g && g.names) || []).map(function (v) { return v == null ? '' : String(v); });
+    var terms = Array.isArray(g && g.terms) && g.terms.length === n ? g.terms.map(function (v) { return v == null ? '' : String(v); }) : names.slice(0, n);
+    while (terms.length < n) terms.push('');
+    var match = Array.isArray(g && g.match) && g.match.length === n ? g.match.map(function (k) { var x = Math.floor(Number(k)); return x >= 0 && x < n ? x : 0; }) : terms.map(function (_, i) { return i; });
+    return { terms: terms, match: match };
+  }
+  function applyMatching(g, terms, match) {
+    var m = matchingModel({ cards: g.cards, names: g.names, terms: terms || g.terms, match: match || g.match });
+    g.terms = m.terms;
+    g.match = m.match;
+    g.names = m.match.map(function (k) { return m.terms[k] == null ? '' : m.terms[k]; });
+    return g;
+  }
+  /** Ogni voce va abbinata a una sola immagine: messaggi chiari per lo Studio. */
+  function matchingIssues(g) {
+    if (!g || !Array.isArray(g.match)) return [];
+    var used = {}, out = [];
+    g.match.forEach(function (k, i) { (used[k] = used[k] || []).push(i + 1); });
+    Object.keys(used).forEach(function (k) {
+      if (used[k].length > 1) out.push('la voce ' + LETTERS[k] + ' è abbinata a più immagini (' + used[k].join(' e ') + '): ogni voce va con una sola immagine');
+    });
+    ((g.terms || [])).forEach(function (t, k) { if (!used[k] && String(t || '').trim()) out.push('la voce ' + LETTERS[k] + ' non è abbinata a nessuna immagine'); });
+    return out;
+  }
+
   function addGame(d, type) {
     if (GAME_TYPES.indexOf(type) < 0) throw new Error('tipo di manche sconosciuto: ' + type);
     d.games[type].push(blankGame(type));
@@ -386,6 +418,7 @@
         var ign = ignoredAccepted(t, g);
         if (ign > 0) warn(where('game', i, t), ign === 1 ? '1 risposta alternativa vuota o doppia verrà ignorata' : ign + ' risposte alternative vuote o doppie verranno ignorate');
         if (t === 'photopuzzle' && g.image && !d.images[g.image]) err(where('game', i, t), 'immagine "' + g.image + '" non presente nel pacchetto');
+        if (t === 'abbinamenti') matchingIssues(g).forEach(function (msg) { err(where('game', i, t), msg); });
         if (t === 'abbinamenti') (g.cards || []).forEach(function (c, k) { if (c && c.img && !d.images[c.img]) err(where('game', i, t), 'immagine ' + (k + 1) + ' ("' + c.img + '") non presente nel pacchetto'); });
       });
     });
@@ -460,7 +493,7 @@
     renameImage: renameImage, removeImage: removeImage, flattenImages: flattenImages,
     nextQuestionId: nextQuestionId, blankQuestion: blankQuestion, addQuestion: addQuestion, duplicateQuestion: duplicateQuestion,
     deleteQuestion: deleteQuestion, moveQuestion: moveQuestion, parseTags: parseTags,
-    blankGame: blankGame, addGame: addGame, duplicateGame: duplicateGame, deleteGame: deleteGame, moveGame: moveGame, parseChainText: parseChainText,
+    blankGame: blankGame, addGame: addGame, matchingModel: matchingModel, applyMatching: applyMatching, matchingIssues: matchingIssues, duplicateGame: duplicateGame, deleteGame: deleteGame, moveGame: moveGame, parseChainText: parseChainText,
     cleanAccepted: cleanAccepted, ACCEPTED_MAIN: ACCEPTED_MAIN,
     toFull: toFull, validate: validate, toZip: toZip, bumpVersion: bumpVersion, contentKey: contentKey, summary: summary,
     serialize: serialize, deserialize: deserialize

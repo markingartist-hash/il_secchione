@@ -206,6 +206,7 @@
   }
 
   var UI = {
+    openStudio: function (id) { openStudio(id || ''); }, // RC2-A.3: scorciatoia dalla scheda GIOCHI della regia
     init: function (c) {
       ctx = c;
       dlg = document.getElementById('packsDialog');

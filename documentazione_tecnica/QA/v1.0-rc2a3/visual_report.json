@@ -1,0 +1,960 @@
+{
+ "errors": [],
+ "curtainChecks": [
+  "photopuzzle",
+  "indovina",
+  "abbinamenti",
+  "ghigliottina",
+  "chain"
+ ],
+ "shots": [
+  {
+   "shot": "photopuzzle_tendina",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "photopuzzle_tendina",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "photopuzzle_tendina",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "photopuzzle_tendina",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 12.5,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    "#puzzleTopLabel": 2.9
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    "#puzzleTopLabel": 2.9
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    "#puzzleTopLabel": 2.9
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    "#puzzleTopLabel": 2.9
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 9
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 9
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 9
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 9
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "indovina_tendina",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "indovina_tendina",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "indovina_tendina",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "indovina_tendina",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 12.5,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 6.7,
+    ".clueCurrent": 7.7,
+    ".clueHistory div": 4.1,
+    ".clueNo": 3.8
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 6.7,
+    ".clueCurrent": 7.7,
+    ".clueHistory div": 4.1,
+    ".clueNo": 3.8
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 6.6,
+    ".clueCurrent": 7.7,
+    ".clueHistory div": 4.1,
+    ".clueNo": 3.8
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 5,
+    ".clueCurrent": 5.8,
+    ".clueHistory div": 3.1,
+    ".clueNo": 2.9
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 6.7
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 6.7
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 6.6
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 5
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_tendina",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_tendina",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_tendina",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_tendina",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 12.5,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 6.3,
+    ".matchNum": 5.4
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 6.3,
+    ".matchNum": 5.4
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 6.3,
+    ".matchNum": 5.4
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 5.4,
+    ".matchNum": 5.4
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 6.8,
+    ".term": 6.3
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 6.8,
+    ".term": 6.3
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 6.8,
+    ".term": 6.3
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 5.9,
+    ".term": 5.4
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "ghigliottina_tendina",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "ghigliottina_tendina",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "ghigliottina_tendina",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "ghigliottina_tendina",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 12.5,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 16.5,
+    ".ghStatus": 6.3
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 16.5,
+    ".ghStatus": 6.3
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 16.5,
+    ".ghStatus": 6.3
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 15.3,
+    ".ghStatus": 5.8
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 7.6,
+    ".ghFinal": 21.8,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 7.6,
+    ".ghFinal": 21.8,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 7.6,
+    ".ghFinal": 21.8,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 7.6,
+    ".ghFinal": 21.8,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 21.8
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 21.8
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 21.8
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 21.8
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "chain_tendina",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "chain_tendina",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "chain_tendina",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 15,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "chain_tendina",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gcTitle": 12.5,
+    ".gcHow": 4,
+    ".gcPts": 4.2
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 12.5,
+    ".chainMask": 12.5
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 12.4,
+    ".chainMask": 12.4
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 12.5,
+    ".chainMask": 12.5
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 9.3,
+    ".chainMask": 9.3
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 15.2
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 15.2
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 15.2
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 14.9
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  }
+ ]
+}

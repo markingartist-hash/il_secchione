@@ -32,7 +32,7 @@ function inspect(main) {
   stage.querySelectorAll('*').forEach(el => {
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) return;
-    if (el.closest('.puzzleSvg,.publicHostCol,.mascotFigure,.transition')) return;
+    if (el.closest('.puzzleSvg,.publicHostCol,.mascotFigure,.transition,.gcGlyph')) return;
     const r = el.getBoundingClientRect();
     if (!r.width || !r.height) return;
     const hasText = Array.prototype.some.call(el.childNodes, n => n.nodeType === 3 && n.textContent.trim());
@@ -97,11 +97,28 @@ function inspect(main) {
     await host.evaluate(() => window.__secchioneDebug.commitScores());
     await host.evaluate(() => { const d = window.__secchioneDebug; if (d.showGameResults) d.showGameResults(); });
   }
-  const T = ['.arcadeTitle', '.hostBubble'];
+  /* RC2-A.3: con la tendina attiva il proiettore non deve avere nel DOM nessun contenuto del gioco; cambiando manche la tendina resta. */
+  const LEAK = '.candidate, .clueCurrent, .term, .matchCard, .ghWord, .ghClues, .chainWord, .chainPath, .puzzleFrame, .gameScreen';
+  async function curtainLeak(g) {
+    await host.evaluate(() => { const d = window.__secchioneDebug; d.loadArcadePreset(1, false); });
+    await sleep(500);
+    for (const s of shows) {
+      const r = await s.p.evaluate(sel => ({ curtain: !!document.querySelector('#publicStage .gameCurtain'), leak: document.querySelectorAll('#publicStage ' + sel.split(', ').join(', #publicStage ')).length }), LEAK);
+      if (!r.curtain || r.leak) throw new Error('tendina ' + g + ' ' + s.w + 'x' + s.h + ': ' + JSON.stringify(r));
+    }
+    const regia = await host.evaluate(() => ({ badge: !!document.querySelector('#stage .regiaCurtainBadge'), board: !!document.querySelector('#stage .gameScreen') }));
+    if (!regia.badge || !regia.board) throw new Error('anteprima regia sotto la tendina: ' + JSON.stringify(regia));
+    if (!curtainChecks.length) await host.locator('#stage').screenshot({ path: path.join(out, 'regia_anteprima_sotto_tendina.png') });
+    curtainChecks.push(g);
+    await host.evaluate(() => { const d = window.__secchioneDebug; d.loadArcadePreset(0, false); });
+    await sleep(300);
+  }
+  const curtainChecks = [];
 
   // Photopuzzle
   await D('startArcade', 'photopuzzle'); await sleep(400);
-  await shoot('photopuzzle_intro', ['.gameIntroTitle', '.gameIntroHow', '.gameIntroPts']);
+  await shoot('photopuzzle_tendina', ['.gcTitle', '.gcHow', '.gcPts']);
+  await curtainLeak('photopuzzle');
   await D('startPhoto');
   await sleep(2500);
   await shoot('photopuzzle_in_corso', ['.queueRow span', '.photoFooter small', '#puzzleTopLabel']);
@@ -114,7 +131,8 @@ function inspect(main) {
 
   // Indovina
   await D('startArcade', 'indovina'); await sleep(400);
-  await shoot('indovina_intro', ['.gameIntroTitle', '.gameIntroHow', '.gameIntroPts']);
+  await shoot('indovina_tendina', ['.gcTitle', '.gcHow', '.gcPts']);
+  await curtainLeak('indovina');
   await D('startIndovina');
   await host.evaluate(() => { document.querySelector('[data-act="clue"]')?.click(); document.querySelector('[data-act="clue"]')?.click(); });
   await shoot('indovina_in_corso', ['.candidate', '.clueCurrent', '.clueHistory div', '.clueNo']);
@@ -126,7 +144,8 @@ function inspect(main) {
 
   // Abbinamenti
   await D('startArcade', 'abbinamenti'); await sleep(400);
-  await shoot('abbinamenti_intro', ['.gameIntroTitle', '.gameIntroHow', '.gameIntroPts']);
+  await shoot('abbinamenti_tendina', ['.gcTitle', '.gcHow', '.gcPts']);
+  await curtainLeak('abbinamenti');
   await D('startMatching');
   await shoot('abbinamenti_in_corso', ['.term', '.matchNum']);
   await entries([[1, 'correct']]);
@@ -137,7 +156,8 @@ function inspect(main) {
 
   // Ghigliottina: 5 coppie con scelte a mano per squadra, poi finale
   await D('startArcade', 'ghigliottina'); await sleep(400);
-  await shoot('ghigliottina_intro', ['.gameIntroTitle', '.gameIntroHow', '.gameIntroPts']);
+  await shoot('ghigliottina_tendina', ['.gcTitle', '.gcHow', '.gcPts']);
+  await curtainLeak('ghigliottina');
   await D('startGh');
   await shoot('ghigliottina_coppia', ['.ghText', '.ghStatus', '.ghMeta']);
   for (let step = 0; step < 5; step++) {
@@ -158,7 +178,8 @@ function inspect(main) {
 
   // Catena / Staffetta: tutte le parole
   await D('startArcade', 'chain'); await sleep(400);
-  await shoot('chain_intro', ['.gameIntroTitle', '.gameIntroHow', '.gameIntroPts']);
+  await shoot('chain_tendina', ['.gcTitle', '.gcHow', '.gcPts']);
+  await curtainLeak('chain');
   await D('startChain');
   await shoot('catena_in_corso', ['.chainWord', '.chainMask']);
   const links = await host.evaluate(() => window.__secchioneDebug.state.arcade.links.length);
@@ -173,7 +194,8 @@ function inspect(main) {
   await shoot('catena_risultato', ['.resultTeam', '.resultDelta strong', '.resultIdentity small']);
 
   const snap = await host.evaluate(() => window.__secchioneDebug.buildSnapshot('visual-qa'));
-  fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ base, errors, report, totals: snap.session.participants.map(p => p.name), scoreEvents: snap.session.scoreEvents.length }, null, 2));
+  console.log('Tendina persistente senza contenuti del gioco nel DOM del proiettore (anche cambiando manche): ' + curtainChecks.join(', '));
+  fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify({ base, errors, curtainChecks, report, totals: snap.session.participants.map(p => p.name), scoreEvents: snap.session.scoreEvents.length }, null, 2));
   await browser.close();
   app.close();
   const bad = report.filter(r => r.bad.length);

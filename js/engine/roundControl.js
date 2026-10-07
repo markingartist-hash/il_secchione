@@ -198,7 +198,7 @@
    * e poche azioni secondarie, solo quelle sensate nella fase corrente. Nessuna logica nuova: ogni `act`
    * corrisponde a una funzione già esistente della regia; `id` conserva l'id storico del pulsante.
    * c = { screen, phase, timerRunning, answerVisible, questionScored, canUndo, teams, isLast,
-   *       plan: null | { finished, nextTitle, position }, arcade: null | { type, name, intro, resultsVisible, played, started, final, pairSelected,
+   *       plan: null | { finished, nextTitle, position }, arcade: null | { type, name, curtain, resultsVisible, played, started, final, pairSelected,
    *       votesA, votesB, solutionShown, scoreCommitted, chainHasNext, canAid } }
    */
   var GAME_IDS = {
@@ -252,15 +252,22 @@
       var a = c.arcade, ids = GAME_IDS[a.type] || {};
       var restart = A('gameRestart', a.scoreCommitted ? '↺ RIPETI MANCHE' : '✕ ANNULLA ROUND', 'gameRestartBtn');
       var skip = A('next', plan ? 'SALTA →' : 'TORNA ALLE DOMANDE →', 'skipBtn');
-      if (a.intro) {
-        /* RC2-A.2: presentazione del gioco sul palco; resta finché il docente non avvia (una sola volta per avvio del gioco). */
-        stage = 'g-intro'; main.push(A('gameStart', '▶ AVVIA ' + String(a.name || a.type).toUpperCase(), ids.start, 'amber', { sub: 'la presentazione lascia il posto al gioco', kbd: 'Spazio' }));
-        sec.push(A('gameEnter', 'MOSTRA IL GIOCO SENZA AVVIARE', 'gameEnterBtn'), skip);
+      /* RC2-A.3: TENDINA sul proiettore, persistente: resta finché il docente non la toglie. Sotto si può preparare la manche. */
+      var curtainOn = A('curtainOn', '▣ MOSTRA TENDINA', 'curtainOnBtn', 'ghost', { title: 'Copre il proiettore con la presentazione del gioco (tasto T)' });
+      if (a.curtain) {
+        stage = 'g-curtain';
+        if (!a.played && !a.started) {
+          main.push(A('gameStart', '▶ TOGLI TENDINA E AVVIA', ids.start, 'amber', { sub: 'il pubblico vede il gioco e parte il tempo', kbd: 'Spazio' }));
+          sec.push(A('curtainOff', 'TOGLI TENDINA (SENZA AVVIARE)', 'curtainOffBtn', 'ghost', { kbd: 'T' }), skip);
+        } else {
+          main.push(A('curtainOff', '▣ TOGLI TENDINA', 'curtainOffBtn', 'primary', { kbd: 'T' }));
+          sec.push(restart);
+        }
       } else if (a.resultsVisible) {
         stage = 'g-results'; main.push(nextAction());
       } else if (!a.played && !a.started) {
         stage = 'g-ready'; main.push(A('gameStart', '▶ AVVIA ' + String(a.name || a.type).toUpperCase(), ids.start, 'amber'));
-        sec.push(skip);
+        sec.push(curtainOn, skip);
       } else if (a.started && a.type === 'ghigliottina' && !a.final) {
         stage = 'g-vote';
         main.push(A('ghA', 'SCEGLI A' + (a.votesA != null ? ' · ' + a.votesA + (a.votesA === 1 ? ' voto' : ' voti') : ''), 'ghPickA', 'primary', { disabled: !!a.pairSelected }),
@@ -282,7 +289,7 @@
         if (a.type === 'chain' && a.chainHasNext) { main.push(A('chainNext', 'PAROLA SUCCESSIVA →', 'chainNextBtn', 'primary')); sec.push(A('next', 'FINE STAFFETTA: RISULTATO →', 'skipBtn')); }
         else main.push(results);
         if (c.canUndo) sec.push(undo);
-        sec.push(restart);
+        sec.push(restart, curtainOn);
       }
     } else if (c.screen === 'leaderboard') {
       stage = 'leaderboard';
@@ -307,7 +314,7 @@
       sec.push(A('openPlanner', '📋 SCALETTA', 'openPlannerBtn'));
     }
     /* durante il voto A/B della Parola Segreta i tablet votano, non rispondono: niente contatore risposte */
-    var showAnswers = stage !== 'g-vote' && stage !== 'g-intro' && stage !== 'g-results' && ((c.screen === 'question' && c.phase !== 'preview') || (c.screen === 'arcade' && !!c.arcade && (!!c.arcade.played || !!c.arcade.started)));
+    var showAnswers = stage !== 'g-vote' && stage !== 'g-curtain' && stage !== 'g-results' && ((c.screen === 'question' && c.phase !== 'preview') || (c.screen === 'arcade' && !!c.arcade && (!!c.arcade.played || !!c.arcade.started)));
     return { stage: stage, main: main, secondary: sec, showAnswers: showAnswers };
   }
   /** Mini indicatore Ø: compare solo se a qualche squadra resta al massimo 1 astensione gratuita. */

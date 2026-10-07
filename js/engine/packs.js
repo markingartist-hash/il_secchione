@@ -242,6 +242,12 @@
       var lk = x.names.map(function (v) { return v.toLowerCase(); });
       if (lk.some(function (k, i) { return lk.indexOf(k) !== i; })) throw new Error('I termini devono essere tutti diversi.');
     }
+    /* RC2-A.3: istruzione facoltativa del docente, mostrata sulla tendina del gioco (i programmi precedenti la ignorano). */
+    if (raw.instruction != null && String(raw.instruction).trim() !== '') {
+      var ins = String(raw.instruction).replace(/[\u0000-\u001f]/g, ' ').trim();
+      if (ins.length > 160) throw new Error('Istruzione troppo lunga (massimo 160 caratteri).');
+      x.instruction = ins;
+    }
     return x;
   }
 

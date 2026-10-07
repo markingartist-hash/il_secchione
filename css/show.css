@@ -391,3 +391,114 @@
 .clueHistory{max-height:none;overflow:visible}
 .candidate,.term,.chainWord,.ghText,.ghFinal{overflow-wrap:normal;word-break:normal;hyphens:none}
 .ghFinal{line-height:1.3}
+
+/* ===== RC2-A.3 · LAYOUT DEDICATI DEI GIOCHI (test reale in classe: contenuto prima di tutto) =====
+   Cornice comune .gameScreen: intestazione su una riga con timer compatto, contenuto a tutto schermo, regola in basso.
+   Nessuna mascotte né logo. Ogni gioco ha il proprio layout; --g-fs lo calcola js/stage-fit.js (il più grande che entra). */
+.gameScreen{position:relative;height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:1.1cqh;padding:1.4cqh 1.6cqw 1.6cqh;overflow:hidden}
+.gsHead{display:flex;align-items:center;gap:1.4cqw;min-width:0;border-bottom:.15cqh solid #4295e4;padding-bottom:.7cqh}
+.gsTitle{font-size:4.6cqh;line-height:1;font-weight:900;white-space:nowrap;letter-spacing:.01em}
+.gsSub{font-size:2.9cqh;font-weight:850;color:#ffdc75;white-space:nowrap}
+.gsSub.solved{color:#94ffc7}
+.gsLabel{margin-left:auto;min-width:0;font-size:2.3cqh;color:#8dd8ff;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gsTimer{flex:none}
+.gameScreen .gsTimer .publicTimerRing{width:8.6cqh;height:8.6cqh;border-width:.4cqh}
+.gameScreen .gsTimer .publicTimerRing b{font-size:4.6cqh}
+.gameScreen .puzzleCounter{font-size:2.9cqh;padding:.4cqh 1cqw}
+.gameScreen .gsMain{display:block;min-height:0;overflow:hidden}
+.gameScreen .arcadeFooter .publicPhase{font-size:2.3cqh}
+.gameScreen .arcadeRule{font-size:2.5cqh}
+/* Indovina: indizio in alto a tutta larghezza, alternative grandi sotto */
+.indLayout{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);gap:1.3cqh;min-height:0}
+.indClue{min-height:0;overflow:hidden;background:#061c42d9;border:1px solid #3268a1;border-radius:1.2cqh;padding:1.2cqh 1.6cqw 1.4cqh}
+.gameScreen .clueNo{font-size:calc(var(--g-fs,4cqh)*.62);font-weight:850;color:#ffda74;line-height:1.2}
+.gameScreen .clueCurrent{font-size:calc(var(--g-fs,4cqh)*1.25);line-height:1.16;font-weight:850;margin:.6cqh 0 0}
+.gameScreen .clueHistory{font-size:calc(var(--g-fs,4cqh)*.66);line-height:1.25;color:#a9cdec;margin-top:1cqh;display:flex;flex-direction:column;gap:.4cqh;max-height:none;overflow:visible}
+.gameScreen .clueHistory>div{margin:0}
+.gameScreen .clueHistory b{color:#ffda74;margin-right:.5em}
+.gameScreen .candidateGrid{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:1.2cqh 1cqw;min-height:0;height:100%;align-content:stretch}
+.gameScreen .candidate{display:flex;align-items:center;justify-content:center;text-align:center;font-size:calc(var(--g-fs,4cqh)*1.08);line-height:1.08;font-weight:850;padding:.6cqh .8cqw;min-height:0;overflow:hidden;border-radius:1.1cqh;border:.2cqh solid #4a96d8;background:linear-gradient(#1458a3,#0c3a74)}
+/* Abbinamenti: immagini grandi (contain), numeri e lettere enormi, nomi a tutta altezza */
+.matchLayout{height:100%;display:grid;grid-template-columns:minmax(0,60fr) minmax(0,40fr);gap:1.3cqw;min-height:0}
+.gameScreen .matchCards{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1cqh .9cqw;min-height:0;height:100%}
+.gameScreen .matchCard{border-radius:1cqh;border:.2cqh solid #5498d6;background:#020b1d}
+.gameScreen .matchCard img{width:100%;height:100%;object-fit:contain}
+.gameScreen .matchNum{top:.8cqh;left:.8cqh;width:8cqh;height:8cqh;font-size:5.4cqh;font-weight:900;box-shadow:0 .4cqh 1.6cqh #000a}
+.gameScreen .matchAnswer{display:none;left:auto;top:auto;right:.8cqh;bottom:.8cqh;padding:.2cqh 1.6cqh;border-radius:1.2cqh;background:#0b8a5f;border:.3cqh solid #8dffd0;box-shadow:0 .4cqh 1.6cqh #000a}
+.gameScreen .matchAnswer.show{display:block}
+.gameScreen .matchAnswer b{font-size:calc(var(--g-fs,4cqh)*1.7);line-height:1.05;font-weight:900}
+.gameScreen .termList{display:grid;grid-auto-rows:minmax(0,1fr);gap:1.1cqh;min-height:0;height:100%;align-content:stretch}
+.gameScreen .term{display:flex;align-items:center;gap:1.4cqw;font-size:calc(var(--g-fs,4cqh)*1.02);line-height:1.1;font-weight:850;padding:.6cqh 1.2cqw;min-height:0;overflow:hidden;border-radius:1.1cqh;border:.2cqh solid #4a96d8;background:linear-gradient(#124f93,#0b356a)}
+.gameScreen .term b{display:inline-grid;place-items:center;flex:none;min-width:1.2em;font-size:calc(var(--g-fs,4cqh)*1.55);color:#ffda77;margin:0}
+/* Photopuzzle: immagine enorme (cover + punto focale invariati), colonna stretta per le corrette, soluzione gigante */
+.photoLayout{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 19cqw;gap:1.3cqw;min-height:0}
+.gameScreen .puzzleFrame{width:100%;height:100%;border-width:.35cqh}
+.gameScreen .puzzleSolution{font-size:9cqh;line-height:1.1;padding:1.6cqh 1cqw;font-weight:900;background:#063e33f5}
+.photoSide{min-height:0;overflow:hidden}
+.photoSide .answerQueue h3{font-size:2.6cqh;margin-bottom:1cqh}
+.photoSide .answerQueue p{font-size:3cqh;line-height:1.3;margin-top:1cqh}
+.photoSide .queueRow{min-height:5.6cqh;font-size:3.1cqh}
+/* Ghigliottina: parole A/B enormi a tutta altezza, parola finale gigante */
+.gameScreen .ghWrap{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);gap:1.2cqh;min-height:0;text-align:center}
+.gameScreen .ghStatus{font-size:calc(var(--g-fs,4cqh)*.95);margin:0;line-height:1.1}
+.gameScreen .ghPair{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw;min-height:0}
+.gameScreen .ghWord{min-height:0;height:100%;padding:1.6cqh 1.2cqw;gap:1cqh;border-width:.25cqh;border-radius:1.4cqh}
+.gameScreen .ghPlaque{font-size:calc(var(--g-fs,4cqh)*1.3);font-weight:900}
+.gameScreen .ghText{font-size:calc(var(--g-fs,4cqh)*2.5);line-height:1.12}
+.gameScreen .ghStamp{font-size:calc(var(--g-fs,4cqh)*.75);font-weight:900}
+.gameScreen .ghWrapFinal{grid-template-rows:auto minmax(0,1fr) auto;align-items:center}
+.gameScreen .ghClues{display:flex;flex-wrap:wrap;justify-content:center;gap:1cqh 1.6cqw;margin:0}
+.gameScreen .ghClues span{font-size:calc(var(--g-fs,4cqh)*1.15);font-weight:850;padding:.4cqh 1cqw}
+.gameScreen .ghFinal{font-size:calc(var(--g-fs,4cqh)*3.3);line-height:1.3;letter-spacing:.05em}
+.gameScreen .ghMeta{font-size:calc(var(--g-fs,4cqh)*.62);color:#9ecbf1;margin:0}
+/* Staffetta / Catena: percorso dei passaggi, parola di partenza e parola da trovare enormi */
+.gameScreen .chainWrap{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);gap:1.8cqh;min-height:0}
+.chainPath{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.8cqh .8cqw}
+.chainStep{font-size:calc(var(--g-fs,4cqh)*.82);font-weight:850;line-height:1.1;padding:.5cqh 1.1cqw;border-radius:1cqh;border:.2cqh solid #2d5a86;color:#7d9cbc;background:#0a2446;min-width:2.4em;text-align:center}
+.chainStep.on{color:#fff;border-color:#4fb3ff;background:#10457f}
+.chainStep.cur{color:#ffd25a;border-color:#ffd25a;background:#2b230c}
+.chainSep{font-style:normal;font-weight:900;color:#8ddcff;font-size:calc(var(--g-fs,4cqh)*.8)}
+.gameScreen .chainPair{display:grid;grid-template-columns:minmax(0,1fr) 7cqw minmax(0,1fr);gap:1cqw;align-items:stretch;min-height:0}
+.gameScreen .chainWord{min-height:0;height:100%;font-size:calc(var(--g-fs,4cqh)*2.3);line-height:1.12;padding:1.6cqh 1cqw;border-width:.25cqh;border-radius:1.4cqh}
+.gameScreen .chainWord.chainMask{font-size:calc(var(--g-fs,4cqh)*2.3)}
+.gameScreen .chainArrow{align-self:center;font-size:9cqh}
+.gameScreen .candidate,.gameScreen .term span,.gameScreen .chainWord,.gameScreen .chainStep,.gameScreen .ghText,.gameScreen .ghFinal{overflow-wrap:normal;word-break:normal;hyphens:none}
+
+/* ===== RC2-A.3 · TENDINA DEL GIOCO: copertura persistente del proiettore, la toglie solo il docente ===== */
+.gameCurtain{--gc:#4fb3ff;position:relative;height:100%;overflow:hidden;padding:3cqh 4cqw 2.6cqh;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:1.8cqh;color:#fff;background:radial-gradient(ellipse at 12% -8%,color-mix(in srgb,var(--gc) 50%,transparent) 0,transparent 55%),radial-gradient(ellipse at 110% 120%,color-mix(in srgb,var(--gc) 26%,transparent) 0,transparent 50%),linear-gradient(140deg,#071a40,#030914)}
+.gc-photopuzzle{--gc:#f0a23a}.gc-indovina{--gc:#38dc94}.gc-abbinamenti{--gc:#5cbcff}.gc-ghigliottina{--gc:#ff6b6b}.gc-chain{--gc:#c79bff}
+.gcGlyph{position:absolute;right:-1cqw;bottom:-10cqh;font-size:62cqh;line-height:1;font-weight:900;letter-spacing:-.06em;color:var(--gc);opacity:.11;pointer-events:none;white-space:nowrap}
+.gcHead{position:relative;display:flex;align-items:center;justify-content:space-between;gap:2cqw;border-bottom:.22cqh solid color-mix(in srgb,var(--gc) 60%,transparent);padding-bottom:1.2cqh}
+.gcKicker{font-size:calc(2.8cqh*var(--cs,1));letter-spacing:.18em;font-weight:850;color:#d4e9ff}
+.gcState{font-size:calc(2.6cqh*var(--cs,1));font-weight:900;letter-spacing:.14em;color:#13213a;background:var(--gc);padding:.6cqh 1.6cqw;border-radius:99px;animation:gcPulse 2.6s ease-in-out infinite}
+.gcMain{position:relative;display:flex;flex-direction:column;justify-content:center;gap:calc(2.2cqh*var(--cs,1));min-height:0;overflow:hidden}
+.gcTitle{font-size:min(calc(15cqh*var(--cs,1)),9.4cqw);line-height:.94;font-weight:900;letter-spacing:-.01em;text-shadow:0 .8cqh 3.4cqh #000a;overflow-wrap:normal}
+.gcPayoff{font-size:calc(5.2cqh*var(--cs,1));line-height:1.1;font-weight:850;color:var(--gc)}
+.gcNote{font-size:calc(3.6cqh*var(--cs,1));line-height:1.25;font-weight:700;background:#ffffff12;border-left:.6cqh solid var(--gc);padding:1cqh 1.4cqw;border-radius:.6cqh}
+.gcHow{margin:0;padding-left:calc(5.6cqh*var(--cs,1));font-size:calc(4cqh*var(--cs,1));line-height:1.24;color:#eef6ff}
+.gcHow li{margin-bottom:.6cqh}
+.gcScore{display:flex;flex-wrap:wrap;gap:1.2cqh 1.4cqw}
+.gcPts{display:flex;align-items:center;gap:1.2cqw;padding:calc(1.3cqh*var(--cs,1)) 1.8cqw;border-radius:1.6cqh;border:.32cqh solid var(--gc);background:#0a1d3ce6;font-size:calc(4.2cqh*var(--cs,1));line-height:1.12;font-weight:900}
+.gcPts b{color:var(--gc)}
+.gcPts.manual{border-color:#7ecbff;font-size:calc(3.1cqh*var(--cs,1));font-weight:750}
+.gcPts.manual b{color:#9ad8ff}
+.gcFoot{position:relative;display:flex;align-items:center;justify-content:space-between;gap:2cqw;font-size:calc(2.9cqh*var(--cs,1));color:#b4d2ec;border-top:1px solid #4a8bd370;padding-top:1.1cqh}
+.gcFoot strong{color:var(--gc);letter-spacing:.06em;text-align:right}
+@keyframes gcPulse{0%,100%{opacity:1}50%{opacity:.72}}
+@media(prefers-reduced-motion:reduce){.gcState{animation:none}}
+/* anteprima in regia: il docente vede il gioco preparato, con l'avviso che il proiettore mostra la tendina */
+.regiaCurtain{position:relative;height:100%}
+.regiaCurtain>.gameScreen{filter:saturate(.75) brightness(.86)}
+.regiaCurtainBadge{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:6;max-width:86%;text-align:center;background:#e8a91c;color:#16233a;font-weight:900;font-size:3cqh;line-height:1.2;padding:1.2cqh 2cqw;border-radius:1.6cqh;box-shadow:0 1cqh 4cqh #000c;border:.3cqh solid #ffe58a}
+/* RC2-A.3 · intestazione che si stringe (4:3): titolo e timer restano, sottotitolo e tema si accorciano; interlinee senza tagli */
+.gsTitle{flex:0 0 auto;line-height:1.15}
+.gsSub{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.gsLabel{flex:0 1 auto;line-height:1.2}
+.gameScreen .gsTimer .publicTimerRing b{line-height:1.15}
+.gameScreen .ghText,.gameScreen .chainWord{line-height:1.25}
+.gameScreen .matchAnswer b{line-height:1.2;display:block}
+@media(max-aspect-ratio:3/2){.publicBody .gsLabel{display:none}}
+/* RC2-A.3 · timer compatto a destra dell'intestazione; titolo della tendina senza tagli verticali */
+.gameScreen .gsTimer.publicTimerHud{width:auto;flex:0 0 auto;margin-left:.6cqw}
+.gcTitle{line-height:1.06}
+@media(max-aspect-ratio:3/2){.publicBody .gameScreen .gsTimer.publicTimerHud{margin-left:auto}}

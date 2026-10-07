@@ -221,3 +221,13 @@ body.stDragging::after{content:"Rilascia qui il file";position:fixed;inset:12px;
   .stApp{padding:12px 16px 40px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+/* RC2-A.3 · Fase B1: CREA DA ZERO e Abbinamenti con voci e coppie */
+.stQuickAdd{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 4px;padding:10px 12px;border:1px solid #2f7d5a;border-radius:12px;background:#0d2a22}
+.stQuickAdd>b{font-size:13px;letter-spacing:.12em;color:#9ff0c8;margin-right:6px}
+.stQuickBtn{font-size:15px;padding:10px 14px}
+.stTerms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stPairPick{margin-top:8px}
+.stPairPick select{width:100%}
+.stPairSummary{display:flex;flex-wrap:wrap;gap:8px}
+.stPairChip{padding:6px 10px;border-radius:999px;background:#13324f;border:1px solid #3f78a8;font-size:14px}
+.stPairChip b{color:#ffd76a}

@@ -1,7 +1,7 @@
 'use strict';
 /* RC2-A.2 GAMEPLAY — dopo il test reale in classe: helper generici di velocità e rango, input manuale a rango (300/290…),
    regola dei round misti, Ghigliottina (+10 per scelta, finale 200–300, massimo 350), Catena/Staffetta (50–100 per parola),
-   score event ricostruibili (ricalcolo, salvataggio/ripresa, server, report/CSV), intro e RISULTATO DEL GIOCO,
+   score event ricostruibili (ricalcolo, salvataggio/ripresa, server, report/CSV), RISULTATO DEL GIOCO,
    tastiera con cursore. */
 var assert = require('assert');
 var fs = require('fs');
@@ -307,35 +307,7 @@ test('RC2-A.2 G. server: voto A/B reale di un tablet → coppia confermata con +
 });
 
 /* ---------------- intro e RISULTATO DEL GIOCO nel flusso della regia ---------------- */
-test('RC2-A.2 intro del gioco: stato reale del flusso, una sola volta per avvio; AVVIA entra nel gioco; nessun loop', function () {
-  assert.ok(/clearPending\(\);loadArcadePreset\(0,false\);state\.arcade\.intro=true;/.test(APP), 'startArcade attiva l’intro (dopo aver caricato la manche)');
-  assert.ok(/function arcadeStartRound\(\)\{const a=state\.arcade;a\.intro=false;/.test(APP), 'ogni avvio di manche (tutti i giochi) chiude l’intro');
-  assert.ok(/if\(a\.intro\)return gameIntroHTML\(a\);/.test(APP));
-  assert.ok(!/chainNext\(\)\{[^\n]*intro=true/.test(APP) && !/function ghOpenPairRound[^\n]*intro=true/.test(APP), 'nessuna intro per i passaggi interni');
-  ['photopuzzle', 'indovina', 'abbinamenti', 'ghigliottina', 'chain'].forEach(function (type) {
-    var m = RC.cockpit({ screen: 'arcade', arcade: { type: type, name: 'Gioco', intro: true } });
-    assert.strictEqual(m.stage, 'g-intro', type);
-    assert.strictEqual(m.main[0].act, 'gameStart', 'AVVIA entra nel gioco giusto: ' + type);
-    assert.strictEqual(m.main[0].id, RC.GAME_IDS[type].start);
-    assert.ok(m.secondary.some(function (x) { return x.act === 'gameEnter'; }));
-    assert.ok(!m.showAnswers);
-    assert.strictEqual(RC.cockpit({ screen: 'arcade', arcade: { type: type, name: 'Gioco', intro: false } }).stage, 'g-ready', 'dopo l’intro: gioco pronto');
-  });
-});
-test('RC2-A.2 intro: nome, payoff, istruzioni e punteggio coerente per ogni gioco', function () {
-  var ctx = { esc: function (x) { return String(x); }, SC: SC, BRAND_LOGO: 'logo.svg', NET: { boundTeamIds: function () { return {}; } },
-    profileId: function () { return 'show_speed'; }, gameName: function (t) { return { photopuzzle: 'Photopuzzle', indovina: 'Indovina', abbinamenti: 'Abbinamenti', ghigliottina: 'La parola nascosta', chain: 'Catena di parole' }[t]; } };
-  var start = APP.indexOf('const GAME_INTRO=');
-  vm.runInNewContext(APP.slice(start, APP.indexOf('\nfunction ', start)) + '\n' + extractFrom(APP, ['speedProfile', 'gameScoreLines', 'gameIntroHTML']), ctx);
-  var h = {};
-  ['photopuzzle', 'indovina', 'abbinamenti', 'ghigliottina', 'chain'].forEach(function (t) { h[t] = ctx.gameIntroHTML({ type: t, label: 'Manche 1' }); });
-  assert.ok(/PHOTOPUZZLE/.test(h.photopuzzle) && /LA PAROLA NASCOSTA/.test(h.ghigliottina) && /CATENA DI PAROLE/.test(h.chain));
-  ['photopuzzle', 'indovina', 'abbinamenti'].forEach(function (t) { assert.ok(/Risposta corretta: 200–300 pt in base alla velocità/.test(h[t]), t); });
-  assert.ok(/Ogni scelta corretta: \+10 pt/.test(h.ghigliottina) && /Risposta finale corretta: 200–300 pt in base alla velocità/.test(h.ghigliottina));
-  assert.ok(/Ogni parola corretta: 50–100 pt in base alla velocità/.test(h.chain));
-  assert.ok(/Senza tablet: 300, 290, 280/.test(h.indovina) && /Senza tablet: 100, 95, 90/.test(h.chain), 'senza tablet la regola a rango è detta');
-  Object.keys(h).forEach(function (t) { assert.ok(/gameIntroPayoff/.test(h[t]) && /<ol class="gameIntroHow"><li>/.test(h[t]) && !/200 \+ bonus/.test(h[t]), t); });
-});
+/* RC2-A.3: l'intro breve è stata sostituita dalla TENDINA persistente; i suoi test sono in rc2a3_show_editor.test.js. */
 test('RC2-A.2 RISULTATO DEL GIOCO: 1° AVANTI conferma e mostra il risultato (una volta), 2° AVANTI prosegue; senza punti si prosegue', function () {
   var calls = [];
   var ctx = { state: { screen: 'arcade', arcade: { type: 'indovina', gameId: 'g1', played: true }, session: { rounds: [] } },
@@ -346,11 +318,11 @@ test('RC2-A.2 RISULTATO DEL GIOCO: 1° AVANTI conferma e mostra il risultato (un
   assert.ok(ctx.state.arcade.resultsVisible);
   assert.strictEqual(ctx.gameResultsStep(), 'proceed', 'il risultato non ricompare: il 2° AVANTI prosegue');
   same(calls, ['settle', 'game.results']);
-  ctx.state.arcade = { type: 'chain', gameId: 'g2', played: true, intro: false };
+  ctx.state.arcade = { type: 'chain', gameId: 'g2', played: true, curtain: false };
   ctx.settleArcadeForNext = function () { return true; }; // nessuna risposta: il docente conferma di proseguire senza punti
   assert.strictEqual(ctx.gameResultsStep(), 'proceed');
-  ctx.state.arcade = { type: 'chain', gameId: 'g3', intro: true };
-  assert.strictEqual(ctx.gameResultsStep(), 'proceed', 'dall’intro si salta il gioco senza risultato');
+  ctx.state.arcade = { type: 'chain', gameId: 'g3', curtain: true };
+  assert.strictEqual(ctx.gameResultsStep(), 'proceed', 'dalla tendina (RC2-A.3) si salta il gioco senza risultato');
   ctx.state.arcade = { type: 'chain', gameId: 'g4', played: true };
   ctx.settleArcadeForNext = function () { return false; };
   assert.strictEqual(ctx.gameResultsStep(), 'blocked', 'avviso «senza risposta»: si resta sul gioco');

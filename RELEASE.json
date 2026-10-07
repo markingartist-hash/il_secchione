@@ -1,50 +1,41 @@
 {
-  "version": "1.0.0-rc2a.2",
-  "name": "RC2A2_GAMEPLAY",
+  "version": "1.0.0-rc2a.3",
+  "name": "RC2A3_SHOW_EDITOR",
   "date": "2026-10-07",
-  "source": "git: markingartist-hash/il_secchione, baseline commit 'Baseline Il Secchione RC2-A.1' (1.0.0-rc2a.1)",
+  "source": "git: markingartist-hash/il_secchione, branch of PR #1 on top of RC2-A.2 (fcf228d)",
   "supportedRuntime": "bundled portable Node 24 (runtime/node.exe)",
-  "scope": "Gameplay patch after a real classroom test. No Phase B, no new games, no pack changes. Game readability on the stage, game intro screen, RESULT OF THE GAME, clear scoring texts, Ghigliottina +10 per A/B choice and final 200–300, Chain 50–100 per word, manual rank 300/290… (chain 100/95…), caret text field on the player keyboard.",
+  "scope": "Show UX fix after the classroom review of RC2-A.2 and start of Phase B1: persistent teacher-controlled game curtain (no early exposure on the projector), dedicated full-screen layouts per game without mascot/logo, Pack Studio 'create from scratch' for every content type, Abbinamenti editor with items A–D and pairs, optional curtain instruction. Scoring unchanged.",
   "changes": [
-    "stage-fit.js fitGame: games use the largest text that fits (3.4–6.6% of stage height); games and intro fill 4:3; right column = timer only",
-    "Game intro screen as a real state (arcade.intro), once per game start; AVVIA enters the game; no intro for internal steps",
-    "RISULTATO DEL GIOCO after every game (first AVANTI commits and shows it, second continues): answer, outcome, time, game points, partials; never totals/positions",
-    "Scoring texts: no '200 + bonus'; SC.gameRules/manualRules single source for stage, regia, intro",
-    "Scales per micro-round (scoring.js): standard / gh_pair (+10, 0, 0) / chain_link (50–100); helpers speedRangePoints, rankRangePoints; scale stored in rounds, score events and server commits",
-    "Manual without tablets: 300, 290, 280… (min 200); chain 100, 95… (min 50); wrong/omitted do not consume rank; mixed rule only when a tablet actually answered",
-    "Ghigliottina: each A/B choice is a committed micro-round per team; majority is scenic only; manual A/B/Ø per team in the PUNTI tab; cancelling an open Ghigliottina voids its committed pairs",
-    "Pair and chain-word omissions do not consume the 3 free omissions",
-    "Player keyboard: real <input inputmode=none> with caret, insert/replace/backspace at the caret (pure editText()), horizontal scroll to caret; fixed stuck 'INVIO…' when the field had focus",
-    "Old rounds without scale keep RC2-A.1 rules (no retroactive recompute); CSV contract v2 unchanged"
+    "Curtain (arcade.curtain) replaces the short intro: stays until the teacher removes it (TOGLI TENDINA E AVVIA / TOGLI TENDINA / MOSTRA TENDINA, key T); public stage HTML contains only the curtain; regia preview shows the prepared game with a notice",
+    "gameFrame + dedicated layouts (photoLayout, indLayout, matchLayout, ghWrap, chainPath); no mascot, no logo, compact header timer; stage-fit fitGame on .gameScreen, fitCurtain (--cs); games and curtain fill 4:3",
+    "Pack Studio: CREA DA ZERO bar (domanda, Photopuzzle, Indovina, Abbinamento, Parola Segreta, Staffetta); Abbinamento with images / items A–D / pairs and clear validation; optional instruction per game; shortcut from regia GIOCHI tab",
+    "packs.js: optional 'instruction' (<=160 chars) on every game, ignored by older versions",
+    "Fixed pre-existing Pack Studio error when a draft is closed right after an edit"
   ],
   "previous": {
-    "version": "1.0.0-rc2a.1",
-    "name": "RC2A1_HOTFIX",
-    "date": "2026-10-06",
-    "scope": "Hotfix only, no new features: arcade records carry the round availableMs before the local score calculation (host = server at first calculation), recompute falls back to rd.availableMs, tablet checklist wording. Scoring, timers and layout unchanged.",
-    "fixes": [
-      "commitArcadeScores → arcadeRecords(): every arcade record has the authoritative round availableMs; finalizeRound uses it as local fallback, stores it on the round and sends it to the server (RC2-A computed 200 locally and relied on score.server_override)",
-      "recomputeAllRounds and SS.recomputeTotals use rd.availableMs for historic records without availableMs",
-      "Checklist Pulsantiere: \"N tablet collegati · M squadre manuali\" instead of \"N / N collegate\"",
-      "QA erratum: the RC2-A report wrongly stated score.verified for the Photopuzzle; real logs attached"
-    ]
+    "version": "1.0.0-rc2a.2",
+    "name": "RC2A2_GAMEPLAY",
+    "date": "2026-10-07",
+    "scope": "Gameplay patch after a real classroom test. No Phase B, no new games, no pack changes. Game readability on the stage, game intro screen, RESULT OF THE GAME, clear scoring texts, Ghigliottina +10 per A/B choice and final 200–300, Chain 50–100 per word, manual rank 300/290… (chain 100/95…), caret text field on the player keyboard."
   },
   "knownLimitations": [
-    "Real projector legibility, real tablets (iPad/Safari, Android, old devices) and classroom rhythm not verified; inputmode=none tested only in Chromium.",
-    "Popup projector window not exercised in the automated browser (popups blocked); /show tested at 1366x768, 1600x900, 1920x1080, 1024x768.",
+    "Real projector legibility, real tablets and classroom rhythm not verified.",
+    "Popup projector window not exercised in the automated browser; /show tested at 1366x768, 1600x900, 1920x1080, 1024x768.",
+    "Abbinamenti stays at exactly 4 images / 4 items (engine and pack format).",
+    "Abbinamenti item names in 4:3 are slightly smaller than in RC2-A.2 (5.4% vs 5.6% of height) because the images are larger.",
     "Barocco/Preistoria and external packs keep explicit 30/60 s until the Phase B command.",
-    "Phone portrait QWERTY letters are narrow (height >= 44 px).",
-    "SHA256SUMS.txt not regenerated (already not matching the git baseline: runtime/ and HQ sounds are not in the repository); regenerate when building the portable ZIP."
+    "SHA256SUMS.txt not regenerated (see RC2-A.2)."
   ],
-  "node": "v22.22.0 (cloud test environment; distribution runtime v24 not available here)",
+  "node": "v22.22.0 (cloud test environment)",
   "nodePlatform": "linux-x64 (tests)",
   "unitAndIntegration": {
-    "passed": 307,
+    "passed": 315,
     "failed": 0,
-    "baselineRC2A1": 282,
-    "rc2a2New": 25
+    "baselineRC2A2": 307,
+    "rc2a3New": 10,
+    "replacedRC2A2IntroTests": 2
   },
-  "simulatePlayers": "2/6/15/30 devices, no lost or duplicated responses (baseline RC2-A.1 re-run in the same environment: identical outcome)",
-  "manualQA": "Real-browser QA (Playwright + Chromium): tests/e2e/visual_games.cjs 84 screenshots at 4 resolutions, 0 clipped texts, 0 JS errors; tests/e2e/keyboard_caret.cjs 13 checks. See documentazione_tecnica/QA/TEST_RESULTS_1.0_RC2A2.md",
+  "simulatePlayers": "2/6/15/30 devices, no lost or duplicated responses",
+  "manualQA": "Real-browser QA (Playwright + Chromium): visual_games.cjs 84 screenshots at 4 resolutions with curtain leak checks, keyboard_caret.cjs 13 checks, studio_create.cjs 9 checks. See documentazione_tecnica/QA/TEST_RESULTS_1.0_RC2A3.md",
   "contentPacks": "Barocco 3media and Preistoria 1media 1.2.0 (standard times) delivered separately, not inside this ZIP"
 }

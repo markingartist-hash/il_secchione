@@ -83,12 +83,16 @@ Un gioco a più passi produce **più round** (micro-round), ognuno con i propri 
 - Ogni manche ha un `gameInstanceId` (`state.arcade.gameId`), salvato in tutti i suoi round: il RISULTATO DEL GIOCO somma gli score event di quei round. Annullare una Ghigliottina in corso annulla anche le coppie già confermate (`voidGameRounds`).
 - Il CSV (contratto v2) non cambia: ogni coppia e ogni parola è una riga con il proprio `round_id` e i propri punti. Scala e passaggio sono nel salvataggio JSON completo.
 
-### 3.2 RC2-A.2 — flusso di un gioco
+### 3.2 RC2-A.2/A.3 — flusso di un gioco
 ```text
-startArcade ──► INTRO (arcade.intro) ──AVVIA──► gioco ──RIVELA──► RISULTATO DEL GIOCO ──AVANTI──► contenuto successivo
-                 una sola per avvio             (coppie / parole       (arcade.resultsVisible: 1° AVANTI conferma
-                                                 senza nuova intro)     i punti e lo mostra, 2° AVANTI prosegue)
+startArcade ──► TENDINA (arcade.curtain) ──TOGLI TENDINA E AVVIA──► gioco ──RIVELA──► RISULTATO DEL GIOCO ──AVANTI──► successivo
+                 persistente: resta mentre il docente     (coppie / parole       (arcade.resultsVisible: 1° AVANTI conferma
+                 sceglie manche, immagini, parole;         senza tendina)         i punti e lo mostra, 2° AVANTI prosegue)
+                 ▣ MOSTRA / TOGLI TENDINA (tasto T), mai durante il tempo
 ```
+- **Tendina (RC2-A.3)**: finché `arcade.curtain` è vero, `stageHTML()` (proiettore, `/show`, finestra del palco) restituisce **solo** la tendina: nel DOM pubblico non c'è nessuna parola, immagine o lista del gioco. Solo l'anteprima della regia (`stageHTML(true)`) mostra il gioco preparato con l'avviso. Nessun timer la toglie.
+- **Layout dei giochi (RC2-A.3)**: cornice comune `gameFrame` (intestazione su una riga con timer compatto, contenuto, regola del punteggio), nessuna mascotte né logo; un layout per gioco (`photoLayout`, `indLayout`, `matchLayout`, `ghWrap`, `chainPath`). `stage-fit.js` adatta `--g-fs` ai giochi e `--cs` alla tendina, e riempie anche il 4:3.
+
 La classifica generale resta solo su ★ CLASSIFICA.
 
 ## 4. Ciclo di una domanda

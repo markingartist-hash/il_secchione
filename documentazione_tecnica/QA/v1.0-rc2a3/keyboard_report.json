@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "inserimento alla fine: ROMA",
+    "tocco all’inizio del campo → inserimento all’inizio: LAROMA",
+    "tocco in mezzo → SPAZIO nel punto del cursore: LA ROMA",
+    "⌫ nel mezzo cancella il carattere prima del cursore, poi inserisce: LA ROSA (il resto non si cancella)",
+    "selezione sostituita da ciò che si digita (accento compreso): LA CITTÀ",
+    "⌫ con selezione cancella solo la selezione: CITTÀ",
+    "apostrofo e frase intera: CITTÀ DELL'ARCO",
+    "telefono verticale: tasti lettere ≥ 44 px (96 px)",
+    "rotazione in orizzontale: testo conservato, il cursore resta dov’era (inserimento in mezzo dopo la rotazione)",
+    "testo lungo (40 caratteri): scorrimento orizzontale fino al cursore (scrollLeft 808)",
+    "testo lungo: tocco all’inizio, inserimento e ⌫ all’inizio senza toccare il resto (scrollLeft 0)",
+    "mai oltre il limite di 47 caratteri",
+    "INVIA: la regia riceve AUGUSTO, corretta"
+  ],
+  "errors": [],
+  "landscapeMinKeyPx": 44
+}

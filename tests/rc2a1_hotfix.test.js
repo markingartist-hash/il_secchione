@@ -63,14 +63,18 @@ test('RC2-A.1 Photopuzzle tablet: 2 s su 45 s → 296 già nel calcolo locale de
 test('RC2-A.1 Indovina tablet: tempo misurato → bonus corretto (9 s su 45 s = 280)', function () {
   same(commitLocal(gameCtx('indovina', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 9000 }, { id: 'b', outcome: 'correct', mode: 'tablet', ms: 30000 }])), { a: 280, b: 233, c: 0 });
 });
-test('RC2-A.1 Staffetta: bonus corretto per il collegamento (15 s su 45 s = 267; dopo +10 s il tempo disponibile è 55 s)', function () {
-  same(commitLocal(gameCtx('chain', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 15000 }])), { a: 267, b: 0, c: 0 });
+/* RC2-A.2 (comportamento approvato dopo il test in classe): una parola della Staffetta vale 50–100 per velocità
+   (prima 200–300). Resta verificato che il tempo disponibile del round, +10 s compresi, entri già nel calcolo locale. */
+test('RC2-A.1 Staffetta: bonus corretto per il collegamento (RC2-A.2: 15 s su 45 s = 83; dopo +10 s il tempo disponibile è 55 s = 86)', function () {
+  same(commitLocal(gameCtx('chain', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 15000 }])), { a: 83, b: 0, c: 0 });
   var ext = gameCtx('chain', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 15000 }]);
   ext.state.round.availableMs = 55000; // come addSeconds(10) sul round e sul server
-  same(commitLocal(ext), { a: 273, b: 0, c: 0 });
+  same(commitLocal(ext), { a: 86, b: 0, c: 0 });
 });
-test('RC2-A.1 corretta manuale in un gioco → 200; una corretta manuale nel round → tutte le corrette 200 (D1)', function () {
-  same(commitLocal(gameCtx('photopuzzle', 45, [{ id: 'c', outcome: 'correct', mode: 'manual' }])), { a: 0, b: 0, c: 200 });
+/* RC2-A.2 (comportamento approvato): senza tablet nel round la 1ª corretta registrata vale 300 (poi 290, 280…), non più 200.
+   La regola D1 dei round misti resta identica. */
+test('RC2-A.1 corretta manuale in un gioco (RC2-A.2: senza tablet → 300); una corretta manuale nel round → tutte le corrette 200 (D1)', function () {
+  same(commitLocal(gameCtx('photopuzzle', 45, [{ id: 'c', outcome: 'correct', mode: 'manual' }])), { a: 0, b: 0, c: 300 });
   same(commitLocal(gameCtx('photopuzzle', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 2000 }, { id: 'c', outcome: 'correct', mode: 'manual' }])), { a: 200, b: 0, c: 200 });
   same(commitLocal(gameCtx('photopuzzle', 45, [{ id: 'a', outcome: 'correct', mode: 'tablet', ms: 2000 }, { id: 'c', outcome: 'wrong', mode: 'manual' }])), { a: 296, b: 0, c: -100 }, 'un\'errata a mano non toglie il bonus');
 });

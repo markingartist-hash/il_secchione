@@ -327,6 +327,9 @@ test('Ghigliottina su tablet: per ogni coppia un round A/B; voti contati; la mag
   c.state.screen = 'arcade'; c.state.arcade = a; c.state.round = { roundInstanceId: 'r-gh', kind: 'arcade' };
   c.gameName = function () { return 'Parola Segreta'; };
   c.devices = { t1: { connected: true }, t2: { connected: true } };
+  /* RC2-A.2: alla scelta la coppia diventa un micro-round con punti per squadra (coperto in rc2a2_gameplay.test.js); qui basta il passaggio. */
+  var pairCommits = [];
+  c.ghCommitPair = function (ga, gp, grid) { pairCommits.push([gp.correctSide, grid, JSON.stringify(ga.votes)]); };
   vm.runInNewContext(extract(['ghOpenPairRound', 'ghClosePairRound', 'ghVoteLabel', 'ghVote', 'chooseGh', 'applyTabletResponse']), c);
   c.ghOpenPairRound();
   var open = c.sent.filter(function (x) { return x[0] === 'open'; })[0][1];
@@ -344,6 +347,7 @@ test('Ghigliottina su tablet: per ogni coppia un round A/B; voti contati; la mag
   assert.strictEqual(a.pairs[0].selected, 'B', 'maggioranza B');
   assert.deepStrictEqual(c.sent.filter(function (x) { return x[0] === 'close'; }).map(function (x) { return x[1]; }), [rid], 'voto chiuso sui tablet');
   assert.strictEqual(a.pairRoundId, null);
+  assert.deepStrictEqual(pairCommits, [['A', rid, '{"t1":"B","t2":"B"}']], 'RC2-A.2: la coppia si registra con l\'id del round A/B e i voti di ogni squadra');
   // parità: decide il docente
   a.step = 1; c.ghOpenPairRound();
   var rid2 = a.pairRoundId;

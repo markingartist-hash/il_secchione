@@ -1,5 +1,5 @@
 /*
- * Il Secchione · stage-fit.js (RC2-A, feedback dai pilot in classe)
+ * Il Secchione · stage-fit.js (RC2-A, feedback dai pilot in classe; RC2-A.2: anche i giochi)
  * Leggibilità dal fondo dell'aula: domanda e risposte usano il testo PIÙ GRANDE che entra nello spazio disponibile,
  * tra un massimo e un minimo leggibile espressi in percentuale dell'altezza dello schermo (valgono per ogni proiettore).
  * Sotto il minimo non si scende: un testo troppo lungo resta al minimo e il palco lo segnala con la classe "tooLong".
@@ -10,6 +10,9 @@
 
   /* Percentuali dell'altezza del palco (H). Domanda e opzioni hanno limiti propri: una domanda lunga non schiaccia le risposte. */
   var RANGE = { qMax: 0.062, qMin: 0.042, oMax: 0.048, oMin: 0.034 };
+  /* RC2-A.2: giochi (Indovina, Abbinamenti, Ghigliottina, Staffetta). --g-fs è la base: ogni elemento ne usa un multiplo (css/show.css). */
+  var GAME = { gMax: 0.066, gMin: 0.034 };
+  var GAME_BOXES = '.arcadeContent, .candidateGrid, .candidate, .cluePanel, .termList, .term, .matchAnswer, .ghWrap, .ghWord, .ghText, .ghClues, .ghFinal, .chainWrap, .chainWord';
   var STEPS = 8;
 
   /** Dimensioni in px per un palco alto H, alla scala s (1 = massimo, 0 = minimo leggibile). */
@@ -60,6 +63,42 @@
     return best < 0 ? 0 : best;
   }
 
+  /** Ricerca binaria della scala più grande (0–1) per cui nessun riquadro trabocca; apply(s) imposta le dimensioni. */
+  function search(apply, fits) {
+    var lo = 0, hi = 1, best = -1;
+    apply(1);
+    if (fits()) return 1;
+    for (var i = 0; i < STEPS; i++) {
+      var mid = (lo + hi) / 2;
+      apply(mid);
+      if (fits()) { best = mid; lo = mid; } else hi = mid;
+    }
+    if (best < 0) { apply(0); return fits() ? 0 : -1; }
+    apply(best);
+    return best;
+  }
+
+  /** RC2-A.2 — adatta un gioco (.publicBoard): il testo più grande tra GAME.gMin e GAME.gMax che entra senza tagli. */
+  function fitGame(board) {
+    var stage = board.closest ? (board.closest('.stage') || board) : board;
+    var H = stage.clientHeight;
+    var content = board.querySelector('.arcadeContent');
+    if (!H || !content) return null;
+    var boxes = Array.prototype.slice.call(board.querySelectorAll(GAME_BOXES));
+    function apply(s) {
+      var k = Math.max(0, Math.min(1, s));
+      board.style.setProperty('--g-fs', Math.round((GAME.gMin + (GAME.gMax - GAME.gMin) * k) * H * 10) / 10 + 'px');
+    }
+    function fits() {
+      for (var i = 0; i < boxes.length; i++) if (overflows(boxes[i])) return false;
+      return true;
+    }
+    var best = search(apply, fits);
+    board.classList.toggle('tooLong', best < 0);
+    if (best < 0) apply(0);
+    return best < 0 ? 0 : best;
+  }
+
   /** Adatta tutte le domande presenti in un documento e, nella finestra del proiettore, riempie anche il 4:3. */
   function fit(doc) {
     var d = doc || root.document;
@@ -68,9 +107,11 @@
     if (body && body.classList && body.classList.contains('publicBody')) {
       var st = d.getElementById('publicStage');
       /* Domanda, risultato del round e fine contenuti occupano tutta la finestra (anche 4:3), le altre schermate restano 16:9. */
-      body.classList.toggle('fillStage', !!(st && st.querySelector('.questionShow, .roundSummary, .finishedScene')));
+      /* RC2-A.2: anche giochi e intro dei giochi riempiono la finestra (4:3 compreso). */
+      body.classList.toggle('fillStage', !!(st && st.querySelector('.questionShow, .roundSummary, .finishedScene, .gameIntro, .publicBoard, .photoShow')));
     }
     Array.prototype.forEach.call(d.querySelectorAll('.questionShow'), function (show) { fitQuestion(show); });
+    Array.prototype.forEach.call(d.querySelectorAll('.publicBoard'), function (board) { fitGame(board); });
   }
 
   /** Riadatta al ridimensionamento della finestra (resize, schermo intero, F11), una volta per fotogramma. */
@@ -86,7 +127,7 @@
     try { w.document.addEventListener('fullscreenchange', again); } catch (e) { /* non supportato */ }
   }
 
-  var api = { RANGE: RANGE, sizes: sizes, fit: fit, fitQuestion: fitQuestion, watch: watch };
+  var api = { RANGE: RANGE, GAME: GAME, sizes: sizes, fit: fit, fitQuestion: fitQuestion, fitGame: fitGame, watch: watch };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (root) root.SecchioneStageFit = api;
 })(typeof self !== 'undefined' ? self : this);

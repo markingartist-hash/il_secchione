@@ -1,0 +1,961 @@
+{
+ "errors": [],
+ "shots": [
+  {
+   "shot": "photopuzzle_intro",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "photopuzzle_intro",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "photopuzzle_intro",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "photopuzzle_intro",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 11.2,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".photoFooter small": 2.3,
+    "#puzzleTopLabel": 3
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".photoFooter small": 2.3,
+    "#puzzleTopLabel": 3
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".photoFooter small": 2.3,
+    "#puzzleTopLabel": 3
+   }
+  },
+  {
+   "shot": "photopuzzle_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".photoFooter small": 2.3,
+    "#puzzleTopLabel": 3
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 6
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 6
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 6
+   }
+  },
+  {
+   "shot": "photopuzzle_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".puzzleSolution": 6
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "photopuzzle_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "indovina_intro",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "indovina_intro",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "indovina_intro",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "indovina_intro",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 11.2,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 4.9,
+    ".clueCurrent": 5.9,
+    ".clueHistory div": 3.5,
+    ".clueNo": 3.2
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 4.9,
+    ".clueCurrent": 5.9,
+    ".clueHistory div": 3.5,
+    ".clueNo": 3.2
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 4.8,
+    ".clueCurrent": 5.9,
+    ".clueHistory div": 3.5,
+    ".clueNo": 3.2
+   }
+  },
+  {
+   "shot": "indovina_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate": 3.6,
+    ".clueCurrent": 4.4,
+    ".clueHistory div": 2.6,
+    ".clueNo": 2.4
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 4.9
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 4.9
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 4.8
+   }
+  },
+  {
+   "shot": "indovina_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".candidate.answer": 3.6
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "indovina_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_intro",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "abbinamenti_intro",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "abbinamenti_intro",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "abbinamenti_intro",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 11.2,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 5.8,
+    ".matchNum": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 5.7,
+    ".matchNum": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 5.8,
+    ".matchNum": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".term": 5.6,
+    ".matchNum": 4.2
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 7.2,
+    ".term": 5.8
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 7.2,
+    ".term": 5.7
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 7.2,
+    ".term": 5.8
+   }
+  },
+  {
+   "shot": "abbinamenti_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".matchAnswer.show": 7,
+    ".term": 5.6
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "abbinamenti_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6
+   }
+  },
+  {
+   "shot": "ghigliottina_intro",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "ghigliottina_intro",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "ghigliottina_intro",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "ghigliottina_intro",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 11.2,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 8.1,
+    ".ghStatus": 3.8,
+    ".ghMeta": 2.8
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 7.3,
+    ".ghStatus": 3.5,
+    ".ghMeta": 2.5
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 6.8,
+    ".ghStatus": 3.2,
+    ".ghMeta": 2.4
+   }
+  },
+  {
+   "shot": "ghigliottina_coppia",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghText": 8.1,
+    ".ghStatus": 3.8,
+    ".ghMeta": 2.8
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 6.3,
+    ".ghFinal": 14.5,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 6.3,
+    ".ghFinal": 14.5,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 6.3,
+    ".ghFinal": 14.5,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_finale",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghClues span": 6.3,
+    ".ghFinal": 14.5,
+    ".ghMeta": 4.1
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 14.5
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 14.5
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 14.5
+   }
+  },
+  {
+   "shot": "ghigliottina_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".ghFinal": 14.5
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "ghigliottina_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "chain_intro",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "chain_intro",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "chain_intro",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 13,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "chain_intro",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".gameIntroTitle": 11.2,
+    ".gameIntroHow": 3.7,
+    ".gameIntroPts": 4
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 10.6,
+    ".chainMask": 10.6
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 10.6,
+    ".chainMask": 10.6
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 10.6,
+    ".chainMask": 10.6
+   }
+  },
+  {
+   "shot": "catena_in_corso",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 9.2,
+    ".chainMask": 9.2
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 10.6
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 10.6
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 10.6
+   }
+  },
+  {
+   "shot": "catena_soluzione",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".chainWord": 10.6
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1366x768",
+   "stage": "1366x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1600x900",
+   "stage": "1600x900",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1920x1080",
+   "stage": "1920x1080",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  },
+  {
+   "shot": "catena_risultato",
+   "size": "1024x768",
+   "stage": "1024x768",
+   "problems": 0,
+   "tooLong": false,
+   "fontPctOfHeight": {
+    ".resultTeam": 3.6,
+    ".resultDelta strong": 3.6,
+    ".resultIdentity small": 2.3
+   }
+  }
+ ]
+}

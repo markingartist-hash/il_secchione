@@ -65,6 +65,32 @@ session
 - Le lettere sono mescolate a ogni domanda. Per questo ogni record salva `selectedSourceIndex` e ogni round salva la mappa `displayed`: la risposta resta confrontabile tra sessioni.
 - "Riapri punti" non cancella nulla: le risposte precedenti restano con `voided: true`.
 
+### 3.1 RC2-A.2 — micro-round e scale di punteggio
+Un gioco a più passi produce **più round** (micro-round), ognuno con i propri record grezzi e i propri score event:
+
+| Contenuto | Round | `scale` | Corretta (tablet) | Corretta (senza tablet) | Errata | Omessa |
+|---|---|---|---|---|---|---|
+| Domanda, Photopuzzle, Indovina, Abbinamenti | 1 | `standard` | 200–300 per velocità | 300, 290, 280… (min 200) | −100 | 0 (3 gratuite, poi −100) |
+| Ghigliottina, scelta A/B (×5) | 1 per coppia (`ghPart: 'pair'`, `pairIndex`) | `gh_pair` | +10 | +10 | 0 | 0, non conta |
+| Ghigliottina, parola finale | 1 (`ghPart: 'final'`) | `standard` | 200–300 | 300, 290… | −100 | come una domanda |
+| Catena/Staffetta, ogni parola | 1 per parola (`chainIndex`) | `chain_link` | 50–100 per velocità | 100, 95, 90… (min 50) | 0 | 0, non conta |
+
+- Helper generici in `scoring.js`: `speedRangePoints(elapsed, available, min, max)` e `rankRangePoints(rank, max, step, min)`. `speedPoints` (200–300) usa lo stesso helper.
+- **Round misto**: se nel micro-round ha risposto almeno un tablet (le omissioni automatiche non contano) e c'è una CORRETTA inserita a mano, tutte le corrette valgono il minimo della scala (200 o 50). Errate e omesse a mano non tolgono la velocità.
+- **Senza tablet** il rango conta solo le corrette, nell'ordine di registrazione (`correctOrder`).
+- La scala è salvata nel round (`rounds[].scale`) e in ogni score event (`scale`), viaggia nel `round.commit` verso il server e viene usata da `recomputeAllRounds`, `recomputeTotals`, `renumberOmissions` e `committedOmissionCounts`. Il server la conserva in `commits[id].scale` (anche dopo il riavvio).
+- **Retrocompatibilità**: i round senza `scale` (giocati fino alla RC2-A.1) mantengono le regole di allora (corretta a mano = 200), anche se ricalcolati. Un round riaperto mantiene la scala con cui era stato confermato. Con i profili senza velocità (`show_standard`, `legacy_v3`, `learning`) le scale non cambiano le regole storiche; le coppie A/B valgono 0.
+- Ogni manche ha un `gameInstanceId` (`state.arcade.gameId`), salvato in tutti i suoi round: il RISULTATO DEL GIOCO somma gli score event di quei round. Annullare una Ghigliottina in corso annulla anche le coppie già confermate (`voidGameRounds`).
+- Il CSV (contratto v2) non cambia: ogni coppia e ogni parola è una riga con il proprio `round_id` e i propri punti. Scala e passaggio sono nel salvataggio JSON completo.
+
+### 3.2 RC2-A.2 — flusso di un gioco
+```text
+startArcade ──► INTRO (arcade.intro) ──AVVIA──► gioco ──RIVELA──► RISULTATO DEL GIOCO ──AVANTI──► contenuto successivo
+                 una sola per avvio             (coppie / parole       (arcade.resultsVisible: 1° AVANTI conferma
+                                                 senza nuova intro)     i punti e lo mostra, 2° AVANTI prosegue)
+```
+La classifica generale resta solo su ★ CLASSIFICA.
+
 ## 4. Ciclo di una domanda
 
 ```text

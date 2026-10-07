@@ -154,3 +154,10 @@ button:focus-visible,input:focus-visible{outline:4px solid #ffd258;outline-offse
  .textKeyboard.kb2 .kbKey,.textKeyboard.kb2 .kbSend{min-height:44px}
  .answerArea.textMode .textEntryBar .textDisplay{height:44px;min-height:44px;font-size:28px}
 }
+/* RC2-A.2 · campo di testo con cursore: tocca un punto per spostare il cursore, trascina per selezionare.
+   Stesse dimensioni della vecchia riga di testo; testo allineato a sinistra e scorrimento orizzontale se lungo. */
+input.textField{display:block;width:100%;box-sizing:border-box;margin:0;text-align:left;justify-content:flex-start;-webkit-appearance:none;appearance:none;outline:none;caret-color:#ffffff;color:#ffd258;-webkit-user-select:text;user-select:text;touch-action:manipulation;text-overflow:clip;overflow-x:auto}
+input.textField:focus{border-color:#ffd258}
+input.textField::placeholder{color:#6f879d;opacity:1;font-size:.7em;letter-spacing:.08em}
+input.textField::selection{background:#1f7fd1;color:#fff}
+input.textField:disabled{opacity:.6}

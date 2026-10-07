@@ -198,7 +198,7 @@
    * e poche azioni secondarie, solo quelle sensate nella fase corrente. Nessuna logica nuova: ogni `act`
    * corrisponde a una funzione già esistente della regia; `id` conserva l'id storico del pulsante.
    * c = { screen, phase, timerRunning, answerVisible, questionScored, canUndo, teams, isLast,
-   *       plan: null | { finished, nextTitle, position }, arcade: null | { type, name, played, started, final, pairSelected,
+   *       plan: null | { finished, nextTitle, position }, arcade: null | { type, name, intro, resultsVisible, played, started, final, pairSelected,
    *       votesA, votesB, solutionShown, scoreCommitted, chainHasNext, canAid } }
    */
   var GAME_IDS = {
@@ -252,7 +252,13 @@
       var a = c.arcade, ids = GAME_IDS[a.type] || {};
       var restart = A('gameRestart', a.scoreCommitted ? '↺ RIPETI MANCHE' : '✕ ANNULLA ROUND', 'gameRestartBtn');
       var skip = A('next', plan ? 'SALTA →' : 'TORNA ALLE DOMANDE →', 'skipBtn');
-      if (!a.played && !a.started) {
+      if (a.intro) {
+        /* RC2-A.2: presentazione del gioco sul palco; resta finché il docente non avvia (una sola volta per avvio del gioco). */
+        stage = 'g-intro'; main.push(A('gameStart', '▶ AVVIA ' + String(a.name || a.type).toUpperCase(), ids.start, 'amber', { sub: 'la presentazione lascia il posto al gioco', kbd: 'Spazio' }));
+        sec.push(A('gameEnter', 'MOSTRA IL GIOCO SENZA AVVIARE', 'gameEnterBtn'), skip);
+      } else if (a.resultsVisible) {
+        stage = 'g-results'; main.push(nextAction());
+      } else if (!a.played && !a.started) {
         stage = 'g-ready'; main.push(A('gameStart', '▶ AVVIA ' + String(a.name || a.type).toUpperCase(), ids.start, 'amber'));
         sec.push(skip);
       } else if (a.started && a.type === 'ghigliottina' && !a.final) {
@@ -271,8 +277,10 @@
         sec.push(restart);
       } else {
         stage = 'g-revealed';
-        if (a.type === 'chain' && a.chainHasNext) { main.push(A('chainNext', 'PAROLA SUCCESSIVA →', 'chainNextBtn', 'primary')); sec.push(A('next', plan ? 'AVANTI →' : 'TORNA ALLE DOMANDE →', 'skipBtn')); }
-        else main.push(nextAction());
+        /* RC2-A.2: il primo AVANTI dopo un gioco conferma i punti e mostra il RISULTATO DEL GIOCO; il secondo prosegue. */
+        var results = A('next', 'RISULTATO DEL GIOCO →', 'nextQBtn', 'primary', { sub: missingSub('punti di questa manche, senza classifica') });
+        if (a.type === 'chain' && a.chainHasNext) { main.push(A('chainNext', 'PAROLA SUCCESSIVA →', 'chainNextBtn', 'primary')); sec.push(A('next', 'FINE STAFFETTA: RISULTATO →', 'skipBtn')); }
+        else main.push(results);
         if (c.canUndo) sec.push(undo);
         sec.push(restart);
       }
@@ -299,7 +307,7 @@
       sec.push(A('openPlanner', '📋 SCALETTA', 'openPlannerBtn'));
     }
     /* durante il voto A/B della Parola Segreta i tablet votano, non rispondono: niente contatore risposte */
-    var showAnswers = stage !== 'g-vote' && ((c.screen === 'question' && c.phase !== 'preview') || (c.screen === 'arcade' && !!c.arcade && (!!c.arcade.played || !!c.arcade.started)));
+    var showAnswers = stage !== 'g-vote' && stage !== 'g-intro' && stage !== 'g-results' && ((c.screen === 'question' && c.phase !== 'preview') || (c.screen === 'arcade' && !!c.arcade && (!!c.arcade.played || !!c.arcade.started)));
     return { stage: stage, main: main, secondary: sec, showAnswers: showAnswers };
   }
   /** Mini indicatore Ø: compare solo se a qualche squadra resta al massimo 1 astensione gratuita. */

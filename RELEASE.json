@@ -1,44 +1,34 @@
 {
-  "version": "1.0.0-rc2a.1",
-  "name": "RC2A1_HOTFIX",
-  "date": "2026-10-06",
-  "source": "Il_Secchione_1.0_RC2A_POST_PILOT_PORTABLE.zip",
-  "sourceSHA256": "779802ebf333ee1f77f631d1758cd09d437eab587d5c8eabc47c0db38ca9e18c",
+  "version": "1.0.0-rc2a.3.1",
+  "name": "RC2A3_1_CURTAIN_HOTFIX",
+  "date": "2026-10-08",
+  "source": "git: markingartist-hash/il_secchione, branch of PR #1 on top of RC2-A.2 (fcf228d)",
   "supportedRuntime": "bundled portable Node 24 (runtime/node.exe)",
-  "scope": "Hotfix only, no new features: arcade records carry the round availableMs before the local score calculation (host = server at first calculation), recompute falls back to rd.availableMs, tablet checklist wording. Scoring, timers and layout unchanged.",
-  "fixes": [
-    "commitArcadeScores → arcadeRecords(): every arcade record has the authoritative round availableMs; finalizeRound uses it as local fallback, stores it on the round and sends it to the server (RC2-A computed 200 locally and relied on score.server_override)",
-    "recomputeAllRounds and SS.recomputeTotals use rd.availableMs for historic records without availableMs",
-    "Checklist Pulsantiere: \"N tablet collegati · M squadre manuali\" instead of \"N / N collegate\"",
-    "QA erratum: the RC2-A report wrongly stated score.verified for the Photopuzzle; real logs attached"
+  "scope": "Blocking hotfix of RC2-A.3 only: the game curtain is active before the first render and the temporary game transition is removed, so the curtain stays until the teacher removes it. Nothing else changed.",
+  "changes": [
+    "startArcade: curtain:true in the initial arcade object (before loadArcadePreset/renderAll); removed showTransition(gameName(type),'BONUS SHOW','★'); question/leaderboard transitions unchanged",
+    "Fixed RC2-A.3 test that certified the wrong order; new browser E2E tests/e2e/curtain_hold.cjs (fails on RC2-A.3, passes on RC2-A.3.1)"
   ],
-  "featuresFromRC2A": [
-    "Scoring show_speed (default): correct = round(300 - 100 * elapsed / available), clamped 200..300, real server-measured ms; no measured time = 200; one manually entered CORRECT answer makes all correct answers of the round 200 (no speed bonus); wrong -100 and omission policy unchanged",
-    "availableMs per round (duration + added seconds, pauses excluded), kept by the server (authoritative, persisted) and stored on every response; CSV columns tempo_disponibile_ms and bonus_velocita",
-    "Old saved games keep their profile (show_standard 300/275...); RC1 preferences migrate once to the new default",
-    "Standard times in one place (engine/timer.js DEFAULTS): questions 15 s (also with image), photopuzzle/abbinamenti/indovina/chain/ghigliottina 45 s; explicit seconds always win; normalizer no longer writes defaults; 60 s game minimum removed; tablet round duration = stage timer",
-    "Bundled pack Arte romana 3.6.0: explicit 30/60 s removed (declared); external packs untouched",
-    "Round result screen: outcome, time, points of the round; no positions, podium colours or totals; top-down cascade",
-    "Leaderboard only on command: end of content shows FINE DEI CONTENUTI; ★ CLASSIFICA always starts the reveal from last place; mid-game reveal ends with TORNA AL GIOCO, final with TERMINA PARTITA",
-    "Stage readability: question screen without footer/mascot, answers fill the height (2x2 when short), js/stage-fit.js picks the largest text that fits between min and max % of screen height; question/result/end screens fill 4:3 windows",
-    "Explicit fullscreen button on projector window and /show (F key, hide, reappears after ESC, F11 hint if the browser refuses), regia fullscreen button; click-anywhere fullscreen removed",
-    "Player text keyboard: 5 full-height rows, keys >= 44 px, accents, apostrophe, hyphen, digits behind 123, INVIA inside the keyboard, single send, clear green confirmation"
-  ],
+  "previous": {
+    "version": "1.0.0-rc2a.3",
+    "name": "RC2A3_SHOW_EDITOR",
+    "date": "2026-10-07"
+  },
   "knownLimitations": [
-    "Phone portrait QWERTY letters are 30-33 px wide (height >= 44 px).",
-    "Popup projector window and fullscreen could not be exercised in the embedded test browser (popups/fullscreen blocked); /show was tested.",
+    "Real projector legibility, real tablets and classroom rhythm not verified.",
+    "Popup projector window not exercised in the automated browser; /show tested at 1366x768, 1600x900, 1920x1080, 1024x768.",
+    "Abbinamenti stays at exactly 4 images / 4 items (engine and pack format).",
+    "Abbinamenti item names in 4:3 are slightly smaller than in RC2-A.2 (5.4% vs 5.6% of height) because the images are larger.",
     "Barocco/Preistoria and external packs keep explicit 30/60 s until the Phase B command.",
-    "Real projector legibility, real tablets and classroom rhythm not verified."
+    "SHA256SUMS.txt not regenerated (see RC2-A.2)."
   ],
-  "node": "v24.19.0",
-  "nodePlatform": "win32-x64",
+  "node": "v22.22.0 (cloud test environment)",
+  "nodePlatform": "linux-x64 (tests)",
   "unitAndIntegration": {
-    "passed": 282,
-    "failed": 0,
-    "baselineRC2A": 274,
-    "rc2a1New": 8
+    "passed": 315,
+    "failed": 0
   },
   "simulatePlayers": "2/6/15/30 devices, no lost or duplicated responses",
-  "manualQA": "Browser repro on RC2-A (score delta 200 → score.server_override) and on RC2-A.1 (Photopuzzle +295 and Indovina +290 computed locally → score.verified) with a real /player page. See documentazione_tecnica/QA/TEST_RESULTS_1.0_RC2A1.md",
+  "manualQA": "tests/e2e/curtain_hold.cjs 10 checks (projector window + /show, >2 s hold for all 5 games, preset change under the curtain, only T / TOGLI TENDINA / TOGLI TENDINA E AVVIA reveal); visual_games.cjs 84 screenshots OK. See documentazione_tecnica/CHANGELOG_1.0_RC2A3_1_CURTAIN_HOTFIX.md",
   "contentPacks": "Barocco 3media and Preistoria 1media 1.2.0 (standard times) delivered separately, not inside this ZIP"
 }

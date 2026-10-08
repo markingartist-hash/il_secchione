@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "CREA DA ZERO: 6 pulsanti (domanda, Photopuzzle, Indovina, Abbinamento, Parola Segreta, Staffetta)",
+    "domanda compilata dal modulo",
+    "Photopuzzle da zero: immagine caricata dal PC, soluzione, istruzione per la tendina",
+    "Indovina da zero: 4 alternative, soluzione scelta, 3 indizi",
+    "Abbinamento da zero: 4 immagini dal PC, voci A–D, coppie impostate (1 → C Colosseo2 → A Pantheon3 → D Ara Pacis4 → B Tempio di Ercole)",
+    "validazione: «la voce C è abbinata a più immagini» quando una voce è usata due volte",
+    "SALVA NELLA LIBRERIA: ✓ «Prova B1 Roma» salvato nella libreria: versione 1.0.0, 1 domanda, 3 manche. Nella regia",
+    "pacchetto su disco valido: Abbinamento [\"Colosseo\",\"Pantheon\",\"Ara Pacis\",\"Tempio di Ercole\"], Indovina = Traiano, Photopuzzle con istruzione e immagini",
+    "riapertura dalla libreria: Abbinamento con le stesse coppie (1 → A Colosseo2 → B Pantheon3 → C Ara Pacis4 → D Tempio di Ercole)"
+  ],
+  "errors": []
+}

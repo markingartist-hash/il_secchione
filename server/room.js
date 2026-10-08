@@ -480,6 +480,8 @@ Room.prototype.commit = function (o) {
     try { records.push(Session.makeResponse(base)); } catch (e) { return { ok: false, reason: 'bad_record' }; }
   }
   var profileId = Scoring.hasProfile(x.profileId) ? x.profileId : Scoring.DEFAULT_PROFILE;
+  /* RC2-A.2: scala del micro-round (coppia Ghigliottina, parola Catena, standard); assente = regole fino alla RC2-A.1 */
+  var scale = Scoring.hasScale(x.scale) ? x.scale : null;
   var previousRecords = [];
   /* RC1: con l'orario di apertura del round contano solo le omissioni dei round aperti PRIMA di questo
      (ordine cronologico anche quando il docente riconferma una domanda vecchia), come fa la regia. */
@@ -489,11 +491,12 @@ Room.prototype.commit = function (o) {
     var c = self.commits[rid];
     if (!c || !Array.isArray(c.records)) return;
     if (openedAt && c.openedAt && !(c.openedAt < openedAt)) return;
+    if (c.scale && !Scoring.countsOmissions(c.scale, c.profileId)) return;
     previousRecords = previousRecords.concat(c.records);
   });
   var priorOmissions = Session.countOmissions(previousRecords);
-  var events = Session.scoreEventsFor(records, profileId, id, { priorOmissions: priorOmissions, freeOmissions: Scoring.DEFAULT_FREE_OMISSIONS });
-  this.commits[id] = { records: records, scoreEvents: events, profileId: profileId, committedAt: this.iso(), openedAt: openedAt };
+  var events = Session.scoreEventsFor(records, profileId, id, { priorOmissions: priorOmissions, freeOmissions: Scoring.DEFAULT_FREE_OMISSIONS, scale: scale || undefined });
+  this.commits[id] = { records: records, scoreEvents: events, profileId: profileId, committedAt: this.iso(), openedAt: openedAt, scale: scale };
   events.forEach(function (e) { self.addLog({ event: 'score', roundInstanceId: id, participantId: e.participantId, scoreDelta: e.points }); });
   if (corrected) this.addLog({ event: 'commit.corrected', roundInstanceId: id, reason: corrected + ' record riallineati ai dati del server' });
   return { ok: true, records: records, scoreEvents: events, corrected: corrected };

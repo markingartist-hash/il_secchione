@@ -152,6 +152,8 @@
         points: s.points,
         speedBonus: s.speedBonus || 0,
         profileId: profile.id,
+        /* RC2-A.2: scala del micro-round (standard | gh_pair | chain_link), null per i round fino alla RC2-A.1 */
+        scale: s.scale || null,
         createdAt: createdAt
       };
     });
@@ -172,6 +174,11 @@
     return out;
   }
 
+  /** RC2-A.2: coppie della Ghigliottina e parole della Catena (profilo a velocità) non consumano le omissioni gratuite. */
+  function roundCountsOmissions(rd, fallbackProfile) {
+    return !rd || !rd.scale || Scoring.countsOmissions(rd.scale, rd.profileId || fallbackProfile);
+  }
+
   /**
    * Omissioni già confermate nella sessione. Se excludeRoundId è valorizzato, quel round non conta:
    * serve quando si riapre/ricalcola un round esistente.
@@ -180,7 +187,7 @@
     var s = session || {};
     var committed = {};
     (s.rounds || []).forEach(function (rd) {
-      if (rd && rd.committed && rd.roundInstanceId !== excludeRoundId) committed[rd.roundInstanceId] = true;
+      if (rd && rd.committed && rd.roundInstanceId !== excludeRoundId && roundCountsOmissions(rd, s.scoringProfile)) committed[rd.roundInstanceId] = true;
     });
     return countOmissions((s.responses || []).filter(function (r) { return r && committed[r.roundInstanceId]; }));
   }
@@ -196,7 +203,7 @@
     var free = freeOmissions == null ? Scoring.DEFAULT_FREE_OMISSIONS : Math.max(0, Math.floor(Number(freeOmissions) || 0));
     var key = function (r) { return String(r.openedAt || r.committedAt || ''); };
     var rounds = (session.rounds || []).map(function (r, i) { return { r: r, i: i }; })
-      .filter(function (x) { return x.r && x.r.committed; })
+      .filter(function (x) { return x.r && x.r.committed && roundCountsOmissions(x.r, session.scoringProfile); })
       .sort(function (a, b) { var ka = key(a.r), kb = key(b.r); return ka < kb ? -1 : ka > kb ? 1 : a.i - b.i; });
     var byRound = {};
     (session.scoreEvents || []).forEach(function (e) { if (e && !e.voided) (byRound[e.roundInstanceId] = byRound[e.roundInstanceId] || []).push(e); });
@@ -229,8 +236,9 @@
     var prior = {};
     (session.rounds || []).forEach(function (rd) {
       if (!rd || !rd.committed || !byRound[rd.roundInstanceId]) return;
-      var rows = Scoring.scoreRound(byRound[rd.roundInstanceId], profileId, { priorOmissions: prior, freeOmissions: Scoring.DEFAULT_FREE_OMISSIONS, availableMs: rd.availableMs > 0 ? rd.availableMs : undefined }); // RC2-A.1
+      var rows = Scoring.scoreRound(byRound[rd.roundInstanceId], profileId, { priorOmissions: prior, freeOmissions: Scoring.DEFAULT_FREE_OMISSIONS, availableMs: rd.availableMs > 0 ? rd.availableMs : undefined, scale: rd.scale || undefined }); // RC2-A.1, RC2-A.2
       events = events.concat(rows);
+      if (rd.scale && !Scoring.countsOmissions(rd.scale, profileId)) return;
       byRound[rd.roundInstanceId].forEach(function (r) {
         if (Scoring.normalizeOutcome(r.outcome) === 'omitted') prior[r.participantId] = (prior[r.participantId] || 0) + 1;
       });
@@ -288,6 +296,7 @@
     scoreEventsFor: scoreEventsFor,
     countOmissions: countOmissions,
     committedOmissionCounts: committedOmissionCounts,
+    roundCountsOmissions: roundCountsOmissions,
     renumberOmissions: renumberOmissions,
     totals: totals,
     recomputeTotals: recomputeTotals,

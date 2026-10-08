@@ -49,14 +49,18 @@ Pulsanti: **＋ NUOVA DOMANDA** (copia categoria, argomento, tempo e difficoltà
 
 **ANTEPRIMA** mostra la domanda come sullo schermo della classe; **SOLUZIONE** evidenzia la risposta corretta e mostra la spiegazione. In gara l'ordine delle alternative viene mescolato.
 
+### Crea da zero (RC2-A.3, Fase B1)
+Sotto le schede c'è sempre la barra **CREA DA ZERO**: **＋ DOMANDA**, **＋ PHOTOPUZZLE**, **＋ INDOVINA**, **＋ ABBINAMENTO**, **＋ PAROLA SEGRETA**, **＋ STAFFETTA**. Ogni pulsante crea un contenuto vuoto e apre il suo modulo; i controlli in alto dicono cosa manca. Lo Studio si apre anche dalla regia, scheda **GIOCHI** → **✏ CREA NUOVI GIOCHI (PACK STUDIO)**.
+
 ### Manche speciali
 Sono i giochi già presenti nel Secchione. Ogni tipo ha il suo **＋ AGGIUNGI**, e ogni manche si può **duplicare**, **eliminare** e **spostare**.
+Ogni manche ha anche un'**Istruzione sulla tendina** facoltativa (massimo 160 caratteri), che compare sul proiettore prima che il gioco parta.
 
 | Gioco | Cosa serve |
 |---|---|
 | Photopuzzle | un'immagine e la soluzione |
 | Indovina | da 2 a 8 alternative (il pallino indica la soluzione) e da 1 a 5 indizi, dal più difficile al più facile |
-| Abbinamenti | 4 immagini, ognuna con il suo termine corretto (in gara i termini vengono mescolati) |
+| Abbinamenti | **1 · Immagini**: carica le 4 immagini (dal PC o dalla scheda Immagini). **2 · Voci**: scrivi i 4 nomi A–D nell'ordine che preferisci. **3 · Coppie**: per ogni immagine scegli la voce corretta; il riepilogo mostra le coppie e il controllo segnala una voce usata due volte o non abbinata. Nel pacchetto resta il formato di sempre (il termine *n* corrisponde all'immagine *n*); in gara le lettere vengono mescolate |
 | Parola Segreta | la parola finale e 5 coppie: a sinistra la parola collegata, a destra quella che non c'entra |
 | Staffetta di parole | da 1 a 20 collegamenti tra parole; si possono scrivere anche tutti in una riga: `NEVE \| SORGENTE \| FIUME \| MARE` |
 

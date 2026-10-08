@@ -26,7 +26,7 @@
   var GAME_HELP = {
     photopuzzle: 'Un\'immagine coperta da tessere che si scoprono poco a poco: le squadre devono riconoscerla.',
     indovina: 'Gli indizi compaiono uno alla volta: le squadre scelgono la soluzione tra le alternative.',
-    abbinamenti: 'Quattro immagini e quattro termini da abbinare: in gara i termini vengono mescolati.',
+    abbinamenti: 'Quattro immagini e quattro voci da abbinare: aggiungi le immagini, scrivi le voci A–D e scegli per ogni immagine la voce giusta.',
     ghigliottina: 'Cinque coppie di parole: in ogni coppia una sola parola è collegata alla parola finale da indovinare.',
     chain: 'Una catena di parole: ogni parola è collegata alla successiva.'
   };
@@ -237,6 +237,10 @@
     }
     setPath(path, value);
     if (followSubject) g.subject = String(value).trim();
+    if (/^g\.(terms|match)\./.test(path) && S.g && S.g.type === 'abbinamenti' && g) {
+      PS.applyMatching(g);
+      if (/^g\.terms\./.test(path)) scheduleRepaintPairs();
+    }
     if (path === 'm.id') S.idAuto = false;
     if (path === 'm.title' && S.idAuto) {
       var taken = (S.library || []).map(function (p) { return p.id; });
@@ -245,6 +249,25 @@
       if (idField) idField.value = S.draft.manifest.id;
     }
     changed(path, el);
+  }
+
+  /* Abbinamenti: riepilogo delle coppie; mentre si scrive una voce le scelte si aggiornano senza perdere il fuoco del campo. */
+  function pairChips(g) {
+    return (g.match || []).map(function (jj, k) { return '<span class="stPairChip"><b>' + (k + 1) + '</b> → <b>' + PS.LETTERS[jj] + '</b> ' + esc((g.terms || [])[jj] || '…') + '</span>'; }).join('');
+  }
+  var pairsTimer = null;
+  function scheduleRepaintPairs() {
+    clearTimeout(pairsTimer);
+    pairsTimer = setTimeout(function () {
+      if (!S.draft) return;
+      var g = curGame();
+      if (!g || !S.g || S.g.type !== 'abbinamenti') return;
+      Array.prototype.forEach.call(app.querySelectorAll('select[data-bind^="g.match."]'), function (sel) {
+        Array.prototype.forEach.call(sel.options, function (o, jj) { o.textContent = PS.LETTERS[jj] + ' · ' + ((g.terms || [])[jj] || '(voce vuota)'); });
+      });
+      var sum = $('.stPairSummary');
+      if (sum) sum.innerHTML = pairChips(g);
+    }, 150);
   }
 
   /* ---------------- aggiornamenti dopo una modifica ---------------- */
@@ -280,7 +303,7 @@
   }
   function scheduleCheck() {
     clearTimeout(S.checkTimer);
-    S.checkTimer = setTimeout(function () { S.check = PS.validate(S.draft); paintBadges(); }, 350);
+    S.checkTimer = setTimeout(function () { if (!S.draft) return; S.check = PS.validate(S.draft); paintBadges(); }, 350); // RC2-A.3: la bozza può essere stata chiusa nel frattempo
   }
   function scheduleAutosave() {
     clearTimeout(S.autoTimer);
@@ -444,7 +467,14 @@
       '<span class="stStatus" id="stStatus"></span><button class="btn ghost" data-act="export">⬇ ESPORTA ZIP</button><button class="btn green" data-act="save">💾 SALVA NELLA LIBRERIA</button><button class="btn ghost" data-act="close">✕ CHIUDI</button>') +
       '<nav class="stTabs" role="tablist" aria-label="Sezioni del pacchetto">' + TABS.map(function (t) {
         return '<button class="tabBtn" role="tab" data-act="tab" data-tab="' + t[0] + '">' + t[1] + ' <span class="stBadge" id="badge-' + t[0] + '"></span></button>';
-      }).join('') + '</nav><div id="stMsg"></div><main class="stPanel" id="stPanel"></main>';
+      }).join('') + '</nav>' + quickAddHTML() + '<div id="stMsg"></div><main class="stPanel" id="stPanel"></main>';
+  }
+  /* RC2-A.3 (Fase B1) — CREA DA ZERO: un pulsante per ogni tipo di contenuto, sempre visibile. Ognuno apre il suo mini-form. */
+  var QUICK_ADD = [['question', '＋ DOMANDA'], ['photopuzzle', '＋ PHOTOPUZZLE'], ['indovina', '＋ INDOVINA'], ['abbinamenti', '＋ ABBINAMENTO'], ['ghigliottina', '＋ PAROLA SEGRETA'], ['chain', '＋ STAFFETTA']];
+  function quickAddHTML() {
+    return '<div class="stQuickAdd" role="toolbar" aria-label="Crea un contenuto da zero"><b>CREA DA ZERO</b>' + QUICK_ADD.map(function (x) {
+      return '<button class="btn green stQuickBtn" type="button" data-act="quick-add" data-kind="' + x[0] + '">' + x[1] + '</button>';
+    }).join('') + '</div>';
   }
   function renderEditor() {
     app.innerHTML = editorHTML();
@@ -745,7 +775,8 @@
       '<p class="help">' + GAME_HELP[t] + '</p><div id="stEdErrors" class="stIssues"></div>' +
       '<div class="stRow3">' + field('Titolo della manche', input('g.label', g.label, 80, 'es. Vulcani d’Italia')) +
       field('Tema', input('g.theme', g.theme, 70, 'es. Geografia fisica'), 'Se resta vuoto si usa il titolo.') +
-      field('Secondi', '<input class="control" type="number" min="10" max="300" data-bind="g.seconds:int" value="' + esc(secsValue(g.seconds)) + '" placeholder="' + TMR.defaultSeconds(t) + '">', 'Vuoto = tempo standard (' + TMR.defaultSeconds(t) + ' s). Da 10 a 300.') + '</div>';
+      field('Secondi', '<input class="control" type="number" min="10" max="300" data-bind="g.seconds:int" value="' + esc(secsValue(g.seconds)) + '" placeholder="' + TMR.defaultSeconds(t) + '">', 'Vuoto = tempo standard (' + TMR.defaultSeconds(t) + ' s). Da 10 a 300.') + '</div>' +
+      field('Istruzione sulla tendina <small>(facoltativa)</small>', input('g.instruction', g.instruction, 160, 'es. Attenzione: le immagini sono dettagli delle opere'), 'Compare sul proiettore, nella tendina del gioco, prima che tu la tolga.');
     if (t === 'photopuzzle') {
       html += field('Immagine da riconoscere', imagePicker('g.image', g.image || '')) +
         field('Punto focale (facoltativo)', input('g.focus', g.focus, 30, 'es. 50% 30%  oppure  alto'), 'La foto riempie tutta la cornice: indica quale parte deve restare inquadrata, in percentuale orizzontale e verticale (50% 50% = centro), oppure alto, basso, sinistra, destra. Utile per le foto verticali.') +
@@ -765,12 +796,21 @@
         return '<div class="stOpt"><b class="stNum">' + (k + 1) + '</b>' + textarea('g.clues.' + k, c, 180, 2, 'Indizio ' + (k + 1)) + rowBtn('arr-del', 'clues', k, clues.length <= 1, '✕') + '</div>';
       }).join('') + rowBtn('arr-add', 'clues', null, clues.length >= 5, '＋ INDIZIO') + '</div>';
     } else if (t === 'abbinamenti') {
-      html += '<div class="stField"><span>Quattro immagini, ognuna con il suo termine corretto <small>— in gara i termini vengono mescolati</small></span><div class="stCards">' + [0, 1, 2, 3].map(function (k) {
+      /* RC2-A.3: 1) quattro immagini, 2) quattro voci A–D, 3) per ogni immagine la voce giusta. */
+      var mm = PS.matchingModel(g);
+      g.terms = mm.terms; g.match = mm.match;
+      var L = PS.LETTERS;
+      html += '<div class="stField"><span>1 · Immagini <small>— le quattro immagini da riconoscere, numerate 1–4 sul proiettore</small></span><div class="stCards">' + [0, 1, 2, 3].map(function (k) {
         var c = (g.cards || [])[k] || {};
         return '<div class="stCardSlot"><b class="stNum">' + (k + 1) + '</b>' + imagePicker('g.cards.' + k + '.img', c.img || '') +
-          field('Termine corretto', input('g.names.' + k, (g.names || [])[k], 60, 'es. Etna')) +
-          field('Didascalia <small>(facoltativa)</small>', input('g.cards.' + k + '.title', c.title, 60, 'Immagine ' + (k + 1))) + '</div>';
-      }).join('') + '</div></div>';
+          field('Didascalia <small>(facoltativa, solo per te)</small>', input('g.cards.' + k + '.title', c.title, 60, 'Immagine ' + (k + 1))) +
+          '<label class="stField stPairPick"><span>Voce corretta per l\'immagine ' + (k + 1) + '</span><select class="control" data-bind="g.match.' + k + ':int">' +
+          L.map(function (letter, jj) { return '<option value="' + jj + '"' + (mm.match[k] === jj ? ' selected' : '') + '>' + letter + ' · ' + esc(mm.terms[jj] || '(voce vuota)') + '</option>'; }).join('') + '</select></label></div>';
+      }).join('') + '</div></div>' +
+        '<div class="stField"><span>2 · Voci <small>— i quattro nomi tra cui scegliere; scrivili nell\'ordine che preferisci (in gara le lettere vengono mescolate)</small></span><div class="stTerms">' + [0, 1, 2, 3].map(function (jj) {
+          return '<div class="stOpt"><b class="stNum">' + L[jj] + '</b>' + input('g.terms.' + jj, mm.terms[jj], 60, 'Voce ' + L[jj]) + '</div>';
+        }).join('') + '</div></div>' +
+        '<div class="stField"><span>3 · Coppie corrette <small>— ogni voce va usata una volta sola</small></span><div class="stPairSummary">' + pairChips(g) + '</div></div>';
     } else if (t === 'ghigliottina') {
       html += field('Risposta principale (parola finale)', input('g.answer', g.answer, 40, 'es. FIUME')) + acceptedBlock('g.acceptedAnswers', g.acceptedAnswers, 80) +
         '<div class="stField"><span>Cinque coppie <small>— a sinistra la parola collegata alla soluzione, a destra quella che non c\'entra (in gara la posizione viene mescolata)</small></span>' +
@@ -1200,6 +1240,14 @@
     if (act === 'draft-del') return deleteDraft(b.getAttribute('data-id'));
     if (!d) return;
     if (act === 'tab') { S.tab = b.getAttribute('data-tab'); S.preview = 'question'; if (S.msg && S.msg.kind !== 'err') setMsg(); renderPanel(); root.scrollTo(0, 0); return; }
+    if (act === 'quick-add') {
+      var kind = b.getAttribute('data-kind');
+      if (kind === 'question') { S.tab = 'questions'; S.filter = ''; S.q = PS.addQuestion(d, d.questions.length); structural(); var qa = $('[data-bind="q.question"]'); if (qa) qa.focus(); }
+      else { S.tab = 'games'; S.g = { type: kind, index: PS.addGame(d, kind) }; S.preview = 'question'; structural(); var gl = $('[data-bind="g.label"]'); if (gl) gl.focus(); }
+      setMsg('ok', (kind === 'question' ? 'Nuova domanda' : 'Nuova manche di ' + PS.GAME_LABELS[kind]) + ' creata: compila i campi, i controlli dicono cosa manca.');
+      root.scrollTo(0, 0);
+      return;
+    }
     if (act === 'q-sel') { S.q = i; renderPanel(); return; }
     if (act === 'q-new') {
       var prev = d.questions[S.q];

@@ -27,3 +27,20 @@ fallback file:// offline. Lo stato interno viene letto per le asserzioni, non us
 Vengono controllati anche gli errori JavaScript, le richieste Internet e i frame WebSocket del Player.
 I test bloccano le risorse HTTP esterne; il fallback file viene provato con context offline.
 Gli E2E non sostituiscono un pilot fisico Wi-Fi né i test su iPad/Safari o dispositivi datati.
+
+## RC2-A.2 — QA del palco e della tastiera (Chromium di Playwright, senza channel)
+
+```sh
+NODE_PATH=<node_modules con playwright> node tests/e2e/visual_games.cjs  [cartella-risultati]
+NODE_PATH=<node_modules con playwright> node tests/e2e/keyboard_caret.cjs [cartella-risultati]
+```
+- `visual_games.cjs`: regia + quattro /show (1366×768, 1600×900, 1920×1080, 1024×768); per ogni gioco intro, gioco, soluzione e RISULTATO DEL GIOCO; controlla testi tagliati o fuori dal palco e misura il testo in % dell'altezza (`report.json`).
+- `keyboard_caret.cjs`: pulsantiera reale con PIN; cursore, selezione, ⌫, accenti, apostrofo, frase, testo lungo, rotazione, INVIA.
+`E2E_CHANNEL=chrome` usa Chrome installato al posto del Chromium di Playwright.
+
+## RC2-A.3 — tendina e Pack Studio da zero
+- `visual_games.cjs` ora fotografa la **tendina** di ogni gioco e verifica che, con la tendina attiva, il DOM del proiettore non contenga contenuti del gioco anche cambiando manche.
+- `studio_create.cjs`: Pack Studio in un browser reale; domanda, Photopuzzle, Indovina e Abbinamento creati da zero solo con l'interfaccia, salvati, controllati su disco e riaperti.
+
+## RC2-A.3.1 — `curtain_hold.cjs`
+Regressione della tendina: regia + finestra del proiettore (APRI) + `/show`; per ogni gioco scelto con un clic la tendina resta per oltre 2 s (campioni ogni 50 ms) e dopo i cambi di manche; solo T, TOGLI TENDINA e TOGLI TENDINA E AVVIA rivelano il gioco. `APP_ROOT=<cartella>` prova un'altra copia dell'app (controprova sul codice precedente).

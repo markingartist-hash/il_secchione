@@ -135,6 +135,8 @@ Ogni manche ha `label` (titolo in regia, max 80), `theme` (visibile sul palco: n
 | `ghigliottina` | `answer`, `pairs` | esattamente 5 coppie `["parola che resta","alternativa"]` |
 | `chain` | `links` | 1–20 coppie `{"from":"…","to":"…"}`, parole diverse |
 
+**`instruction`** (RC2-A.3, facoltativo, tutti i giochi, massimo 160 caratteri): frase del docente mostrata sul proiettore nella **tendina** del gioco, prima che il docente la tolga. Una stringa vuota equivale ad assente; i programmi precedenti la ignorano, quindi il pacchetto resta compatibile.
+
 ---
 
 ## 5. Nomi dei giochi

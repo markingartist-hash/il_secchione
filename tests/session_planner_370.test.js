@@ -317,7 +317,7 @@ function planSandbox(questions, games) {
     confirm: function () { return ctx.confirmAnswer; }
   };
   ctx.P[RT.id] = RT;
-  vm.runInNewContext(extract(['planLive', 'planCurrent', 'planOnItem', 'planItemFor', 'qNumber', 'planRecord', 'startPlan', 'planGo', 'planSkipMissing', 'planNext', 'planPrev', 'planResume', 'planFinish', 'settleArcadeForNext']), ctx);
+  vm.runInNewContext(extract(['planLive', 'planCurrent', 'planOnItem', 'planItemFor', 'qNumber', 'planRecord', 'startPlan', 'planGo', 'planSkipMissing', 'planNext', 'planPrev', 'planResume', 'planFinish', 'settleArcadeForNext', 'gameResultsStep', 'gameRounds']), ctx); // RC2-A.2: AVANTI passa dal RISULTATO DEL GIOCO (qui nessun round salvato → si prosegue)
   return ctx;
 }
 
@@ -424,7 +424,7 @@ test('Cablaggio: script, finestra SCALETTA, preferenze (plans), istantanea (plan
   assert.ok(nq.indexOf('if(planLive())return planNext();') > 0 && nq.indexOf('if(planLive())return planNext();') > nq.indexOf('revealNextPlace()'), 'AVANTI = nextQuestion (RC2-A: prima la proclamazione in corso)');
   assert.ok(/function goQuestion\(i\)\{RC\.applyDeferred\(state\);state\.repeatOf=null;/.test(app), 'repeatOf non sopravvive a un cambio di domanda');
   assert.strictEqual((app.match(/newSession\(true\);state\.completedRounds=\{\};state\.planRun=null;/g) || []).length, 2);
-  assert.ok(/const VERSION='1\.0\.0-rc2a\.1';/.test(app)); // RC2-A.1
+  assert.ok(/const VERSION='1\.0\.0-rc2a\.3\.1';/.test(app)); // RC2-A.3.1
 });
 
 test('Persistenza: le scalette salvate nelle preferenze tornano dal server (GET /api/host/prefs, solo regia)', async function () {

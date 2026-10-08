@@ -36,7 +36,7 @@
     ws: null, connected: false, retry: 0, retryTO: null, lastMsgAt: 0,
     phase: 'join', pin: '', deviceId: null, label: '', deviceToken: null, joinToken: null,
     participant: null, teams: [], requested: null, round: null,
-    selection: null, numBuf: '', textBuf: '', kbDigits: false, sending: false, pendingSend: null,
+    selection: null, numBuf: '', textBuf: '', textSel: null, kbDigits: false, sending: false, pendingSend: null,
     error: '', notice: '', noticeTO: null, joining: false
   };
 
@@ -154,7 +154,7 @@
       st.sending = false; st.pendingSend = null;
     } else {
       if (!st.round || st.round.roundInstanceId !== r.roundInstanceId) {
-        st.selection = null; st.numBuf = ''; st.textBuf = ''; st.kbDigits = false; st.error = ''; st.sending = false;
+        st.selection = null; st.numBuf = ''; st.textBuf = ''; st.textSel = null; st.kbDigits = false; st.error = ''; st.sending = false;
         if (!st.pendingSend || st.pendingSend.roundInstanceId !== r.roundInstanceId) st.pendingSend = null;
         if (r.status === 'open' && !r.myAnswer) vibrate(40);
       }
@@ -199,6 +199,37 @@
     var btn = document.getElementById('sendBtn'); if (btn) btn.disabled = true;
     sendAnswer();
     render();
+  }
+
+  /*
+   * RC2-A.2 — modifica del testo nel punto del cursore (funzione pura, testata in Node).
+   * value: testo; start/end: selezione (start = end → solo cursore); op: 'insert' | 'space' | 'backspace' | 'clear'.
+   * Una selezione viene sostituita da ciò che si digita; ⌫ cancella la selezione oppure il carattere prima del cursore.
+   * SPAZIO non va all'inizio e non raddoppia uno spazio vicino. Mai oltre maxLen caratteri.
+   * Restituisce { value, caret, changed }.
+   */
+  function editText(value, start, end, op, ch, maxLen) {
+    var v = String(value == null ? '' : value), n = v.length;
+    var a = Math.max(0, Math.min(n, Math.floor(Number(start)))), b = Math.max(0, Math.min(n, Math.floor(Number(end))));
+    if (!isFinite(a)) a = n;
+    if (!isFinite(b)) b = a;
+    if (b < a) { var t = a; a = b; b = t; }
+    var max = Number(maxLen) > 0 ? Math.floor(Number(maxLen)) : 40;
+    var same = { value: v, caret: b, changed: false };
+    if (op === 'clear') return { value: '', caret: 0, changed: n > 0 };
+    if (op === 'backspace') {
+      if (b > a) return { value: v.slice(0, a) + v.slice(b), caret: a, changed: true };
+      if (a === 0) return { value: v, caret: 0, changed: false };
+      return { value: v.slice(0, a - 1) + v.slice(a), caret: a - 1, changed: true };
+    }
+    var add = op === 'space' ? ' ' : String(ch == null ? '' : ch);
+    if (!add) return same;
+    if (op === 'space') {
+      var before = v.slice(0, a), after = v.slice(b);
+      if (!before || before.charAt(before.length - 1) === ' ' || after.charAt(0) === ' ') return same;
+    }
+    if (n - (b - a) + add.length > max) return same;
+    return { value: v.slice(0, a) + add + v.slice(b), caret: a + add.length, changed: true };
   }
 
   function currentAnswer() {
@@ -256,7 +287,9 @@
       var maxLen = (r && r.maxLength) || 40;
       var key = function (ch) { return '<button class="kbKey" type="button" data-char="' + esc(ch) + '"' + dis + '>' + esc(ch) + '</button>'; }
       var back = '<button class="kbKey action back" type="button" data-text-action="backspace"' + dis + ' aria-label="Cancella una lettera">⌫</button>';
-      var html = '<div class="textEntryBar"><div class="textDisplay" id="textDisplay">' + (esc(st.textBuf) || '<span>SCRIVI LA RISPOSTA</span>') + '</div><span class="textCount" id="textCount">' + st.textBuf.length + '/' + maxLen + '</span></div>' +
+      /* RC2-A.2: vero campo di testo con cursore (tocca un punto per spostarlo, trascina per selezionare).
+         inputmode="none": niente tastiera di sistema dove il browser lo consente; se compare (browser vecchi) funziona lo stesso. */
+      var html = '<div class="textEntryBar"><input id="textInput" class="textDisplay textField" type="text" inputmode="none" enterkeyhint="send" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" maxlength="' + maxLen + '" placeholder="SCRIVI LA RISPOSTA" aria-label="Risposta" value="' + esc(st.textBuf) + '"' + dis + '><span class="textCount" id="textCount">' + st.textBuf.length + '/' + maxLen + '</span></div>' +
         '<div class="textKeyboard kb2' + (st.kbDigits ? ' digits' : '') + '" id="textKeyboard">';
       letters.forEach(function (row, idx) { html += '<div class="kbRow kbLetters">' + row.map(key).join('') + (idx === 2 ? back : '') + '</div>'; });
       digits.forEach(function (row, idx) { html += '<div class="kbRow kbDigits">' + row.map(key).join('') + (idx === 2 ? back : '') + '</div>'; });
@@ -346,9 +379,39 @@
       if (fresh) { fresh.value = typed; if (hadFocus) { fresh.focus(); try { fresh.setSelectionRange(typed.length, typed.length); } catch (e) { /* ignore */ } } }
       return;
     }
-    var keepText = active && active.id === 'textInput' && st.phase === 'team' && st.round && st.round.layout === 'text' && document.getElementById('textInput');
+    /* RC2-A.2: si conserva il campo (e il cursore) solo mentre si sta scrivendo; conferma, pausa, fine tempo e soluzione ridisegnano. */
+    var keepText = active && active.id === 'textInput' && st.phase === 'team' && st.round && st.round.layout === 'text' && st.round.status === 'open' && !st.round.myAnswer && !st.round.revealed && !st.notice && document.getElementById('textInput');
     if (keepText) { updateTextUI(); return; }
     app.innerHTML = h;
+    if (document.getElementById('textInput')) updateTextUI();
+  }
+
+  /* RC2-A.2 — cursore del campo di testo: lo stato (st.textSel) segue il campo; i tasti della tastiera lo usano anche se il campo non ha il fuoco. */
+  function textField() { return document.getElementById('textInput'); }
+  function readSel() {
+    var f = textField();
+    if (!f) return;
+    try { if (typeof f.selectionStart === 'number') st.textSel = { start: f.selectionStart, end: f.selectionEnd }; } catch (e) { /* ignore */ }
+  }
+  var measureCtx = null;
+  function caretVisible(f, caret) {
+    try {
+      if (!measureCtx) measureCtx = document.createElement('canvas').getContext('2d');
+      var cs = window.getComputedStyle(f);
+      measureCtx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      var x = measureCtx.measureText(f.value.slice(0, caret)).width;
+      var pad = parseFloat(cs.paddingLeft) || 0, room = f.clientWidth - 2 * pad - 4;
+      if (x - f.scrollLeft > room) f.scrollLeft = Math.ceil(x - room);
+      else if (x < f.scrollLeft) f.scrollLeft = Math.max(0, Math.floor(x - 8));
+    } catch (e) { /* ignore */ }
+  }
+  function applyEdit(op, ch) {
+    var max = (st.round && st.round.maxLength) || 40;
+    var sel = st.textSel || { start: st.textBuf.length, end: st.textBuf.length };
+    var r = editText(st.textBuf, sel.start, sel.end, op, ch, max);
+    st.textBuf = r.value;
+    st.textSel = { start: r.caret, end: r.caret };
+    return r.changed;
   }
 
   function updateTextUI() {
@@ -357,7 +420,13 @@
     var tc = document.getElementById('textCount');
     var cl = document.getElementById('choiceLine');
     var sb = document.getElementById('sendBtn');
-    if (td) { td.innerHTML = ans ? esc(st.textBuf) : '<span>SCRIVI LA RISPOSTA</span>'; td.scrollLeft = td.scrollWidth; }
+    var f = textField();
+    if (f) {
+      if (f.value !== st.textBuf) f.value = st.textBuf;
+      var sel = st.textSel || { start: st.textBuf.length, end: st.textBuf.length };
+      try { if (f.selectionStart !== sel.start || f.selectionEnd !== sel.end) f.setSelectionRange(sel.start, sel.end); } catch (e) { /* ignore */ }
+      caretVisible(f, sel.end);
+    } else if (td) { td.innerHTML = ans ? esc(st.textBuf) : '<span>SCRIVI LA RISPOSTA</span>'; td.scrollLeft = td.scrollWidth; }
     if (tc) tc.textContent = st.textBuf.length + '/' + ((st.round && st.round.maxLength) || 40);
     if (cl) cl.textContent = 'SPAZIO separa le parole · INVIA quando hai finito';
     if (sb) { sb.disabled = !ans || st.round.status !== 'open' || st.sending || !st.connected; if (st.sending) sb.textContent = 'INVIO…'; }
@@ -387,9 +456,7 @@
       return;
     }
     if ((el = t.closest('[data-char]'))) {
-      var max = (st.round && st.round.maxLength) || 40;
-      var ch = el.getAttribute('data-char') || '';
-      if (st.textBuf.length < max) st.textBuf += ch;
+      applyEdit('insert', el.getAttribute('data-char') || '');
       st.error = '';
       updateTextUI();
       return;
@@ -404,9 +471,7 @@
         if (mk) mk.textContent = st.kbDigits ? 'ABC' : '123';
         return;
       }
-      if (action === 'backspace') st.textBuf = st.textBuf.slice(0, -1);
-      else if (action === 'clear') st.textBuf = '';
-      else if (action === 'space' && st.textBuf.length < maxLen && st.textBuf && st.textBuf.charAt(st.textBuf.length - 1) !== ' ') st.textBuf += ' ';
+      if (action === 'backspace' || action === 'clear' || action === 'space') applyEdit(action, null, maxLen);
       st.error = '';
       updateTextUI();
       return;
@@ -415,8 +480,16 @@
   });
   app.addEventListener('input', function (e) {
     if (e.target.id === 'pinInput') { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4); return; }
-    if (e.target.id === 'textInput') { st.textBuf = e.target.value; updateTextUI(); }
+    if (e.target.id === 'textInput') { st.textBuf = e.target.value; readSel(); updateTextUI(); }
   });
+  /* il cursore si sposta toccando il campo, trascinando o con le frecce di una tastiera fisica */
+  ['click', 'keyup', 'select', 'focus', 'touchend', 'mouseup'].forEach(function (type) {
+    app.addEventListener(type, function (e) { if (e.target && e.target.id === 'textInput') setTimeout(readSel, 0); });
+  });
+  document.addEventListener('selectionchange', function () { if (document.activeElement && document.activeElement.id === 'textInput') readSel(); });
+  /* i tasti della tastiera non rubano il fuoco al campo: il cursore resta dov'è */
+  app.addEventListener('mousedown', function (e) { if (e.target.closest && e.target.closest('.kbKey')) e.preventDefault(); });
+  if (window.addEventListener) window.addEventListener('resize', function () { var f = textField(); if (f && st.textSel) caretVisible(f, st.textSel.end); });
   app.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter') return;
     if (e.target.id === 'pinInput') { e.preventDefault(); doJoin(); }

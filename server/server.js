@@ -24,7 +24,7 @@ var storeMod = require('./store.js');
 var packDisk = require('./packstore-disk.js');
 var netinfo = require('./netinfo.js');
 
-var VERSION = '1.0.0-rc2a.1';
+var VERSION = '1.0.0-rc2a.3.1';
 var ROOT = path.join(__dirname, '..');
 var DEFAULT_PORT = 8765;
 

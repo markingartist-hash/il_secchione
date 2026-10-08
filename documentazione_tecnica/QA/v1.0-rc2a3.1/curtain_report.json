@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "photopuzzle: tendina sempre visibile per 2,3 s dalla scelta (43 campioni per schermo) e per altri 2,1 s dopo due cambi di manche (39 campioni); nessun HTML del gioco ricevuto da /show",
+    "photopuzzle: TOGLI TENDINA E AVVIA rivela il gioco e lo avvia",
+    "indovina: tendina sempre visibile per 2,3 s dalla scelta (43 campioni per schermo) e per altri 2,1 s dopo due cambi di manche (39 campioni); nessun HTML del gioco ricevuto da /show",
+    "indovina: rivelato solo dai comandi del docente — tasto T, MOSTRA TENDINA la rimette, TOGLI TENDINA mostra senza avviare",
+    "abbinamenti: tendina sempre visibile per 2,3 s dalla scelta (42 campioni per schermo) e per altri 2,1 s dopo due cambi di manche (39 campioni); nessun HTML del gioco ricevuto da /show",
+    "abbinamenti: TOGLI TENDINA E AVVIA rivela il gioco e lo avvia",
+    "ghigliottina: tendina sempre visibile per 2,3 s dalla scelta (42 campioni per schermo) e per altri 2,1 s dopo due cambi di manche (38 campioni); nessun HTML del gioco ricevuto da /show",
+    "ghigliottina: TOGLI TENDINA E AVVIA rivela il gioco e lo avvia",
+    "chain: tendina sempre visibile per 2,3 s dalla scelta (43 campioni per schermo) e per altri 2,1 s dopo due cambi di manche (39 campioni); nessun HTML del gioco ricevuto da /show",
+    "chain: TOGLI TENDINA E AVVIA rivela il gioco e lo avvia"
+  ],
+  "errors": [],
+  "stageMessages": 19
+}

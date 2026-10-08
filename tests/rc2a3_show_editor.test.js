@@ -48,7 +48,12 @@ function curtainCtx(bound) {
   return ctx;
 }
 test('RC2-A.3 tendina: vero stato del gioco, attivata alla scelta del gioco, tolta solo dal docente (AVVIA o TOGLI TENDINA)', function () {
-  assert.ok(/loadArcadePreset\(0,false\);state\.arcade\.curtain=true;/.test(APP), 'scelto il gioco, il proiettore mostra la tendina');
+  /* RC2-A.3.1: la vecchia verifica certificava l'ordine sbagliato (tendina accesa DOPO il primo render di loadArcadePreset).
+     Ora la tendina è nell'oggetto iniziale, prima di qualunque render, e il gioco non ha una transizione temporanea. Il flusso vero è provato in browser da tests/e2e/curtain_hold.cjs. */
+  var sa = extract(['startArcade']);
+  assert.ok(/state\.arcade=\{type,presetIndex:0,scoreCommitted:false,curtain:true\};clearPending\(\);loadArcadePreset\(0,false\);/.test(sa), 'tendina attiva prima del primo render');
+  assert.ok(sa.indexOf('curtain:true') < sa.indexOf('loadArcadePreset('), 'ordine: tendina, poi caricamento della manche');
+  assert.ok(!/showTransition/.test(sa), 'nessuna transizione temporanea all’avvio del gioco');
   assert.ok(/function arcadeStartRound\(\)\{const a=state\.arcade;a\.curtain=false;/.test(APP), 'AVVIA la toglie');
   assert.ok(!/setTimeout\([^)]*curtain/.test(APP), 'nessun timer la fa sparire da sola');
   assert.ok(!/function loadArcadePreset[^\n]*curtain=/.test(APP), 'cambiare manche (immagini, parole) non tocca la tendina');

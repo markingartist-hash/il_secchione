@@ -424,7 +424,7 @@ test('Cablaggio: script, finestra SCALETTA, preferenze (plans), istantanea (plan
   assert.ok(nq.indexOf('if(planLive())return planNext();') > 0 && nq.indexOf('if(planLive())return planNext();') > nq.indexOf('revealNextPlace()'), 'AVANTI = nextQuestion (RC2-A: prima la proclamazione in corso)');
   assert.ok(/function goQuestion\(i\)\{RC\.applyDeferred\(state\);state\.repeatOf=null;/.test(app), 'repeatOf non sopravvive a un cambio di domanda');
   assert.strictEqual((app.match(/newSession\(true\);state\.completedRounds=\{\};state\.planRun=null;/g) || []).length, 2);
-  assert.ok(/const VERSION='1\.0\.0-rc2a\.3';/.test(app)); // RC2-A.3
+  assert.ok(/const VERSION='1\.0\.0-rc2a\.3\.1';/.test(app)); // RC2-A.3.1
 });
 
 test('Persistenza: le scalette salvate nelle preferenze tornano dal server (GET /api/host/prefs, solo regia)', async function () {

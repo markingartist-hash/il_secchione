@@ -1,22 +1,18 @@
 {
-  "version": "1.0.0-rc2a.3",
-  "name": "RC2A3_SHOW_EDITOR",
-  "date": "2026-10-07",
+  "version": "1.0.0-rc2a.3.1",
+  "name": "RC2A3_1_CURTAIN_HOTFIX",
+  "date": "2026-10-08",
   "source": "git: markingartist-hash/il_secchione, branch of PR #1 on top of RC2-A.2 (fcf228d)",
   "supportedRuntime": "bundled portable Node 24 (runtime/node.exe)",
-  "scope": "Show UX fix after the classroom review of RC2-A.2 and start of Phase B1: persistent teacher-controlled game curtain (no early exposure on the projector), dedicated full-screen layouts per game without mascot/logo, Pack Studio 'create from scratch' for every content type, Abbinamenti editor with items A–D and pairs, optional curtain instruction. Scoring unchanged.",
+  "scope": "Blocking hotfix of RC2-A.3 only: the game curtain is active before the first render and the temporary game transition is removed, so the curtain stays until the teacher removes it. Nothing else changed.",
   "changes": [
-    "Curtain (arcade.curtain) replaces the short intro: stays until the teacher removes it (TOGLI TENDINA E AVVIA / TOGLI TENDINA / MOSTRA TENDINA, key T); public stage HTML contains only the curtain; regia preview shows the prepared game with a notice",
-    "gameFrame + dedicated layouts (photoLayout, indLayout, matchLayout, ghWrap, chainPath); no mascot, no logo, compact header timer; stage-fit fitGame on .gameScreen, fitCurtain (--cs); games and curtain fill 4:3",
-    "Pack Studio: CREA DA ZERO bar (domanda, Photopuzzle, Indovina, Abbinamento, Parola Segreta, Staffetta); Abbinamento with images / items A–D / pairs and clear validation; optional instruction per game; shortcut from regia GIOCHI tab",
-    "packs.js: optional 'instruction' (<=160 chars) on every game, ignored by older versions",
-    "Fixed pre-existing Pack Studio error when a draft is closed right after an edit"
+    "startArcade: curtain:true in the initial arcade object (before loadArcadePreset/renderAll); removed showTransition(gameName(type),'BONUS SHOW','★'); question/leaderboard transitions unchanged",
+    "Fixed RC2-A.3 test that certified the wrong order; new browser E2E tests/e2e/curtain_hold.cjs (fails on RC2-A.3, passes on RC2-A.3.1)"
   ],
   "previous": {
-    "version": "1.0.0-rc2a.2",
-    "name": "RC2A2_GAMEPLAY",
-    "date": "2026-10-07",
-    "scope": "Gameplay patch after a real classroom test. No Phase B, no new games, no pack changes. Game readability on the stage, game intro screen, RESULT OF THE GAME, clear scoring texts, Ghigliottina +10 per A/B choice and final 200–300, Chain 50–100 per word, manual rank 300/290… (chain 100/95…), caret text field on the player keyboard."
+    "version": "1.0.0-rc2a.3",
+    "name": "RC2A3_SHOW_EDITOR",
+    "date": "2026-10-07"
   },
   "knownLimitations": [
     "Real projector legibility, real tablets and classroom rhythm not verified.",
@@ -30,12 +26,9 @@
   "nodePlatform": "linux-x64 (tests)",
   "unitAndIntegration": {
     "passed": 315,
-    "failed": 0,
-    "baselineRC2A2": 307,
-    "rc2a3New": 10,
-    "replacedRC2A2IntroTests": 2
+    "failed": 0
   },
   "simulatePlayers": "2/6/15/30 devices, no lost or duplicated responses",
-  "manualQA": "Real-browser QA (Playwright + Chromium): visual_games.cjs 84 screenshots at 4 resolutions with curtain leak checks, keyboard_caret.cjs 13 checks, studio_create.cjs 9 checks. See documentazione_tecnica/QA/TEST_RESULTS_1.0_RC2A3.md",
+  "manualQA": "tests/e2e/curtain_hold.cjs 10 checks (projector window + /show, >2 s hold for all 5 games, preset change under the curtain, only T / TOGLI TENDINA / TOGLI TENDINA E AVVIA reveal); visual_games.cjs 84 screenshots OK. See documentazione_tecnica/CHANGELOG_1.0_RC2A3_1_CURTAIN_HOTFIX.md",
   "contentPacks": "Barocco 3media and Preistoria 1media 1.2.0 (standard times) delivered separately, not inside this ZIP"
 }

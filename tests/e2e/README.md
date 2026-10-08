@@ -41,3 +41,6 @@ NODE_PATH=<node_modules con playwright> node tests/e2e/keyboard_caret.cjs [carte
 ## RC2-A.3 — tendina e Pack Studio da zero
 - `visual_games.cjs` ora fotografa la **tendina** di ogni gioco e verifica che, con la tendina attiva, il DOM del proiettore non contenga contenuti del gioco anche cambiando manche.
 - `studio_create.cjs`: Pack Studio in un browser reale; domanda, Photopuzzle, Indovina e Abbinamento creati da zero solo con l'interfaccia, salvati, controllati su disco e riaperti.
+
+## RC2-A.3.1 — `curtain_hold.cjs`
+Regressione della tendina: regia + finestra del proiettore (APRI) + `/show`; per ogni gioco scelto con un clic la tendina resta per oltre 2 s (campioni ogni 50 ms) e dopo i cambi di manche; solo T, TOGLI TENDINA e TOGLI TENDINA E AVVIA rivelano il gioco. `APP_ROOT=<cartella>` prova un'altra copia dell'app (controprova sul codice precedente).

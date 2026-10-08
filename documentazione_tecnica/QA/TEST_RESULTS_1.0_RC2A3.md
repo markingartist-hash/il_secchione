@@ -55,3 +55,17 @@
 - **Contenuti di altri pacchetti**: testi molto lunghi sono gestiti dal fit (testo ridotto fino al minimo e classe `tooLong`), ma non sono stati fotografati.
 - **Abbinamenti con più o meno di 4 coppie**: non supportato dal motore (limite dichiarato).
 - **Runtime Windows e ZIP portatile**: non disponibili. `SHA256SUMS.txt` non è stato rigenerato, come già nella RC2-A.2.
+
+## RC2-A.3.1 CURTAIN HOTFIX (8 ottobre 2026)
+- **Difetto**: la tendina spariva dopo circa 1 s, perché il primo render avveniva con la tendina ancora spenta e la transizione da 1,38 s la scopriva. La QA della RC2-A.3 non lo aveva visto per due motivi:
+  - il controllo della tendina avveniva dopo un cambio di manche, che ridisegnava il palco con la tendina già accesa;
+  - lo script toglieva a mano la transizione.
+- **Nuovo E2E** `tests/e2e/curtain_hold.cjs`: **10 verifiche superate**.
+  - **Tendina dopo la scelta**: per tutti i 5 giochi visibile su finestra del proiettore e `/show` per 2,3 s dalla scelta (circa 42 campioni per schermo).
+  - **Dopo il cambio di manche**: ancora visibile per altri 2,1 s, dopo due cambi.
+  - **Nessuna esposizione**: nessun HTML del gioco ricevuto da `/show`.
+  - **Comandi**: rivelazione solo con T, TOGLI TENDINA, TOGLI TENDINA E AVVIA.
+  - **Controprova**: sul codice RC2-A.3 il test fallisce.
+- **Suite**: 315 superati, 0 falliti.
+- **QA visiva**: 84 schermate senza problemi.
+- **Evidenze**: `v1.0-rc2a3.1/`.

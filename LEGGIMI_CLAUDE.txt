@@ -1,0 +1,38 @@
+IL SECCHIONE — RC1.5 — CLAUDE VISUAL SOURCE PACKAGE
+
+SCOPO
+Pacchetto sorgente alleggerito per audit/redesign visuale con Claude Code.
+La base funzionale di riferimento resta la release portable completa RC1.5.
+
+SHA-256 RELEASE PORTABLE COMPLETA
+de377e6ea1f06ea7f8d1af08d44a7b3169fd1b741f95609041171b51ec17f038
+
+INCLUSO
+- HTML principali
+- css/
+- js/
+- server/
+- tests/
+- tools/
+- PACK_TEMPLATE/
+- un solo SAMPLE_PACK senza immagini
+- asset originali mascotte
+- logo attuale SVG
+- CONCEPT 1 e CONCEPT 3 come riferimenti visivi
+
+ESCLUSO INTENZIONALMENTE
+- runtime/node.exe
+- assets/sounds_hq/
+- immagini dei pack
+- pack multipli
+- legacy_v3/
+- documentazione tecnica storica
+- sorgenti grafiche pesanti
+- dati/sessioni utente
+
+IMPORTANTE
+Questo ZIP è sufficiente per il lavoro di DESIGN SYSTEM / VERTICAL SLICE.
+Non usarlo per distribuire o collaudare la release portable finale.
+Non modificare scoring, server, networking o formato pack salvo richiesta esplicita.
+I concept sono riferimenti di direzione artistica, non mockup da copiare letteralmente.
+Gli asset della mascotte sono la fonte identitaria da preservare fedelmente.

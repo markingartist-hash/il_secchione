@@ -1,0 +1,280 @@
+/* Il Secchione v3.5 CLASSROOM · aggiunte alla regia (si appoggia a show.css della v3) */
+
+kbd{display:inline-block;font:700 10px/1 Segoe UI,Arial,sans-serif;padding:3px 5px;border:1px solid #4d7397;border-bottom-width:2px;border-radius:4px;background:#0c1d2f;color:#d7ecff;margin:0 1px;vertical-align:middle}
+.commandLaunch kbd{background:#0000;border-color:#111d2d55;color:inherit}
+.btn:focus-visible,.microBtn:focus-visible,.tabBtn:focus-visible,.agBtn:focus-visible,.control:focus-visible,.agName:focus-visible{outline:3px solid #ffd258;outline-offset:2px}
+
+/* comandi della domanda */
+.cmdRow{display:grid;grid-template-columns:1.1fr .8fr 1fr 1fr;gap:5px}
+.cmdRow .btn{padding:10px 4px;font-size:11px}
+
+/* stato connessione nell'intestazione */
+body.netOn .headerStatus b{color:#62e5ab}
+body.netOff .headerStatus b{color:#ff8b9a}
+.railNote{display:block;margin-top:6px;font-size:10px;color:#9bb0c5;text-align:center;letter-spacing:.04em}
+.devDot{font-size:11px;margin-right:4px}
+.devDot.on{color:#62e5ab}
+.devDot.off{color:#ff8b9a}
+.rtt{font-size:9px;color:#8aa5bd;margin-left:5px;font-weight:400}
+
+/* griglia rapida delle risposte */
+.answerPanel{padding:10px 10px 12px}
+.answerGrid{display:flex;flex-direction:column;gap:3px}
+.agRow{display:grid;grid-template-columns:10px minmax(44px,1fr) 38px auto 34px auto;align-items:center;gap:3px;padding:3px 4px;border:1px solid transparent;border-radius:6px;background:#0b1a2b}
+.agRow.active{border-color:#ffd258;background:#14273c;box-shadow:0 0 0 1px #ffd25855 inset}
+.agRow.out-correct .agVal{color:#62e5ab}
+.agRow.out-wrong .agVal{color:#ff8b9a}
+.agRow.out-omitted .agVal{color:#c9d6e2}
+.agDev{font-size:10px;text-align:center}
+.agDev.on{color:#62e5ab}.agDev.off{color:#ff8b9a}
+.agName{all:unset;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#edf6ff;padding:4px 2px}
+.agVal{font-size:13px;font-weight:800;display:flex;gap:3px;align-items:center;justify-content:center;min-height:24px;border-radius:4px;background:#07121f}
+.agVal i{font-style:normal}
+.agVal em{font-style:normal;font-size:9px;color:#8edaff;font-weight:400}
+.agWait{color:#7c93aa;animation:agBlink 1.2s ease-in-out infinite}
+.agBtns{display:flex;gap:2px}
+.agBtn{width:26px;height:28px;border-radius:5px;border:1px solid #385d7d;background:#122b43;color:#fff;font-weight:800;font-size:12px;cursor:pointer;padding:0}
+.agBtn:hover:not(:disabled){filter:brightness(1.3)}
+.agBtn.sel{background:#126bb2;border-color:#61c7ff}
+.agBtn.om{color:#ffd258}
+.agBtn.om.sel{background:#6b5714;border-color:#ffd258;color:#fff}
+.answerGrid.locked .agBtn{opacity:.35}
+.agPts{font-size:11px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.agUnlock{all:unset;cursor:pointer;color:#8edaff;font-size:13px;text-align:center}
+.agUnlock:hover{color:#fff}
+.agOrder{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;align-items:center}
+.agOrder small{width:100%;font-size:9px;letter-spacing:.08em;color:#9bb0c5}
+.chipUp{all:unset;cursor:pointer;margin-left:3px;color:#ffd258;font-size:10px}
+.kbdHint{font-size:10px;color:#9bb0c5;line-height:1.9;margin:8px 0 0}
+@keyframes agBlink{50%{opacity:.35}}
+
+/* esportazioni */
+.exportGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.exportGrid .btn small{display:block;font-weight:400;font-size:9px;opacity:.8;margin-top:2px}
+
+/* finestre di dialogo */
+.resumeDialog{width:min(560px,94vw)}
+.resumeDialog h2{color:#ffd258;letter-spacing:.04em}
+.resumeActions{display:grid;gap:8px;margin-top:14px}
+.setGroup{border:1px solid #2c4a66;border-radius:8px;padding:10px 12px 12px;margin:0 0 12px}
+.setGroup legend{font-size:11px;letter-spacing:.06em;color:#8edaff;padding:0 6px}
+.radioList{display:grid;gap:6px}
+.radioCard{display:flex;gap:10px;align-items:flex-start;border:1px solid #2c4a66;border-radius:7px;padding:8px 10px;cursor:pointer;margin:0!important}
+.radioCard:has(input:checked){border-color:#61c7ff;background:#12304b}
+.radioCard input{margin-top:3px}
+.radioCard b{display:block;font-size:13px}
+.radioCard small{display:block;font-size:11px;color:#a6bdd1;line-height:1.4}
+.checkRow{display:flex!important;gap:8px;align-items:center;font-size:12px;margin-top:10px!important}
+
+/* pulsantiere */
+.devicesDialog{width:min(860px,96vw);max-height:92vh;overflow:auto}
+.devTop{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
+.devQr svg{width:100%;height:auto;border-radius:8px;display:block}
+.devQrTabs{display:flex;gap:4px;margin-top:6px}
+.devQrTabs .btn{flex:1}
+.devPin{display:flex;align-items:baseline;gap:10px}
+.devPin small{font-size:12px;color:#9bb0c5;letter-spacing:.1em}
+.devPin b{font-size:44px;letter-spacing:.12em;color:#ffd258;font-variant-numeric:tabular-nums}
+.devSteps{font-size:13px;line-height:1.6;padding-left:18px;margin:8px 0}
+.devUrl{color:#8edaff;user-select:all;word-break:break-all}
+.devOther{font-size:12px;color:#a6bdd1;margin:6px 0}
+.devOther div{margin:3px 0;user-select:all}
+.devListHead{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.devListHead h3,.devNet h3{font-size:12px;letter-spacing:.06em}
+.devList{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.devRow{display:grid;grid-template-columns:90px minmax(0,1fr) 120px auto;gap:8px;align-items:center;background:#0b1a2b;border-radius:6px;padding:6px 8px;font-size:12px}
+.devRow.offline{opacity:.7}
+.devLabel{font-weight:800}
+.devConn{font-size:11px;color:#a6bdd1}
+.devActions{display:flex;gap:5px;align-items:center}
+.devSelect{width:150px;padding:6px}
+.devNet{margin-top:14px;border-top:1px solid #2c4a66;padding-top:10px;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px}
+.devNet h3{width:100%;margin:0}
+.devNet p{width:100%;margin:2px 0 0}
+.devManual{padding:6px 2px;font-size:13px;line-height:1.6}
+.devManual h3{color:#ffd258}
+
+@media(max-width:720px){.devTop{grid-template-columns:1fr}.devRow{grid-template-columns:1fr 1fr}.cmdRow{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.agWait{animation:none}*{scroll-behavior:auto!important}}
+
+/* Gestore Pacchetti */
+.packsDialog{width:min(1100px,97vw);max-height:92vh;overflow:auto}
+.pkTop{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.pkImport{font-size:13px;padding:12px 16px}
+.pkDrop{font-size:12px;color:#a6bdd1;border:1px dashed #4d7397;border-radius:8px;padding:10px 14px}
+.pkWhere{margin:8px 0}
+.pkMsg{border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13px;line-height:1.5;border:1px solid #2c4a66;background:#0d1f33}
+.pkMsg.ok{border-color:#1daf80;background:#0b2a22}
+.pkMsg.err{border-color:#d36677;background:#2c1119}
+.pkMsg p{margin:4px 0}.pkMsg ul{margin:4px 0 4px 18px;padding:0}
+.pkTableWrap{overflow-x:auto;margin-top:8px}
+.pkTable{width:100%;border-collapse:collapse;font-size:12px;min-width:680px}
+.pkTable th{text-align:left;font-size:10px;letter-spacing:.06em;color:#8edaff;padding:6px;border-bottom:1px solid #2c4a66}
+.pkTable td{padding:8px 6px;border-bottom:1px solid #1d3550;vertical-align:middle}
+.pkTable td.n{text-align:right;font-variant-numeric:tabular-nums}
+.pkTable tr.isActive td{background:#12304b}
+.pkTable tr.isBroken td{opacity:.75}
+.pkTitle b{font-size:13px}
+.pkTitle small{display:block;color:#9bb0c5;font-size:10px;margin-top:2px}
+.pkTitle code{font-size:10px;color:#c9d6e2}
+.pkPill{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.06em;background:#ffd258;color:#111d2d;border-radius:4px;padding:2px 5px;margin-left:4px}
+.pkSel input{width:18px;height:18px}
+.pkActs{white-space:normal;min-width:150px}
+.pkActs .btn{margin:2px}
+.pkMix{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:flex-end;margin-top:10px;font-size:12px}
+.pkMix .checkRow{margin:0!important}
+body.pkDragging::after{content:"Rilascia il file .zip per importare il pacchetto";position:fixed;inset:12px;border:4px dashed #ffd258;border-radius:16px;background:#070f1bcc;color:#ffd258;font:800 28px "Segoe UI",Arial,sans-serif;display:flex;align-items:center;justify-content:center;z-index:100;pointer-events:none}
+.pkImport small{display:block;font-weight:400;font-size:10px;opacity:.85;margin-top:2px}
+
+/* v3.6.0 Classroom Control: comandi della domanda corrente, stato pulsantiere, progresso, ricerca Archivio, messaggi */
+.ctlRow{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:5px}
+.ctlRow .btn{padding:9px 4px;font-size:11px}
+.directorProgress{font-size:11px;color:#9fc3df;margin-top:6px;letter-spacing:.02em}
+.directorProgress:empty{display:none}
+.deviceLive{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-top:8px;padding:6px 9px;border-radius:7px;font-size:11px;border:1px solid #2c4a66;background:#0b1a2b}
+.deviceLive b{font-size:12px;letter-spacing:.04em}
+.deviceLive small{color:#9bb0c5;font-size:10px}
+.deviceLive.ok b{color:#62e5ab}
+.deviceLive.warn{border-color:#d36677;background:#2c1119}
+.deviceLive.warn b,.deviceLive.warn span{color:#ffb3bf}
+.lockNote{background:#1d1a0e;border:1px solid #5e4d1c;border-radius:7px;padding:8px 10px;color:#ffe39a!important;line-height:1.45}
+.bankSearch{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) auto;gap:6px;align-items:center}
+.bankQ.isCurrent{background:#12304b;border-radius:6px;padding-left:6px;padding-right:6px}
+.curTag{color:#ffd258}
+.warn{color:#ffd258}
+.toast.ok{background:#62e5ab;color:#06281c}
+.toast.warn{background:#f5cc60;color:#182637}
+.toast.err{background:#ff8b9a;color:#2c0710}
+@media(max-width:720px){.bankSearch{grid-template-columns:1fr 1fr}}
+
+/* ===== Classroom Flow v3.6.1 ===== */
+.agPts{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:1px;min-width:48px}
+.agOmit{display:block;font-size:8px;line-height:1.1;color:#ffd258;white-space:nowrap;font-weight:650}
+.gameScoreInline{margin-top:10px;padding-top:10px;border-top:1px solid #2c4a66;display:grid;gap:6px}
+.gameScoreInline .panelHead{margin-bottom:2px}.gameScoreInline .scoreTeam{padding:7px 8px}.gameScoreInline .scoreTeamTop{margin-bottom:3px}
+.gameScoreInline .scoreButtons{gap:3px}.gameScoreInline .scoreBtn{padding:6px 5px;font-size:10px}
+.gameScoreActions{display:grid;grid-template-columns:1fr 1.25fr;gap:6px;margin-top:4px}
+
+/* ---------- v3.7.0 · regia "one screen": STATO · AZIONE PRINCIPALE · AZIONI SECONDARIE ---------- */
+.cockpit{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.cockpitStatus{display:flex;flex-wrap:wrap;gap:5px}
+.ckChip{display:inline-flex;align-items:center;gap:5px;max-width:100%;font-size:11px;line-height:1.3;padding:4px 8px;border-radius:999px;border:1px solid #2c4a66;background:#0b1a2b;color:#c9dcee}
+.ckChip b{color:#fff}
+.ckChip.ok{border-color:#1daf80;background:#0b2a22}.ckChip.ok b{color:#62e5ab}
+.ckChip.warn{border-color:#c79a2e;background:#2b230c;color:#ffe2a3}
+.ckChip.plan{border-color:#299adf;background:#0d2840;min-width:0}
+.ckChip.plan{white-space:nowrap}
+.ckName{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ckChip.plan b{flex:none}
+.ckExit{border:0;background:#0000;color:#9fc3df;font:700 12px/1 Segoe UI,Arial,sans-serif;padding:0 2px;cursor:pointer;flex:none}
+.ckExit:hover{color:#fff}
+.cockpitMain{display:grid;grid-template-columns:1fr;gap:6px}
+.cockpitMain.split{grid-template-columns:1fr 1fr}
+.cockpitMain .btn{min-width:0;padding:15px 10px;font-size:15px;letter-spacing:.03em;border-width:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 0 1px #0006,0 6px 18px #0005}
+.cockpitMain .btn small{font-size:10px;font-weight:600;letter-spacing:.02em;opacity:.85;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cockpitMain .btn[disabled]{opacity:.55;box-shadow:none}
+.cockpitSecondary{display:flex;flex-wrap:wrap;gap:5px}
+.cockpitSecondary .btn{flex:1 1 auto;min-width:0;padding:8px 8px;font-size:11px}
+.cockpitSecondary .btn[disabled]{opacity:.45}
+.cockpit button *{pointer-events:none}
+.cockpitNote{margin:8px 0 0}
+@media(max-width:1150px){.cockpitMain .btn{padding:12px 8px;font-size:13px}}
+
+/* ---------- v3.7.0 · SCALETTA DELLA PUNTATA ---------- */
+.planDialog{width:min(1240px,97vw);max-height:94vh;overflow:auto}
+.plTop{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.plTop .btn{flex:0 0 auto;min-width:0}
+.plPick{flex:1 1 280px;font-size:11px;color:#9fc3df}
+.plPick select{margin-top:3px}
+.plName{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:12px 0 4px}
+.plName label{flex:1 1 320px;font-size:11px;color:#9fc3df}
+.plName input{margin-top:3px;font-size:15px;font-weight:700}
+.plSaved{font-size:11px;color:#9bb0c5;padding-bottom:9px}
+.plLive{color:#ffd258;letter-spacing:.06em}
+.plIntro{margin-top:14px;border:1px dashed #4d7397;border-radius:10px;padding:16px 18px;font-size:14px;line-height:1.55}
+.plCols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:14px;margin-top:10px}
+.plCols h3{font-size:12px;letter-spacing:.08em;color:#8edaff;margin:0 0 8px}
+.plSource,.plPlan{border:1px solid #2c4a66;border-radius:10px;padding:12px;background:#0d1b2b;min-width:0;display:flex;flex-direction:column}
+.plPacks{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;max-height:120px;overflow:auto}
+.plPackChk{font-size:12px;display:flex;gap:6px;align-items:baseline}
+.plPackChk small{color:#9bb0c5;font-size:10px}
+.plKinds,.plBulk{display:flex;gap:6px;margin:6px 0}
+.plKinds .btn,.plBulk .btn{min-width:0}
+.plFilters{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:6px}
+.plList,.plItems{list-style:none;margin:8px 0 0;padding:0;overflow:auto;max-height:52vh;min-height:160px}
+.plCand{display:flex;align-items:center;gap:8px;padding:6px 4px;border-bottom:1px solid #1d3550}
+.plCand label{display:flex;gap:8px;align-items:flex-start;flex:1;min-width:0;cursor:pointer}
+.plCand label span,.plText{min-width:0}
+.plCand b,.plText b{display:block;font-size:12px;line-height:1.35;font-weight:600;overflow-wrap:anywhere}
+.plCand small,.plText small{display:block;font-size:10px;color:#9bb0c5;margin-top:2px}
+.plCand .btn{flex:0 0 auto;min-width:30px}
+.plCand.isIn{opacity:.6}
+.plIn{font-size:10px;color:#62e5ab;white-space:nowrap}
+.plEmpty{padding:14px 6px;color:#9bb0c5;font-size:12px}
+.plItem{display:flex;align-items:center;gap:7px;padding:7px 6px;border:1px solid #1d3550;border-radius:8px;margin-bottom:5px;background:#10233a;cursor:grab}
+.plItem.dragging{opacity:.4}
+.plItem.dropTarget{border-color:#ffd258;box-shadow:0 -3px 0 #ffd258 inset}
+.plItem.isMissing{border-color:#d36677;background:#2c1119}
+.plMissing{color:#ffb3bf!important}
+.plGrip{color:#5f86aa;font-size:12px;letter-spacing:-2px}
+.plNum{font:800 12px/1 Segoe UI,Arial,sans-serif;color:#ffd258;min-width:20px;text-align:right}
+.plIcon{font-size:14px}
+.plText{flex:1}
+.plActs{display:flex;gap:3px;flex:none}
+.plActs .btn{min-width:0;flex:none;padding:4px 7px}
+.plSum{font-size:11px;color:#c9dcee;letter-spacing:0;font-weight:600;margin-left:6px}
+.plSum .bad{color:#ffb3bf}
+.plFoot{display:flex;gap:8px;margin-top:auto;padding-top:8px}
+.plFoot .btn{min-width:0}
+.plStart{flex:0 0 auto;width:auto;min-width:220px;font-size:14px;padding:12px 18px}
+@media(max-width:900px){.plCols{grid-template-columns:1fr}.plFilters{grid-template-columns:1fr}.plList,.plItems{max-height:40vh}}
+.directorProgress{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* schermi bassi (1366×768, 1280×720, 1024×768): la regia resta compatta, l'aiuto testuale diventa il suggerimento del pulsante principale */
+@media(max-height:900px){
+ .directorDeck .directorHint{display:none}
+ .cockpit{gap:6px;margin-top:8px}
+ .cockpitMain .btn{padding:11px 8px;font-size:14px}
+ .cockpitSecondary .btn{padding:6px 6px}
+ .deviceLive{margin-top:6px;padding:4px 8px}
+}
+@media(max-height:900px) and (min-width:1151px){.tabViewport{max-height:calc(100vh - 380px);min-height:240px}}
+
+/* ---------- v3.7.3 · IMPORTA CONTENUTI ---------- */
+.importDialog{width:min(780px,96vw);max-height:92vh;overflow:auto}
+.importDialog code{font-size:12px;color:#ffe08a;background:#0b1a2b;border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
+.impLead,.impWhat{font-size:15px;line-height:1.5;margin:4px 0 6px}
+.impWhat.ok{color:#62e5ab;font-weight:800}.impWhat.bad{color:#ffb3bf;font-weight:800}
+.impWhere{font-size:14px;line-height:1.5;color:#c9dcee;margin:0 0 10px}
+.impKinds{margin:8px 0 12px 18px;padding:0;font-size:13px;line-height:1.7;color:#c9dcee}
+.impKinds i{color:#ffe08a;font-style:normal;font-weight:800}
+.impPreview{margin:0 0 10px 20px;padding:0;font-size:12px;color:#a9cbe4;line-height:1.5}
+.impPreview .more{list-style:none;margin-left:-14px;color:#7f9bb5}
+.impTable{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 10px}
+.impTable th{text-align:left;font-size:10px;letter-spacing:.06em;color:#8edaff;padding:5px 6px;border-bottom:1px solid #2c4a66}
+.impTable td{padding:6px;border-bottom:1px solid #1d3550}
+.impTable tr.rep td{background:#2b230c}
+.impTable td i{font-style:normal;font-size:11px;color:#ffe08a;margin-left:4px}
+.impTable td i.keep{color:#62e5ab}
+.impWarn{border:1px solid #c79a2e;background:#2b230c;color:#ffe2a3;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5;margin:6px 0 12px}
+.impErrors{margin:0 0 10px 18px;font-size:13px;color:#ffb3bf}
+.impActions{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.impActions .btn{flex:1 1 180px;min-width:0}
+.impActions .btn.xl{flex:2 1 280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.impActions .btn small{font-size:10px;font-weight:600;opacity:.85}
+.impHelp{margin:8px 0 0;font-size:11px}
+
+/* ---------- RC1 · PRONTO PER LA LEZIONE (Home della regia) ---------- */
+.readyList{flex:1 1 100%;display:flex;flex-direction:column;gap:3px;padding:6px 8px;border:1px solid #2c4a66;border-radius:8px;background:#0b1a2b}
+.readyTitle{font-size:10px;letter-spacing:.12em;color:#8edaff;font-weight:800;margin-bottom:2px}
+.readyItem{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:6px;font-size:11px;line-height:1.3;color:#c9dcee;min-height:22px}
+.readyItem>i{font-style:normal;font-weight:900;text-align:center}
+.readyItem span{min-width:0;overflow-wrap:anywhere}
+.readyItem b{color:#fff}
+.readyItem .btn{flex:none;min-width:0;padding:3px 7px;font-size:10px}
+.readyItem.ok>i{color:#62e5ab}
+.readyItem.todo>i{color:#ffd258}.readyItem.todo b{color:#ffe08a}
+.readyItem.warn>i{color:#ffb14a}
+.readyItem.bad>i{color:#ff8b9a}.readyItem.bad b{color:#ffb3bf}
+.readyItem.opt>i{color:#7f9bb5}
+/* corrette ex aequo quando nel round ci sono risposte inserite a mano */
+.agOrder.exAequo .scoreChip{white-space:normal}

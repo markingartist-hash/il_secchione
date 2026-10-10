@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0-rc1.5",
+  "name": "TRAINING_EDITION_1.0_RC1.5",
+  "date": "2026-10-10",
+  "source": "Il_Secchione_1.0_RC1.4_REGOLE_CERVELLONE_STYLE.zip",
+  "sourceSHA256": "4d7e688c11f78398fd099ecf1f0111372d0aff48e4fdde59ef798a6d38076883",
+  "supportedRuntime": "bundled portable Node 24 (runtime/node.exe)",
+  "scope": "Scoring-rule update: TV rules are now real game rules for the Show profile. Correct answers are clamped to 200–300; wrong answers lose 50–200 based on the leaderboard before the round; first 3 omissions remain free, later omissions inherit the same rank-based wrong penalty.",
+  "features": [
+    "Shared readability engine classifies question load as normal, dense or very dense using question length, total answer text, longest answer and presence of an image",
+    "Old single-answer 72-character cutoff removed; dense layout is based on the whole text load",
+    "Dense questions keep larger question/answer text and recover space first by shrinking image column, gaps and mascot area",
+    "Very-dense questions hide the mascot, reduce side chrome and shrink the image column before reducing text",
+    "Questions with images no longer reserve the previous 24% width by default; standard image column reduced to 20%, dense to 15.5%, very-dense to 11.5%",
+    "Pack Studio uses the same readability model and displays a warning for dense/very-dense questions",
+    "Legacy content remains data-only: no pack CSS/JS can override the Training Edition renderer",
+    "Show profile correct-answer points are now clamped to 200–300 (300/275/250/... with minimum 200)",
+    "Show profile wrong-answer penalty is dynamic: −200 for the leading score group down to −50 for the last score group, linearly distributed across distinct leaderboard positions",
+    "When all teams are tied before a round there is no meaningful ranking, so the wrong-answer penalty starts at the minimum −50",
+    "Tied teams share the same wrong-answer penalty",
+    "The first 3 omissions remain free; later omissions use the same pre-round leaderboard penalty as a wrong answer",
+    "HOST and server both compute the penalty from the leaderboard before the round; historical reopen/recompute uses chronological round order",
+    "The TV rules screen reads the active scoring profile and matches the Show profile mechanics"
+  ],
+  "knownLimitations": [
+    "No full backup/restore from file: manual copy of packs/ and data/ remains documented.",
+    "Real projector viewing distance and real tablets on school Wi-Fi remain required manual QA.",
+    "A fresh browser E2E was not run in this environment; Chromium CLI visual capture did not complete reliably, so no visual browser pass is claimed.",
+    "Extremely long content can still be pedagogically unsuitable even though the renderer now protects text readability more aggressively."
+  ],
+  "node": "v24.19.0",
+  "nodePlatform": "win32-x64",
+  "unitAndIntegration": {
+    "passed": 260,
+    "failed": 0,
+    "baselineRc12": 258,
+    "rc15Added": 2
+  },
+  "simulatePlayers": "2/6/15/30 devices, 5 rounds each, no lost or duplicated responses; dynamic standings penalties verified (2026-10-10)",
+  "manualQA": "RC1.5: unit/integration suite and real WebSocket simulator passed. The TV rules screen was not visually re-verified on a physical classroom projector in this environment."
+}

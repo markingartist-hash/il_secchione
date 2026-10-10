@@ -1,0 +1,79 @@
+{
+  "games": {
+    "indovina": [
+      {
+        "label": "Città misteriosa",
+        "theme": "Capitali europee",
+        "subject": "Roma",
+        "candidates": [
+          "Roma",
+          "Madrid",
+          "Atene",
+          "Vienna"
+        ],
+        "clues": [
+          "Sono una capitale europea.",
+          "Mi attraversa un fiume.",
+          "Ospito uno Stato al mio interno.",
+          "Il mio fiume è il Tevere."
+        ],
+        "seconds": 60
+      }
+    ],
+    "ghigliottina": [
+      {
+        "label": "Parola segreta 1",
+        "theme": "Acqua",
+        "answer": "FIUME",
+        "pairs": [
+          [
+            "Foce",
+            "Cima"
+          ],
+          [
+            "Sorgente",
+            "Deserto"
+          ],
+          [
+            "Argine",
+            "Vetta"
+          ],
+          [
+            "Affluente",
+            "Duna"
+          ],
+          [
+            "Delta",
+            "Cratere"
+          ]
+        ],
+        "seconds": 60
+      }
+    ],
+    "chain": [
+      {
+        "label": "Dal monte al mare",
+        "theme": "Il viaggio dell'acqua",
+        "links": [
+          {
+            "from": "NEVE",
+            "to": "SORGENTE"
+          },
+          {
+            "from": "SORGENTE",
+            "to": "TORRENTE"
+          },
+          {
+            "from": "TORRENTE",
+            "to": "FIUME"
+          },
+          {
+            "from": "FIUME",
+            "to": "MARE"
+          }
+        ],
+        "seconds": 60
+      }
+    ]
+  }
+}

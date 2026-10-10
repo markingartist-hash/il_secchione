@@ -1,0 +1,12 @@
+PACK DI ESEMPIO · come creare un nuovo pack
+
+1. Copia questa cartella dentro "packs" e rinominala, per esempio packs/vulcani
+   (solo lettere minuscole, numeri, _ e -).
+2. In pack.json cambia "id" con lo stesso nome della cartella, poi titolo, materia, classe, autore.
+3. Scrivi le domande in questions.json e i giochi in games.json (vedi PACK_FORMAT.md).
+4. Metti le immagini nella cartella images.
+5. Avvia AVVIA_IL_SECCHIONE.bat: il server controlla il pack e lo aggiunge da solo.
+   Se c'è un errore, la finestra nera indica il file e la domanda da correggere.
+   Senza server: esegui  node tools/build_packs.js  oppure, dalla regia, ARCHIVIO > IMPORTA PACK
+   con il file singolo creato da  node tools/build_packs.js --export <id>.
+6. Nella regia: IMPOSTAZIONI PARTITA > Contenuti > scegli il nuovo pack.

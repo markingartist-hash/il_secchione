@@ -1,0 +1,66 @@
+/* =====================================================================
+   Il Secchione · V2 design tokens (redesign visivo sulla base RC1.5)
+   Caricato DOPO show.css/classroom.css. Solo variabili e caratteri: nessuna regola di layout.
+   Caratteri offline (SIL Open Font License 1.1, licenze in assets/fonts/):
+   - Barlow Condensed → titoli, numeri, etichette di scena (DISPLAY)
+   - Inter            → domande, risposte, testi di interfaccia (CONTENUTO)
+   ===================================================================== */
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/barlow-condensed-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/barlow-condensed-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/inter-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/inter-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/inter-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/inter-latin-800-normal.woff2) format("woff2")}
+
+:root{
+  /* caratteri */
+  --v2-display:"Barlow Condensed","Segoe UI",Arial,sans-serif;
+  --v2-text:"Inter","Segoe UI",Arial,sans-serif;
+
+  /* struttura: un solo colore strutturale (blu notte → blu palco) */
+  --v2-night:#050B1F;
+  --v2-stage:#0C2C9A;
+  --v2-stage-hi:#1846E0;
+  --v2-panel:#0E1B44;
+  --v2-panel-2:#142A63;
+  --v2-line:#2B4FA8;
+  --v2-white:#F5F8FF;
+  --v2-muted:#9FB3D9;
+
+  /* accenti (massimo 1–2 per schermata) */
+  --v2-cyan:#22D3F5;
+  --v2-magenta:#FF3DC8;
+  --v2-brain:#FF9DC0;
+
+  /* esiti: il lime significa SOLO corretto/successo, il rosso SOLO errato */
+  --v2-lime:#B4F23C;
+  --v2-ok:#0E8F49;
+  --v2-red:#FF4D5E;
+  --v2-bad:#8E1B2C;
+  --v2-amber:#FFB020;
+
+  /* identità delle lettere (mai lime, mai rosso) */
+  --v2-a:#22D3F5;   /* A ciano */
+  --v2-b:#7C83FF;   /* B blu-viola */
+  --v2-c:#FF9A2E;   /* C arancio */
+  --v2-d:#FF3DC8;   /* D magenta */
+
+  /* podio */
+  --v2-gold:#FFC83D;
+  --v2-silver:#C9D6EA;
+  --v2-bronze:#D98A4E;
+
+  /* misure (relative all'altezza del palco) */
+  --v2-s1:.6cqh;--v2-s2:1.2cqh;--v2-s3:2cqh;--v2-s4:3.2cqh;
+  --v2-r-panel:1.4cqh;--v2-r-card:1cqh;
+  --v2-cut:1.6cqh;
+  --v2-depth:0 1.2cqh 3cqh #0008;
+
+  /* tempi: 4 famiglie di transizione */
+  --v2-t-enter:220ms;   /* ENTER   */
+  --v2-t-reveal:320ms;  /* REVEAL  */
+  --v2-t-score:250ms;   /* SCORE   */
+  --v2-t-victory:500ms; /* VICTORY */
+  --v2-ease:cubic-bezier(.2,.8,.25,1);
+}

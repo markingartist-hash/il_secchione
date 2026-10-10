@@ -1,0 +1,279 @@
+{
+ "errors": [],
+ "shots": [
+  {
+   "shot": "q1_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_classifica_round_1920x1080",
+   "issues": [
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam"
+   ],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 4.4
+   }
+  },
+  {
+   "shot": "q1_classifica_round_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 4.4
+   }
+  },
+  {
+   "shot": "q1_classifica_round_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 4.4
+   }
+  },
+  {
+   "shot": "q2_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q2_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q2_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q2_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q2_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q2_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "10_finale_intro_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "10_finale_intro_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "10_finale_intro_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  }
+ ]
+}

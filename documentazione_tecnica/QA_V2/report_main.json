@@ -1,0 +1,1365 @@
+{
+ "errors": [],
+ "shots": [
+  {
+   "shot": "01_home_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "01_home_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "01_home_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "01_home_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "01_home_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02_regole_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02_regole_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02_regole_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02_regole_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02_regole_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02b_regole_profilo_didattico_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02b_regole_profilo_didattico_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02b_regole_profilo_didattico_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02b_regole_profilo_didattico_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02b_regole_profilo_didattico_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02c_regole_profilo_classico_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02c_regole_profilo_classico_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02c_regole_profilo_classico_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02c_regole_profilo_classico_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "02c_regole_profilo_classico_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_anteprima_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": null,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_anteprima_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": null,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_anteprima_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": null,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_anteprima_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": null,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_anteprima_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": null,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_domanda_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_domanda_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_reveal_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_reveal_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03_normale_classifica_round_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "03_normale_classifica_round_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "03_normale_classifica_round_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "03_normale_classifica_round_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "03_normale_classifica_round_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "03b_timer_ambra_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03b_timer_ambra_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03b_timer_ambra_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03b_timer_ambra_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03b_timer_ambra_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03c_timer_rosso_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03c_timer_rosso_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03c_timer_rosso_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03c_timer_rosso_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "03c_timer_rosso_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_domanda_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_domanda_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_reveal_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_reveal_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "04_immagine_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.8,
+    "risposta": 3.3,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_domanda_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_domanda_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_reveal_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_reveal_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "05_densa_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.5,
+    "risposta": 3.15,
+    "timer": 10,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_domanda_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_domanda_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_reveal_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_reveal_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "06_molto_densa_classifica_round_1920x1080",
+   "issues": [
+    "troncato a righe "
+   ],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "06_molto_densa_classifica_round_1600x900",
+   "issues": [
+    "troncato a righe "
+   ],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "06_molto_densa_classifica_round_1366x768",
+   "issues": [
+    "troncato a righe "
+   ],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "06_molto_densa_classifica_round_1280x720",
+   "issues": [
+    "troncato a righe "
+   ],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "06_molto_densa_classifica_round_1024x768",
+   "issues": [
+    "troncato a righe "
+   ],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.6
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_domanda_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_domanda_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_reveal_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_reveal_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "07_risposte_lunghe_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 4.1,
+    "risposta": 3.08,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_domanda_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_domanda_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_domanda_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_domanda_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_domanda_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_reveal_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_reveal_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_reveal_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_reveal_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "08_immagine_molto_densa_reveal_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": 3.95,
+    "risposta": 3.02,
+    "timer": 8.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "09_classifica_generale_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "10_finale_intro_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "10_finale_intro_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "10_finale_intro_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "10_finale_intro_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "10_finale_intro_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "11_finale_in_corso_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "11_finale_in_corso_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "11_finale_in_corso_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "11_finale_in_corso_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "11_finale_in_corso_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "12_finale_prima_del_primo_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "12_finale_prima_del_primo_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "12_finale_prima_del_primo_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "12_finale_prima_del_primo_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "12_finale_prima_del_primo_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1920x1080",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1600x900",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1366x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_1024x768",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 3.7
+   }
+  }
+ ]
+}

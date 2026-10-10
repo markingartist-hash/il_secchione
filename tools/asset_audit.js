@@ -20,6 +20,7 @@ var KNOWN = [
   { re: /^assets\/logo_clean\.svg$/, origin: 'Logo del progetto (fornito con la v3)', license: 'non documentata', status: 'DA VERIFICARE' },
   { re: /^assets\/sorgenti_grafiche\//, origin: 'Sorgenti grafiche del logo (v3), non usate dall\'app', license: 'non documentata', status: 'DA VERIFICARE' },
   { re: /^PACK_ESEMPI\/vulcani\/images\//, origin: 'Disegni schematici generati per il pacchetto di esempio (v3.5)', license: 'CC0', status: 'OK' },
+  { re: /^assets\/brand\/logo_v2/, origin: 'Logo V2 (redesign RC1.5): disegno vettoriale del progetto generato da tools/brand/make_logo.py; lettere dai contorni di Barlow Condensed', license: 'SIL OFL 1.1 per i contorni del carattere (assets/fonts/OFL_BarlowCondensed.txt)', status: 'OK' },
   { re: /^assets\/sounds_hq\//, origin: 'Effetti sonori forniti con la v3; provenienza non documentata', license: 'non documentata', status: 'DA VERIFICARE' }
 ];
 

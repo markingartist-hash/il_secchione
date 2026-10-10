@@ -1,0 +1,85 @@
+{
+ "errors": [],
+ "shots": [
+  {
+   "shot": "q1_domanda_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_reveal_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q1_classifica_round_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 4.4
+   }
+  },
+  {
+   "shot": "q2_domanda_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "q2_reveal_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": 5.4,
+    "risposta": 3.9,
+    "timer": 12.6,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "10_finale_intro_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": null
+   }
+  },
+  {
+   "shot": "13_finale_vincitore_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  },
+  {
+   "shot": "13b_finale_vincitore_fermo_popup_1280x720",
+   "issues": [],
+   "sizes": {
+    "domanda": null,
+    "risposta": null,
+    "timer": null,
+    "squadra": 6.6
+   }
+  }
+ ]
+}

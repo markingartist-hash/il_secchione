@@ -1,0 +1,18 @@
+{
+  "format": "secchione-pack",
+  "formatVersion": 1,
+  "id": "inglese_base",
+  "title": "Inglese di base",
+  "subtitle": "Words and phrases",
+  "subject": "Lingua inglese",
+  "grade": 1,
+  "gradeLabel": "Scuola secondaria di primo grado · classe 1ª",
+  "author": "Pacchetto di esempio Il Secchione",
+  "version": "0.9.0",
+  "description": "Piccolo pacchetto di prova senza immagini, con domande dagli id volutamente uguali a quelli del pack Vulcani (per provare le sessioni miste).",
+  "language": "it",
+  "license": "CC0 (contenuti di esempio creati per il progetto)",
+  "theme": { "eyebrow": "IL SECCHIONE", "accent": "#63b3ed", "accent2": "#f6e05e", "tags": ["Vocabulary", "Grammar"] },
+  "texts": { "homeEyebrow": "THE CLASSROOM GAME SHOW", "homeClaim": "Read. Think. Answer!", "mascotHome": "Ready?", "footer": "VOCABULARY · GRAMMAR" },
+  "gameNames": { "chain": "Word chain" }
+}

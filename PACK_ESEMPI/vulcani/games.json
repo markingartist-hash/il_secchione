@@ -1,0 +1,84 @@
+{
+  "games": {
+    "photopuzzle": [
+      {
+        "label": "Vulcano misterioso",
+        "theme": "Vulcani italiani",
+        "image": "stromboli.png",
+        "answer": "Stromboli",
+        "seconds": 60
+      }
+    ],
+    "abbinamenti": [
+      {
+        "label": "Riconosci i vulcani",
+        "theme": "Vulcani",
+        "cards": [
+          {
+            "img": "etna.png",
+            "title": "Vulcano 1"
+          },
+          {
+            "img": "vesuvio.png",
+            "title": "Vulcano 2"
+          },
+          {
+            "img": "stromboli.png",
+            "title": "Vulcano 3"
+          },
+          {
+            "img": "cratere.png",
+            "title": "Vulcano 4"
+          }
+        ],
+        "names": [
+          "Etna",
+          "Vesuvio",
+          "Stromboli",
+          "Cratere"
+        ],
+        "seconds": 60
+      }
+    ],
+    "indovina": [
+      {
+        "label": "Il vulcano nascosto",
+        "theme": "Vulcani italiani",
+        "subject": "Etna",
+        "candidates": [
+          "Etna",
+          "Vesuvio",
+          "Stromboli",
+          "Vulcano"
+        ],
+        "clues": [
+          "Sono in Sicilia.",
+          "Sono il vulcano attivo più alto d’Europa.",
+          "Gli abitanti mi chiamano “a muntagna”."
+        ],
+        "seconds": 60
+      }
+    ],
+    "chain": [
+      {
+        "label": "Dal magma alla roccia",
+        "theme": "Eruzioni",
+        "links": [
+          {
+            "from": "MAGMA",
+            "to": "LAVA"
+          },
+          {
+            "from": "LAVA",
+            "to": "BASALTO"
+          },
+          {
+            "from": "BASALTO",
+            "to": "ROCCIA"
+          }
+        ],
+        "seconds": 60
+      }
+    ]
+  }
+}

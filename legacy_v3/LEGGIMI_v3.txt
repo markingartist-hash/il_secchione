@@ -1,0 +1,89 @@
+IL SECCHIONE · ARTE_ROMANA · VERSIONE 3.0
+
+APERTURA OFFLINE
+Apri Il_Secchione_ARTE_ROMANA_OFFLINE_v3.html con Edge o Chrome, anche senza
+connessione. Contiene immagini, suoni, mascotte, domande e giochi: nessuna
+installazione o server. Conservalo sul PC; non serve aprirlo dentro Codex.
+Alternativa: estrai tutto lo ZIP e apri index.html o AVVIA_IL_SECCHIONE.bat.
+
+COME GIOCARE
+1. Aggiungi le squadre e premi AVVIA QUIZ.
+2. AVVIA DOMANDA mostra le quattro alternative mescolate e avvia 30 secondi.
+3. Al termine del timer la soluzione e la spiegazione appaiono automaticamente.
+   Puoi anche chiudere il tempo e rivelarla manualmente in anticipo.
+4. Nella scheda PUNTI assegna le risposte delle squadre nell’ordine desiderato.
+   La prima che segni corretta vale 300 punti, poi 275, 250, 225, 200, 175…
+   Una risposta errata oppure un’astensione vale sempre −100.
+   Errori e astensioni NON occupano posizioni nell’ordine delle corrette.
+   Non ci sono bonus di velocità o degli indizi. Minimo per una corretta: 0 punti.
+5. I punti mostrati sono un’anteprima: premi CONFERMA PUNTEGGI per registrarli.
+   Prima di confermare, puoi cambiare gli esiti e usare ANNULLA ULTIMO.
+   Se trasformi un errore in corretta, quella squadra entra in coda alle corrette;
+   se togli una corretta, le successive avanzano e i punti si aggiornano.
+   MANCANTI = AST. assegna −100 alle squadre non ancora valutate.
+6. Mostra CLASSIFICA o passa alla domanda successiva.
+Non serve prenotare le consegne. Il docente gestisce le risposte su carta,
+tavolette o a voce: non sono collegati telefoni o pulsanti wireless.
+
+GIOCHI
+33 manche: 14 Photopuzzle, 8 Indovina, 3 Abbinamenti, 4 Ghigliottine, 4 Catene.
+Tutti seguono lo stesso punteggio 300 / 275 / 250… e −100.
+Photopuzzle: 30 tessere, una ogni secondo, soluzione al termine.
+Indovina: candidati mescolati; il docente aggiunge gli indizi con + INDIZIO.
+A 30 secondi si evidenzia automaticamente il candidato corretto.
+Abbinamenti: quattro immagini da collegare ai termini; soluzioni a 30 secondi.
+Ghigliottina: scegli A o B per ognuna delle cinque coppie. Il tempo parte dopo
+l’ultima scelta: hai 30 secondi per trovare la parola finale, poi viene svelata.
+Il montepremi che si dimezza è scenico: non modifica il punteggio delle squadre.
+Catena: un collegamento per turno, aiuti a 0, 10 e 20 secondi; soluzione a 30.
+Assegna e conferma i punti prima di passare alla parola successiva.
+I collegamenti sono tematici e guidati dal docente, non necessariamente univoci.
+
+COSTRUIRE GIOCHI DA ZERO
+Scheda GIOCHI → scegli Indovina, Ghigliottina o Catena di parole.
+- NUOVO DA ZERO: apre una scheda completamente vuota.
+- MODIFICA COMPLETA: cambia qualsiasi campo della manche selezionata.
+- DUPLICA: crea una copia modificabile, conservando l’originale.
+Inserisci titolo e tema. Il tema compare sul palco, quindi non deve svelare la
+soluzione. Il titolo identifica la manche nell’elenco privato della regia.
+Indovina: scegli tu il soggetto (personaggio, oggetto o luogo), da 2 a 8 alternative
+inclusa quella corretta, e da 1 a 5 indizi in ordine.
+Ghigliottina: scegli la parola finale e tutte le 5 coppie. Scrivi una coppia per
+riga: PAROLA COLLEGATA | ALTERNATIVA ERRATA. Le posizioni A/B sono mescolate.
+Catena: scegli da 1 a 20 collegamenti, scrivendo A | B | C oppure una coppia
+PARTENZA | ARRIVO per riga. Il tema può essere qualsiasi argomento.
+SALVA E CARICA LA MANCHE aggiunge il gioco all’elenco o aggiorna quello aperto.
+La manche caricata è pronta per un nuovo avvio; i punti già confermati restano.
+
+CONSERVARE E TRASFERIRE LE MODIFICHE
+Il browser salva le domande e i giochi modificati localmente, quando consentito.
+ESPORTA GIOCHI scarica un JSON con Catene, Ghigliottine e Indovina, inclusi quelli
+personalizzati. IMPORTA GIOCHI aggiunge le manche del JSON senza sovrascrivere
+quelle già presenti. Un’importazione con campi non validi viene rifiutata per intero.
+Conserva sempre un’esportazione: cambiare browser, file, percorso, PC o cancellare
+i dati del browser può rendere indisponibile il salvataggio locale.
+I giochi modificati non vengono riscritti automaticamente dentro il file HTML.
+ARCHIVIO permette di creare, modificare, importare ed esportare le domande.
+ESPORTA RISULTATI salva il registro della partita; non permette di riprenderla.
+Squadre e partita attiva si azzerano ricaricando il programma.
+
+TV E MASCOTTE
+APRI in DOPPIO SCHERMO apre un palco separato: spostalo sulla TV e premi F11.
+F8 mostra/nasconde la regia. La mascotte reagisce all’attesa, al timer, alla
+soluzione e alla classifica. Il pulsante MASCOTTE permette di fermare l’animazione.
+
+CONTENUTI
+72 domande e 24 immagini estratte dalle due dispense fornite:
+- Arte romana repubblicana (2).pdf, 24 pagine;
+- Arte romana Imperiale.pdf, 26 pagine.
+Ogni soluzione indica la dispensa (Repubblicana o Imperiale) e la pagina PDF.
+Il percorso include città, infrastrutture, archi e volte, mosaico, domus e insulae,
+pittura pompeiana, ritratto, Vitruvio, Ara Pacis, Pantheon, Colonna Traiana,
+Colosseo e scultura imperiale. Le domande seguono prima la dispensa repubblicana,
+poi quella imperiale; puoi rimescolarle nella scheda ARCHIVIO.
+Le etichette delle dispense indicano il file di provenienza, non necessariamente
+la datazione di ogni opera: alcune pagine confrontano esempi di epoche diverse.
+Nell’Indovina trovi sei personaggi, un monumento e un tipo di abitazione.
+Gli editor consentono di sostituire ogni tema e costruire altri giochi da zero.
+I salvataggi di questa edizione sono separati da quelli della Preistoria.
+La cartella include domande_romana.json, giochi_romana.json e SOLUZIONI_DOCENTE.html.

@@ -1,0 +1,44 @@
+{
+  "format": "secchione-pack",
+  "formatVersion": 1,
+  "id": "arte_romana",
+  "title": "Arte romana",
+  "subtitle": "Repubblica e Impero",
+  "subject": "Arte e immagine",
+  "grade": 2,
+  "gradeLabel": "Scuola secondaria di primo grado · classe 2ª",
+  "author": "",
+  "version": "3.5.1",
+  "description": "72 domande e 33 manche arcade sull’arte romana repubblicana e imperiale, ricavate da due dispense didattiche (Arte romana repubblicana, 24 pagine; Arte romana imperiale, 26 pagine). Il campo sourcePage indica la pagina della dispensa. Manche a risposta testuale impostate a 60 secondi; maschere multi-parola della Staffetta rese più leggibili dalla v3.6.1.",
+  "language": "it",
+  "license": "DA VERIFICARE",
+  "files": {
+    "questions": "questions.json",
+    "games": "games.json",
+    "images": "images/"
+  },
+  "theme": {
+    "eyebrow": "IL SECCHIONE",
+    "accent": "#f5bd63",
+    "accent2": "#d9784b",
+    "homeImage": "colosseo.jpg",
+    "tags": [
+      "Architettura",
+      "Pittura",
+      "Scultura"
+    ]
+  },
+  "texts": {
+    "homeEyebrow": "IL GAME SHOW DI ARTE",
+    "homeClaim": "Osserva le opere. Riconosci i dettagli.\nConquista la classifica.",
+    "mascotHome": "Tutte le strade\nportano al quiz!",
+    "footer": "ARCHITETTURA · PITTURA · SCULTURA"
+  },
+  "gameNames": {},
+  "legacy": {
+    "v3PackKey": "romana",
+    "imagePrefix": "romana/",
+    "convertedFrom": "Il_Secchione_ARTE_ROMANA_v3.0",
+    "convertedAt": "2026-10-03T16:48:12.463Z"
+  }
+}

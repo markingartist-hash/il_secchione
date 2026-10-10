@@ -5,8 +5,8 @@
    "shot": "q1_domanda_popup_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -15,8 +15,8 @@
    "shot": "q1_reveal_popup_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -28,15 +28,15 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 4.4
+    "squadra": 5.8
    }
   },
   {
    "shot": "q2_domanda_popup_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -45,8 +45,8 @@
    "shot": "q2_reveal_popup_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -68,7 +68,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.65
    }
   },
   {
@@ -78,7 +78,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.65
    }
   }
  ]

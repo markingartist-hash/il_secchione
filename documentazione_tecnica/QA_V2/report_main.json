@@ -205,7 +205,7 @@
    "shot": "03_normale_anteprima_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
+    "domanda": 6.4,
     "risposta": null,
     "timer": 12.6,
     "squadra": null
@@ -215,7 +215,7 @@
    "shot": "03_normale_anteprima_1600x900",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
+    "domanda": 6.4,
     "risposta": null,
     "timer": 12.6,
     "squadra": null
@@ -225,7 +225,7 @@
    "shot": "03_normale_anteprima_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
+    "domanda": 6.4,
     "risposta": null,
     "timer": 12.6,
     "squadra": null
@@ -235,7 +235,7 @@
    "shot": "03_normale_anteprima_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
+    "domanda": 6.4,
     "risposta": null,
     "timer": 12.6,
     "squadra": null
@@ -245,7 +245,7 @@
    "shot": "03_normale_anteprima_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
+    "domanda": 6.4,
     "risposta": null,
     "timer": 12.6,
     "squadra": null
@@ -255,8 +255,8 @@
    "shot": "03_normale_domanda_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -265,8 +265,8 @@
    "shot": "03_normale_domanda_1600x900",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -275,8 +275,8 @@
    "shot": "03_normale_domanda_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -285,8 +285,8 @@
    "shot": "03_normale_domanda_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -295,8 +295,8 @@
    "shot": "03_normale_domanda_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -305,8 +305,8 @@
    "shot": "03_normale_reveal_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -315,8 +315,8 @@
    "shot": "03_normale_reveal_1600x900",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -325,8 +325,8 @@
    "shot": "03_normale_reveal_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -335,8 +335,8 @@
    "shot": "03_normale_reveal_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -345,20 +345,27 @@
    "shot": "03_normale_reveal_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
   },
   {
    "shot": "03_normale_classifica_round_1920x1080",
-   "issues": [],
+   "issues": [
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam"
+   ],
    "sizes": {
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.66
    }
   },
   {
@@ -368,7 +375,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.64
    }
   },
   {
@@ -378,7 +385,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.62
    }
   },
   {
@@ -388,7 +395,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.61
    }
   },
   {
@@ -398,15 +405,15 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.56
    }
   },
   {
    "shot": "03b_timer_ambra_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -415,8 +422,8 @@
    "shot": "03b_timer_ambra_1600x900",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -425,8 +432,8 @@
    "shot": "03b_timer_ambra_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -435,8 +442,8 @@
    "shot": "03b_timer_ambra_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -445,8 +452,8 @@
    "shot": "03b_timer_ambra_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -455,8 +462,8 @@
    "shot": "03c_timer_rosso_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -465,8 +472,8 @@
    "shot": "03c_timer_rosso_1600x900",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -475,8 +482,8 @@
    "shot": "03c_timer_rosso_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -485,8 +492,8 @@
    "shot": "03c_timer_rosso_1280x720",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -495,8 +502,8 @@
    "shot": "03c_timer_rosso_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -810,7 +817,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.53
    }
   },
   {
@@ -822,7 +829,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.51
    }
   },
   {
@@ -834,7 +841,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.49
    }
   },
   {
@@ -846,7 +853,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.48
    }
   },
   {
@@ -858,7 +865,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.6
+    "squadra": 4.43
    }
   },
   {
@@ -1068,7 +1075,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.67
    }
   },
   {
@@ -1078,7 +1085,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.67
    }
   },
   {
@@ -1088,7 +1095,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.67
    }
   },
   {
@@ -1098,7 +1105,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.67
    }
   },
   {
@@ -1108,7 +1115,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.67
    }
   },
   {
@@ -1168,7 +1175,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.12
    }
   },
   {
@@ -1178,7 +1185,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.11
    }
   },
   {
@@ -1188,7 +1195,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.1
    }
   },
   {
@@ -1198,7 +1205,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.09
    }
   },
   {
@@ -1208,7 +1215,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.07
    }
   },
   {
@@ -1218,7 +1225,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.12
    }
   },
   {
@@ -1228,7 +1235,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.11
    }
   },
   {
@@ -1238,7 +1245,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.1
    }
   },
   {
@@ -1248,7 +1255,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.09
    }
   },
   {
@@ -1258,7 +1265,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.07
    }
   },
   {
@@ -1268,7 +1275,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.65
    }
   },
   {
@@ -1278,7 +1285,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.66
    }
   },
   {
@@ -1288,7 +1295,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.65
    }
   },
   {
@@ -1298,7 +1305,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.65
    }
   },
   {
@@ -1308,7 +1315,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.66
    }
   },
   {
@@ -1318,7 +1325,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.65
    }
   },
   {
@@ -1328,7 +1335,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.66
    }
   },
   {
@@ -1338,7 +1345,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.65
    }
   },
   {
@@ -1348,7 +1355,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.65
    }
   },
   {
@@ -1358,7 +1365,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.7
+    "squadra": 4.66
    }
   }
  ]

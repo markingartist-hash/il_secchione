@@ -33,7 +33,7 @@
 .v2HomeStats span{display:flex;align-items:baseline;gap:.7cqw;padding:1cqh 1.5cqw;background:#0E1B44cc;border:.18cqh solid var(--v2-line);border-radius:999px;font-weight:700;font-size:2cqh;line-height:1;font-family:var(--v2-display);letter-spacing:.12em;color:var(--v2-muted)}
 .v2HomeStats b{font-weight:800;font-size:3.8cqh;line-height:1;font-family:var(--v2-display);color:var(--v2-white);font-variant-numeric:tabular-nums}
 .v2HomeReady{display:flex;align-items:center;gap:1cqw;font-weight:800;font-size:2.6cqh;line-height:1;font-family:var(--v2-display);letter-spacing:.14em;color:var(--v2-cyan)}
-.v2HomeReady i{width:1.5cqh;height:1.5cqh;border-radius:50%;background:var(--v2-cyan);box-shadow:0 0 0 .5cqh #22D3F533}
+.v2HomeReady i:not(.v2Mark){width:1.5cqh;height:1.5cqh;border-radius:50%;background:var(--v2-cyan);box-shadow:0 0 0 .5cqh #22D3F533}
 .v2HomeHero{position:relative;z-index:1;min-height:0;display:flex;align-items:flex-end;justify-content:center}
 .v2HomeHero .mascotStage{height:100%;padding:0 0 .6cqh}
 .v2Bubble{position:absolute;z-index:3;top:3cqh;left:0;max-width:19cqw;padding:1.6cqh 1.6cqw;background:var(--v2-white);color:var(--v2-night);font-weight:800;font-size:3.2cqh;line-height:1.08;font-family:var(--v2-display);letter-spacing:.02em;text-transform:uppercase;border-radius:1.6cqh;box-shadow:var(--v2-depth)}
@@ -117,11 +117,6 @@
 .v2Count{display:flex;flex-direction:column;align-items:center;font-family:var(--v2-display)}
 .v2Count b{font-weight:800;font-size:4cqh;line-height:1;font-family:var(--v2-display);font-variant-numeric:tabular-nums}
 .v2Count small{font-weight:700;font-size:1.6cqh;line-height:1.2;font-family:var(--v2-display);letter-spacing:.14em;color:var(--v2-muted)}
-/* mascotte MINIMAL: ritaglio della testa via CSS (posa e reazioni restano quelle del motore) */
-.v2MiniMascot{position:relative;flex:none;margin-top:auto;width:12cqh;height:12cqh;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,#1d4fd8,#0b1f63);box-shadow:inset 0 0 0 .3cqh var(--v2-line)}
-.v2MiniMascot .mascotStage{position:absolute;inset:0;display:block;padding:0;width:100%;height:100%}
-.v2MiniMascot .publicHostMascot{position:absolute;left:-55%;top:-4%;width:210%;max-width:none;height:auto;object-fit:initial;filter:none}
-.v2MiniMascot .mascotAura,.v2MiniMascot .mascotShadow,.v2MiniMascot .mascotSpark{display:none}
 /* footer della soluzione */
 .v2QFoot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.6cqw;min-height:14cqh;max-height:24cqh;animation:v2Enter var(--v2-t-enter) var(--v2-ease) both}
 .v2Q .answerExplanation{flex:none;max-width:none;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:.6cqh;overflow:hidden;padding:1.2cqh 1.6cqw;background:#0E1B44;border-left:.7cqh solid var(--v2-lime);border-radius:0 var(--v2-r-card) var(--v2-r-card) 0}
@@ -204,8 +199,6 @@
 .v2Empty{grid-column:1/-1;align-self:center;text-align:center;font-weight:700;font-size:3cqh;line-height:1.2;font-family:var(--v2-text);color:var(--v2-muted)}
 .v2RFoot{display:flex;align-items:center;gap:2cqw;font-weight:600;font-size:1.8cqh;line-height:1.2;font-family:var(--v2-text);color:var(--v2-muted);min-width:0}
 .v2RFoot strong{margin-left:auto;white-space:nowrap;font-weight:800;font-size:2.6cqh;line-height:1;font-family:var(--v2-display);letter-spacing:.06em;color:var(--v2-white)}
-.v2Round.few .v2RList{grid-template-rows:repeat(var(--rows),minmax(0,15cqh))}
-.v2Round.few .v2RTeam{font-size:4.4cqh}
 .v2Round.compact .v2RList{gap:.9cqh 1.4cqw}
 .v2Round.compact .v2RRow{grid-template-columns:4.4cqh minmax(0,1fr) repeat(4,auto);gap:1cqw;padding:.5cqh 1.1cqw .5cqh .8cqw}
 .v2Round.compact .v2RPos{font-size:3.4cqh}
@@ -314,3 +307,79 @@
 .v2 .finalMany.tight .finalPodium .finalScore strong{font-size:4.4cqh}
 /* righe compatte: l'esito resta su una riga (la spiegazione completa è nella legenda in basso) */
 .v2Round.compact .v2ROut,.v2Round.many .v2ROut,.v2Round.tiny .v2ROut{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* =====================================================================
+   FASE 2B · polish della slice
+   ===================================================================== */
+
+/* --- grammatica grafica V2: slash magenta/ciano, scintille, cervello. Solo decorazione, sacrificabile --- */
+.v2Mark{display:inline-block;flex:none;pointer-events:none}
+.v2Slash{width:.92em;height:.6em;margin-right:.32em;vertical-align:.06em;transform:skewX(-24deg);
+  background:linear-gradient(var(--v2-magenta),var(--v2-magenta)) 0 0/34% 100% no-repeat,linear-gradient(var(--v2-cyan),var(--v2-cyan)) 66% 0/34% 100% no-repeat}
+.v2ExplainTag .v2Slash{margin:0 0 0 .6em}
+.v2Bolt{width:2.6cqh;height:4.4cqh;background:var(--v2-cyan);clip-path:polygon(58% 0,8% 56%,44% 56%,28% 100%,92% 38%,56% 38%,78% 0)}
+.v2Sparks{position:absolute;z-index:3;display:flex;align-items:flex-start;gap:.6cqw;pointer-events:none}
+.v2Sparks .v2Bolt:first-child{transform:rotate(-14deg)}
+.v2Sparks .v2Bolt:last-child{width:1.8cqh;height:3cqh;margin-top:3cqh;background:var(--v2-magenta);transform:rotate(18deg)}
+.v2Brain{width:3.2cqh;height:2.5cqh;margin-left:1cqw;vertical-align:middle;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 32'%3E%3Cg fill='%23FF9DC0'%3E%3Ccircle cx='9' cy='12' r='8'/%3E%3Ccircle cx='16' cy='8' r='8'/%3E%3Ccircle cx='25' cy='8' r='8'/%3E%3Ccircle cx='31' cy='13' r='8'/%3E%3Ccircle cx='10' cy='21' r='8'/%3E%3Ccircle cx='19' cy='21' r='9'/%3E%3Ccircle cx='29' cy='21' r='8'/%3E%3C/g%3E%3Cpath d='M20 2v27M6 15q5-5 9 0M24 12q5 5 9 0M10 24q4-4 7 0' fill='none' stroke='%23D9578E' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")}
+.v2Q.textDense .v2Mark,.v2Q.veryDense .v2Mark,.v2Q.withArt .v2Mark{display:none}
+
+/* --- DOMANDA breve (normale senza immagine): il blocco domanda+risposte occupa circa 2/3 del palco --- */
+.v2Q.short .v2QMain{gap:2.2cqh}
+.v2Q.short .v2QText{font-size:5.8cqh;line-height:1.12;padding:2.4cqh 2.4cqw 2.6cqh 2.6cqw;border-left-width:.9cqh}
+.v2Q.short.qBrief .v2QText{font-size:6.4cqh}
+.v2Q.short .v2Opts{gap:1.6cqh;grid-auto-rows:minmax(10.5cqh,auto)}
+.v2Q.short .v2Opts.grid2{gap:1.6cqh 1.2cqw;grid-auto-rows:minmax(18cqh,auto)}
+.v2Q.short .option{gap:1.6cqw;padding:1.4cqh 2cqw 1.4cqh 1.4cqw;border-radius:1.3cqh}
+.v2Q.short .v2OptText{font-size:4.2cqh}
+.v2Q.short .v2Opts.grid2 .v2OptText{font-size:4.6cqh}
+.v2Q.short .v2Letter{width:8cqh;height:8cqh;font-size:5.4cqh;border-radius:1.2cqh}
+.v2Q.short .v2Votes b{font-size:4.4cqh}
+.v2Q.short .v2Votes small{font-size:1.9cqh}
+.v2Q.short .v2Verdict{font-size:2.8cqh;padding:.8cqh 1.1cqw}
+.v2Q.short .option.wrong .v2Verdict{font-size:4cqh}
+/* con la soluzione aperta il riquadro in basso prende spazio: si stringono le righe, non il testo */
+.v2Q.short.withResults .v2QMain{gap:1.4cqh}
+.v2Q.short.withResults .v2Opts{gap:1cqh;grid-auto-rows:minmax(7.6cqh,auto)}
+.v2Q.short.withResults .v2Opts.grid2{grid-auto-rows:minmax(10.5cqh,auto)}
+.v2Q.short.withResults .v2QText{padding:1.6cqh 2cqw 1.8cqh 2.4cqw}
+.v2Q.short.withResults .v2Letter{width:6.8cqh;height:6.8cqh;font-size:4.6cqh}
+
+/* --- CLASSIFICA DEL ROUND: 2–6 squadre → righe alte distribuite; le misure seguono l'altezza della riga --- */
+.v2Round.teamsFew .v2RList{grid-template-rows:repeat(var(--rows),minmax(0,21cqh));gap:1.4cqh;align-content:center}
+.v2Round.teamsFew .v2RRow{container-type:size;grid-template-columns:auto minmax(0,1fr) repeat(4,auto);gap:2.2cqw;padding:0 2.4cqw 0 1.6cqw;border-left-width:1cqh}
+.v2Round.teamsFew .v2RPos{font-size:min(50cqh,5.2cqw);min-width:1.5em}
+.v2Round.teamsFew .v2RTeam{font-size:min(38cqh,3.6cqw)}
+.v2Round.teamsFew .v2ROut{font-size:min(16cqh,1.7cqw);margin-top:2cqh}
+.v2Round.teamsFew .v2RCell{min-width:8.5cqw}
+.v2Round.teamsFew .v2RCell span{font-size:min(12cqh,1.25cqw)}
+.v2Round.teamsFew .v2RCell strong{font-size:min(36cqh,3.6cqw);margin-top:2cqh}
+.v2Round.teamsFew .v2RTotal strong{font-size:min(42cqh,4.2cqw)}
+
+/* --- CLASSIFICA / FINALE: 2–6 squadre → carte che scalano con la propria altezza (il 1° è più grande) --- */
+.finalScene.teamsFew.v2 .finalList{gap:1.3cqh}
+.finalScene.teamsFew.v2 .finalCard{container-type:size;gap:2.4cqw;padding:0 2.6cqw 0 1.8cqw}
+.finalScene.teamsFew.v2 .finalCard .resultPos{width:min(62cqh,7cqw);height:min(62cqh,7cqw);font-size:min(27cqh,3cqw)}
+.finalScene.teamsFew.v2 .finalTeam{font-size:min(34cqh,3.8cqw)}
+.finalScene.teamsFew.v2 .finalIdentity{gap:3cqh}
+.finalScene.teamsFew.v2 .finalIdentity small{font-size:min(14cqh,1.6cqw)}
+.finalScene.teamsFew.v2 .finalScore strong{font-size:min(48cqh,5.2cqw)}
+.finalScene.teamsFew.v2 .finalScore span{font-size:min(11cqh,1.1cqw)}
+.finalScene.teamsFew.v2 .finalLock{font-size:30cqh}
+/* vincitore unico: domina; ex aequo: stessa dignità per tutte le prime */
+.finalScene.soloWin.complete.v2 .finalCard.p1{border-width:.3cqh .3cqh .3cqh 1.1cqh;box-shadow:0 0 6cqh #ffc83d55}
+.finalScene.tieWin.complete.v2 .finalCard.p1 .finalShine{animation:v2Shine var(--v2-t-victory) 150ms ease-out both}
+.finalScene.tieWin.v2 .finalPodium .finalCard.p1{height:100%}
+.v2Champ.tie{font-size:3.4cqh;line-height:1.05;text-align:center}
+.v2ManyVictory .v2Champ{left:auto;right:12cqw;top:12cqh;transform:rotate(-4deg);font-size:3cqh;animation:none}
+
+/* --- REGOLE e HOME: mascotte rivolta verso i contenuti, scintille e appoggio luminoso --- */
+.v2.v2Rules{grid-template-columns:minmax(0,1fr) 22cqw}
+.v2RulesHero{position:relative}
+.v2RulesHero .mascotStage,.v2HomeHero .mascotStage{transform:scaleX(-1)}
+.v2RulesHero .v2Sparks{top:14cqh;left:1cqw}
+.v2HomeHero .v2Sparks{top:24cqh;right:3cqw}
+.v2Bubble{left:auto;right:1cqw}
+.v2Bubble::after{right:auto;left:2.4cqw}
+.v2TitleRow{display:flex;align-items:baseline;font-size:6.4cqh;line-height:1}
+.v2 .resultTime strong{color:var(--v2-muted)}

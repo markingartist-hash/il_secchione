@@ -48,8 +48,7 @@
 - **Mascotte**:
   - **HERO**: Home, Regole, 1° posto della finale (posa *celebrate*, con coriandoli e «CAMPIONI!»).
   - **SUPPORT**: classifiche (posa *present*, ridotta, in colonna laterale). Con più di 8 squadre la colonna sparisce; resta solo la HERO piccola alla vittoria.
-  - **MINIMAL**: domanda a densità normale senza immagine. È un ritaglio della testa fatto con il CSS sulle stesse pose animate del motore, così restano le reazioni (pensa, panico a tempo scaduto, festa).
-  - **OFF**: domande dense, molto dense o con immagine.
+  - **OFF nelle domande** (Fase 2B): nessuna mascotte nella zona contenuti delle MCQ, a qualunque densità.
   - Nessun file della mascotte creato, ridisegnato o modificato. Il ritaglio statico di `secchione_a` approvato non è servito.
 - **Timer**: anello `conic-gradient`, numero a circa il 13% dell'altezza (12,6 cqh contro 4,15 di RC1.5). Ciano > 10 s, ambra ≤ 10 s, rosso ≤ 5 s con leggero pulse (scala 1 → 1,04), nessun lampeggio. Si riduce con la densità del testo (10 e 8,6 cqh).
 - **Movimento**: 4 famiglie, tutte tra 150 e 500 ms:
@@ -101,3 +100,47 @@
 - **Piè di pagina della domanda**: niente più riga tecnica con le regole durante il gioco (restano nella schermata REGOLE e nella regia). Lo stato (RISPONDETE, TEMPO CHIUSO…) è sotto il timer.
 - **Classifica finale oltre 17 squadre**: le carte dal 4° posto in giù mostrano posizione, nome e punti, senza ✓ ✗ Ø.
 - **Animazioni al reveal**: si ripetono a ogni nuovo disegno del palco (stesso comportamento delle animazioni RC1.5).
+
+## Fase 2B · polish della slice
+Solo grafica e UX: motore, punteggio, rete, pacchetti, logica del reveal, livelli di densità e responsive invariati.
+
+1. **Domanda breve** (classe `short`, cioè `normal` senza immagine):
+   - il blocco domanda + risposte occupa circa il 59% del palco, circa il 70% dello spazio utile (prima circa il 45%);
+   - domanda 6,4% dell'altezza fino a 60 caratteri (`qBrief`), 5,8% oltre (prima 5,4);
+   - risposte 4,6% nella griglia 2×2 e 4,2% in elenco (prima 3,9 e 3,6);
+   - card alte 18 o 10,5 cqh, badge lettera 8 cqh;
+   - timer invariato.
+   - Con la soluzione aperta si stringono righe e padding, mai il testo.
+   - `dense` e `veryDense` sono invariate.
+2. **Mascotte tolta da tutte le domande**:
+   - HERO: Home, Regole e Finale; in Home e Regole è specchiata, così indica i contenuti;
+   - SUPPORT: classifiche.
+3. **Grammatica grafica V2** (`V2_SLASH`, `V2_BOLT`, `V2_BRAIN`):
+   - doppio slash magenta/ciano davanti ai titoli;
+   - scintille vicino alla mascotte;
+   - cervello rosa nella Home e nel logo.
+   - Elementi solo decorativi, nascosti nelle domande dense, molto dense o con immagine.
+4. **Classifiche adattive** `teamsFew` (2–6), `teamsMedium` (7–12), `teamsMany` (13+):
+   - con poche squadre righe e carte diventano contenitori CSS: posizione, nome, punti ed esito scalano con l'altezza della riga;
+   - le righe sono distribuite in verticale;
+   - nome di una squadra con 6 squadre nel round: da 3,6 a 4,7% dell'altezza;
+   - ranking invariato.
+5. **Finale**:
+   - **vincitore unico** (`soloWin`): riga del 1° più alta (1,9 fr contro 1,45), bordo oro più forte, HERO, «CAMPIONI!», coriandoli;
+   - **ex aequo reale** (`tieWin`): «CAMPIONI EX AEQUO», tutte le prime con la stessa grafica e lo stesso luccichio, podio a pari altezza con più di 8 squadre.
+   - Il calcolo della classifica non è cambiato.
+6. **Logo, polish della direzione B**:
+   - etichetta «il» più piccola, appoggiata sulla linea di base;
+   - cervello rosa che esce dall'etichetta;
+   - occhiali pixel più grandi con contorno più marcato;
+   - sottolineatura ciano asimmetrica (con l'etichetta forma una staffa a L) chiusa da due tagli magenta/ciano.
+   - Sempre 100% SVG; variante monocromatica aggiornata.
+7. **Regole**: impostazione invariata, valori dal motore. Aggiunti lo slash nel titolo, le scintille e la mascotte rivolta verso i pannelli.
+
+**QA Fase 2B**
+- **Suite**: 263 superati, 4 falliti (gli stessi della base).
+  - Un test RC1.x richiede `<h1>CLASSIFICA</h1>` letterale: lo slash è stato messo fuori dal titolo, il test non è stato toccato.
+  - I test V2 sono aggiornati: niente mascotte nelle domande; vincitore unico contro ex aequo.
+- **Simulatore**: 2/6/15/30 OK.
+- **QA visiva**: 260 schermate (scenari main, t3, t12, t30, tie, popup), 0 testi tagliati o fuori dal palco, 0 errori JavaScript, nessuna regola CSS persa nella finestra del proiettore.
+- **Confronto con la prima slice**: `QA_V2/V2_SLICE_POLISH_BEFORE_AFTER.jpg`.

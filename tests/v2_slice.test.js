@@ -24,7 +24,7 @@ function extract(names) {
   }).join('\n');
 }
 function rulesCtx(profile) {
-  var ctx = { SC: SC, FREE_OMISSIONS: SC.DEFAULT_FREE_OMISSIONS, V2_LOGO: 'logo.svg', profileId: function () { return profile; }, mascotMarkup: function () { return '<i class="mascot"></i>'; }, esc: function (x) { return String(x).replace(/</g, '&lt;'); } };
+  var ctx = { SC: SC, FREE_OMISSIONS: SC.DEFAULT_FREE_OMISSIONS, V2_LOGO: 'logo.svg', V2_SLASH: '', V2_BOLT: '', profileId: function () { return profile; }, mascotMarkup: function () { return '<i class="mascot"></i>'; }, esc: function (x) { return String(x).replace(/</g, '&lt;'); } };
   vm.runInNewContext(extract(['rulesModel', 'rulesHTML']), ctx);
   return ctx;
 }
@@ -99,8 +99,8 @@ test('V2 logo: vettoriale, senza raster né caratteri esterni; nessun file della
   assert.ok(/const V2_LOGO='assets\/brand\/logo_v2\.svg'/.test(source('js/app.js')));
 });
 
-test('V2 mascotte: MINIMAL nella domanda solo a densità normale senza immagine; HERO e coriandoli solo al 1° posto della finale', function () {
-  assert.ok(/const mascot=!density&&!x\.image\?/.test(extract(['questionHTML'])));
+test('V2 mascotte: nessuna mascotte nelle domande; HERO e coriandoli solo al 1° posto della finale', function () {
+  assert.strictEqual(extract(['questionHTML']).indexOf('mascotMarkup'), -1, 'mascotte nella zona contenuti della domanda');
   var teams = [{ id: 'a', name: 'Alfa', score: 500 }, { id: 'b', name: 'Beta', score: 475 }, { id: 'c', name: 'Gamma', score: 450 }, { id: 'd', name: 'Delta', score: 50 }];
   var s = SS.createSession({}); s.rounds = []; s.responses = [];
   var ctx = { RC: RC, SC: SC, BRAND_LOGO: 'logo.svg', Date: Date, state: { screen: 'leaderboard', teams: teams, session: s, finalReveal: { shown: 0, lastAt: 0 } }, esc: function (x) { return String(x); }, pack: function () { return { title: 'Prova' }; } };
@@ -115,5 +115,12 @@ test('V2 mascotte: MINIMAL nella domanda solo a densità normale senza immagine;
   var done = ctx.leaderboardHTML();
   assert.ok(/v2Confetti/.test(done) && /mascot_celebrate/.test(done) && /CAMPIONI/.test(done) && /finalCard podium p1/.test(done));
   ctx.state.finalReveal = null;
+  assert.ok(/CAMPIONI!/.test(done) && !/EX AEQUO<\/span>/.test(done) && /soloWin/.test(done), 'vincitore unico');
+  ctx.state.finalReveal = null;
   assert.ok(!/v2Confetti|mascot_celebrate/.test(ctx.leaderboardHTML()), 'classifica generale: niente vittoria');
+  // più squadre davvero prime: nessun vincitore unico finto
+  teams[1].score = 500; ctx.state.finalReveal = { shown: teams.length, lastAt: 0 };
+  var tie = ctx.leaderboardHTML();
+  assert.ok(/CAMPIONI<br>EX AEQUO/.test(tie) && !/CAMPIONI!/.test(tie) && /tieWin/.test(tie), 'ex aequo esplicito');
+  assert.strictEqual((tie.match(/finalCard podium p1/g) || []).length, 2, 'due prime con la stessa grafica');
 });

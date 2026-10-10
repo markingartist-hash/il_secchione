@@ -27,7 +27,7 @@ def glasses(cx,cy,p,rot=-6,outline=True,fill=INK,hi=WHITE):
     his=[]
     for a in (1,13): his+=[(a+6,1),(a+7,1),(a+5,2),(a+6,2)]
     w,h=24*p,5*p; ox,oy=cx-w/2,cy-h/2
-    o=p*0.42
+    o=p*0.55
     def rp(cs,e,pad=0):  # un solo tracciato: niente fessure tra i pixel
         return ''.join(f'M{ox+c*p-pad:.2f} {oy+r*p-pad:.2f}h{p+2*pad+e:.2f}v{p+2*pad+e:.2f}h{-(p+2*pad+e):.2f}z' for c,r in cs)
     out=''
@@ -45,57 +45,67 @@ def brain(cx,cy,s,fill=PINK,line=PINKD):
     folds=(f'<path d="M{cx:.1f} {cy-15*k:.1f} V{cy+12*k:.1f} M{cx-14*k:.1f} {cy-1*k:.1f} q5 {-5*k:.1f} {9*k:.1f} 0 M{cx+5*k:.1f} {cy-4*k:.1f} q5 {5*k:.1f} {9*k:.1f} 0 M{cx-9*k:.1f} {cy+8*k:.1f} q4 {-4*k:.1f} {7*k:.1f} 0" fill="none" stroke="{line}" stroke-width="{sw:.1f}" stroke-linecap="round"/>')
     return f'<g fill="{fill}">{circ}</g>{folds}'
 
-def tag(x,top,base,fill=CYAN,ink=NIGHT,brainOn=True,knock=False):
-    # «il» in un'etichetta inclinata: due aste + cervello come puntino della i
-    h=base-top; w=h*0.78; sk=h*0.18
+def tag(x,top,base,fill=CYAN,ink=NIGHT,brainOn=True):
+    # «il» in un'etichetta inclinata più piccola della parola; il cervello (puntino della i) esce dal bordo superiore
+    h=base-top; w=h*0.80; sk=h*0.18
     poly=f'<path d="M{x+sk:.1f} {top} H{x+w+sk:.1f} L{x+w:.1f} {base} H{x:.1f} Z" fill="{fill}"/>'
-    sw=h*0.16; ix=x+w*0.30; lx=x+w*0.60
+    sw=h*0.17; ix=x+w*0.26; lx=x+w*0.58
     def stem(xx,yt):  # asta inclinata come l'etichetta
         t=(yt-top)/h*sk
         return f'M{xx+sk-t:.1f} {yt:.1f} H{xx+sk-t+sw:.1f} L{xx+sw+h*0.1*0.18:.1f} {base-h*0.1:.1f} H{xx+h*0.1*0.18:.1f} Z'
-    stems=f'<path d="{stem(ix,top+h*0.45)} {stem(lx,top+h*0.14)}" fill="{ink}"/>'
-    b=brain(ix+sw*0.5+sk*0.78,top+h*0.25,h*0.34) if brainOn else ''
+    stems=f'<path d="{stem(ix,top+h*0.42)} {stem(lx,top+h*0.14)}" fill="{ink}"/>'
+    b=brain(ix+sw*0.5+sk*0.86,top+h*0.06,h*0.62) if brainOn else ''
     return poly+stems+b, w+sk
+
+def bar(x0,x1,y,h,fill):  # barra con taglio diagonale a destra
+    return f'<path d="M{x0:.1f} {y:.1f} H{x1+h*0.6:.1f} L{x1:.1f} {y+h:.1f} H{x0:.1f} Z" fill="{fill}"/>'
+def slash(x,y,h,w,fill):
+    return f'<path d="M{x+h*0.6:.1f} {y:.1f} h{w:.1f} L{x+w:.1f} {y+h:.1f} h{-w:.1f} Z" fill="{fill}"/>'
 
 def svg(w,h,body,title='Il Secchione'):
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:.0f} {h:.0f}" role="img" aria-label="{title}"><title>{title}</title>{body}</svg>\n'
 
 # ---- orizzontale (core) ----
-S=200; base=212; top=base-140
-t,tw=tag(6,top,base)
-wx=6+tw+22
-shadow,_=word('SECCHIONE',S,wx+5,base+8,DEEP)
-front,d=word('SECCHIONE',S,wx,base,WHITE)
-# occhiali appoggiati sopra «HIO»
-P=d['parts']; gx0=wx+P[4]['x']; gx1=wx+P[6]['x']+P[6]['adv']
-g=glasses((gx0+gx1)/2, top-30, (gx1-gx0+20)/24, rot=-5)
-W=wx+d['width']+14
-open(f'{OUT}/logo_v2.svg','w').write(svg(W,base+16,t+shadow+front+g))
-# ---- monocromatico (un solo colore, «il» traforato) ----
-tm,_=tag(6,top,base,fill=WHITE,ink=NIGHT,brainOn=False)
-m_front,_=word('SECCHIONE',S,wx,base,WHITE)
-gm=glasses((gx0+gx1)/2, top-44, (gx1-gx0+20)/24, rot=-5, outline=False, fill=WHITE, hi=None)
-# traforo: aste e puntino in maschera
-ix_mask=tag(6,top,base,fill='#fff',ink='#000',brainOn=False)[0]
-mono=f'<defs><mask id="m" maskUnits="userSpaceOnUse"><rect width="{W:.0f}" height="{base+16}" fill="#fff"/>{ix_mask.replace("#fff","#fff")}</mask></defs>'
-# semplice: etichetta bianca con aste trasparenti
-tagMask=tag(6,top,base,fill='#fff',ink='#000',brainOn=False)[0]
-mono=f'<defs><mask id="tagKnock" maskUnits="userSpaceOnUse">{tagMask}<circle cx="0" cy="0" r="0"/></mask></defs><rect width="{6+tw+4:.0f}" height="{base}" fill="{WHITE}" mask="url(#tagKnock)"/>'
-open(f'{OUT}/logo_v2_mono.svg','w').write(svg(W,base+16,mono+m_front+gm))
-# ---- micro (solo testo) ----
-mi1,d1=word('IL',S*0.62,0,base,WHITE)
-mi2,d2=word('SECCHIONE',S,d1['width']+26,base,WHITE)
-open(f'{OUT}/logo_v2_micro.svg','w').write(svg(d1['width']+26+d2['width']+6,base+10,mi1+mi2))
+# silhouette: etichetta «il» piccola in alto + barra ciano sotto che forma una staffa a L asimmetrica,
+# occhiali pixel più grandi appoggiati su «HIO», due tagli magenta/ciano a fine barra.
+MAG='#FF3DC8'
+def core(x0,top,mono=False,shadowOn=True):
+    S=200; base=top+140
+    th=92  # etichetta ≈ 2/3 dell'altezza delle maiuscole
+    t,tw=tag(x0,base-th,base,fill=WHITE if mono else CYAN,ink=NIGHT,brainOn=not mono)
+    if mono:
+        tmask=tag(x0,base-th,base,fill='#fff',ink='#000',brainOn=False)[0]
+        t=f'<defs><mask id="tk" maskUnits="userSpaceOnUse">{tmask}</mask></defs><rect x="{x0}" y="{base-th}" width="{tw+2:.0f}" height="{th}" fill="{WHITE}" mask="url(#tk)"/>'
+    wx=x0+tw+16
+    front,d=word('SECCHIONE',S,wx,base,WHITE)
+    sh=word('SECCHIONE',S,wx+5,base+8,DEEP)[0] if shadowOn and not mono else ''
+    P=d['parts']; gx0=wx+P[4]['x']; gx1=wx+P[6]['x']+P[6]['adv']
+    pp=(gx1-gx0+44)/24
+    lift=16 if mono else 0
+    g=glasses((gx0+gx1)/2, top-4-2.5*pp-lift, pp, rot=-5, outline=not mono, fill=WHITE if mono else INK, hi=None if mono else WHITE)
+    uy=base+18; uh=18
+    ul=bar(x0,gx1,uy,uh,WHITE if mono else CYAN)
+    sl=slash(gx1+30,uy,uh,16,WHITE if mono else MAG)+slash(gx1+58,uy,uh,16,WHITE if mono else CYAN)
+    return t+sh+front+g+ul+sl, wx+d['width'], uy+uh
+body,W,H=core(6,86)
+open(f'{OUT}/logo_v2.svg','w').write(svg(W+14,H+8,body))
+mb,_,_=core(6,86,mono=True)
+open(f'{OUT}/logo_v2_mono.svg','w').write(svg(W+14,H+8,mb))
+# ---- micro (solo testo, per misure piccolissime) ----
+mi1,d1=word('IL',S*0.62,0,base,WHITE) if False else word('IL',124,0,212,WHITE)
+mi2,d2=word('SECCHIONE',200,d1['width']+26,212,WHITE)
+open(f'{OUT}/logo_v2_micro.svg','w').write(svg(d1['width']+26+d2['width']+6,222,mi1+mi2))
 # ---- compatto (etichetta sopra la parola) ----
-ct,ctw=tag(6,10,120)
-cbase=330
-c_sh,_=word('SECCHIONE',S,11,cbase+8,DEEP)
-c_fr,cd=word('SECCHIONE',S,6,cbase,WHITE)
-CP=cd['parts']; cg0=6+CP[4]['x']; cg1=6+CP[6]['x']+CP[6]['adv']
-cgl=glasses((cg0+cg1)/2, cbase-140-30, (cg1-cg0+20)/24, rot=-5)
-open(f'{OUT}/logo_v2_compact.svg','w').write(svg(6+cd['width']+14,cbase+16,ct+c_sh+c_fr+cgl))
+ct,ctw=tag(6,40,132)
+cbase=360
+c_sh,_=word('SECCHIONE',200,11,cbase+8,DEEP)
+c_fr,cd=word('SECCHIONE',200,6,cbase,WHITE)
+CP=cd['parts']; cg0=6+CP[4]['x']; cg1=6+CP[6]['x']+CP[6]['adv']; cp=(cg1-cg0+44)/24
+cgl=glasses((cg0+cg1)/2, cbase-140-4-2.5*cp, cp, rot=-5)
+cul=bar(6,cg1,cbase+18,18,CYAN)+slash(cg1+30,cbase+18,18,16,MAG)+slash(cg1+58,cbase+18,18,16,CYAN)
+open(f'{OUT}/logo_v2_compact.svg','w').write(svg(6+cd['width']+14,cbase+44,ct+c_sh+c_fr+cgl+cul))
 # ---- simbolo (occhiali + cervello su quadrato arrotondato) ----
 sym=(f'<rect x="8" y="8" width="304" height="304" rx="64" fill="#0C2C9A" stroke="{CYAN}" stroke-width="10"/>'
-     +brain(160,112,96)+glasses(160,212,11,rot=-5))
+     +brain(160,112,96)+glasses(160,212,11,rot=-5)+slash(222,262,16,14,MAG)+slash(244,262,16,14,CYAN))
 open(f'{OUT}/logo_v2_symbol.svg','w').write(svg(320,320,sym))
 print('ok',W)

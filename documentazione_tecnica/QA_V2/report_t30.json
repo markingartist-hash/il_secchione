@@ -5,8 +5,8 @@
    "shot": "q1_domanda_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -15,8 +15,8 @@
    "shot": "q1_domanda_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -25,8 +25,8 @@
    "shot": "q1_domanda_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -35,8 +35,8 @@
    "shot": "q1_reveal_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -45,8 +45,8 @@
    "shot": "q1_reveal_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -55,8 +55,8 @@
    "shot": "q1_reveal_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -101,8 +101,8 @@
    "shot": "q2_domanda_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -111,8 +111,8 @@
    "shot": "q2_domanda_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -121,8 +121,8 @@
    "shot": "q2_domanda_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -131,8 +131,8 @@
    "shot": "q2_reveal_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -141,8 +141,8 @@
    "shot": "q2_reveal_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -151,8 +151,8 @@
    "shot": "q2_reveal_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -164,7 +164,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -174,7 +174,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -184,7 +184,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -224,7 +224,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -234,7 +234,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -244,7 +244,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -254,7 +254,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -264,7 +264,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -274,7 +274,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -284,7 +284,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -294,7 +294,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   },
   {
@@ -304,7 +304,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 3.9
+    "squadra": 3.4
    }
   }
  ]

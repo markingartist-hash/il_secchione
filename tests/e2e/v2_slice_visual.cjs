@@ -1,7 +1,7 @@
 /* REDESIGN V2 · QA visiva della vertical slice (solo sviluppo).
    NODE_PATH=<node_modules con playwright> node tests/e2e/v2_slice_visual.cjs <cartella-app> <cartella-risultati> [scenario]
    La cartella-app deve contenere i pacchetti (packs/…, packs.bundle.js): node tools/build_packs.js.
-   scenario: main (6 squadre, 5 risoluzioni, tutte le schermate e i casi di densità) | t3 | t12 | t30 (3/12/30 squadre) | popup
+   scenario: main (6 squadre, 5 risoluzioni, tutte le schermate e i casi di densità; vincitore unico) | t3 | t12 | t30 (3/12/30 squadre) | tie (finale ex aequo) | popup
    (finestra del proiettore aperta dalla regia con APRI). Per ogni schermata misura testi tagliati o fuori dal palco;
    verifica inoltre che il CSS V2 sopravviva alla copia nella finestra del proiettore (serializzazione CSSOM). */
 'use strict';
@@ -17,7 +17,8 @@ const NAMES = {
   t3: ['Leoni', 'I Magnifici Archeologi della 3ªB', 'Volpi'],
   t12: ['Leoni', 'Aquile', 'Volpi', 'Squadra dei Gladiatori Romani', 'Lupi', 'Falchi', 'Orsi', 'Delfini', 'Tigri', 'Pantere', 'Castori', 'I Centurioni della Via Appia'],
   t30: Array.from({ length: 30 }, (_, i) => i === 7 ? 'I Legionari Invincibili della Terza Legione' : 'Squadra ' + String(i + 1).padStart(2, '0')),
-  popup: ['Leoni', 'Aquile', 'Volpi']
+  popup: ['Leoni', 'Aquile', 'Volpi'],
+  tie: ['Leoni', 'Aquile', 'Volpi', 'Squadra dei Gladiatori Romani del Colosseo', 'Lupi', 'Falchi']
 };
 const report = [];
 (async () => {
@@ -70,10 +71,12 @@ const report = [];
       const m = await measure(p); report.push({ shot: `${name}_${s}`, ...m });
     }
   }
+  let qi = 0;
   async function question(i, name, opts) {
     await D(`(() => { const d = window.__secchioneDebug; d.goQuestion(${i}); d.startQuestion(); })()`);
     await shot(name + '_domanda', 900);
-    await D(`(() => { const d = window.__secchioneDebug, s = d.state, c = s.qRound.correctDisplayLetter, w = ['A','B','C','D'].find(x => x !== c); s.teams.forEach((t, k) => d.setPending(t.id, k % 3 === 1 ? w : k % 5 === 4 ? 'abstain' : c, { inputMode: 'manual' })); d.revealQuestion(); })()`);
+    await D(`(() => { const d = window.__secchioneDebug, s = d.state, c = s.qRound.correctDisplayLetter, w = ['A','B','C','D'].find(x => x !== c); const tie = ${SCEN === 'tie'}, qi = ${qi}; s.teams.forEach((t, k) => d.setPending(t.id, tie ? (k % 3 === 1 ? w : k % 5 === 4 ? 'abstain' : c) : k === 0 ? c : (k + qi) % 2 === 1 ? w : k % 5 === 4 ? 'abstain' : c, { inputMode: 'manual' })); d.revealQuestion(); })()`);
+    qi++;
     await shot(name + '_reveal', 900);
     if (opts && opts.round) { await host.locator('#nextQBtn').click().catch(() => {}); await shot(name + '_classifica_round', 3200); }
     await D(() => { const d = window.__secchioneDebug; d.commitQuestionScores && d.commitQuestionScores(); });

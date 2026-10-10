@@ -5,8 +5,8 @@
    "shot": "q1_domanda_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -15,8 +15,8 @@
    "shot": "q1_domanda_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -25,8 +25,8 @@
    "shot": "q1_domanda_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -35,8 +35,8 @@
    "shot": "q1_reveal_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -45,8 +45,8 @@
    "shot": "q1_reveal_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -55,8 +55,8 @@
    "shot": "q1_reveal_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -72,17 +72,21 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 4.4
+    "squadra": 5.8
    }
   },
   {
    "shot": "q1_classifica_round_1366x768",
-   "issues": [],
+   "issues": [
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam",
+    "troncato a righe v2RTeam"
+   ],
    "sizes": {
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 4.4
+    "squadra": 5.8
    }
   },
   {
@@ -92,15 +96,15 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 4.4
+    "squadra": 5.81
    }
   },
   {
    "shot": "q2_domanda_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -109,8 +113,8 @@
    "shot": "q2_domanda_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -119,8 +123,8 @@
    "shot": "q2_domanda_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -129,8 +133,8 @@
    "shot": "q2_reveal_1920x1080",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -139,8 +143,8 @@
    "shot": "q2_reveal_1366x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -149,8 +153,8 @@
    "shot": "q2_reveal_1024x768",
    "issues": [],
    "sizes": {
-    "domanda": 5.4,
-    "risposta": 3.9,
+    "domanda": 6.4,
+    "risposta": 4.6,
     "timer": 12.6,
     "squadra": null
    }
@@ -162,7 +166,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.67
    }
   },
   {
@@ -172,7 +176,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.67
    }
   },
   {
@@ -182,7 +186,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.67
    }
   },
   {
@@ -222,7 +226,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.65
    }
   },
   {
@@ -232,7 +236,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.65
    }
   },
   {
@@ -242,7 +246,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.66
    }
   },
   {
@@ -252,7 +256,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.65
    }
   },
   {
@@ -262,7 +266,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.65
    }
   },
   {
@@ -272,7 +276,7 @@
     "domanda": null,
     "risposta": null,
     "timer": null,
-    "squadra": 6.6
+    "squadra": 4.66
    }
   }
  ]
